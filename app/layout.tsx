@@ -9,8 +9,17 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Invoice SaaS | Professional PDF Invoice Maker | VAT & Tax Compliant",
+  description: "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use.",
+  keywords: ["Invoice Generator", "PDF Invoice Maker", "VAT Compliant", "Tax Compliant", "USA", "Europe"],
+  openGraph: {
+    title: "Invoice SaaS | Professional PDF Invoice Maker",
+    description: "Create VAT and tax compliant invoices. Export to PDF instantly.",
+    url: defaultUrl,
+    siteName: "Invoice SaaS",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 const geistSans = Geist({
