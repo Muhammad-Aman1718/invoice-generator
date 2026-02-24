@@ -12,10 +12,16 @@ export default function Home() {
             Invoice SaaS
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/auth/login" className="text-sm font-medium text-slate-600 hover:text-slate-900">
+            <Link
+              href="/auth/login"
+              className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            >
               Sign in
             </Link>
-            <Link href="/auth/sign-up" className="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg">
+            <Link
+              href="/auth/sign-up"
+              className="text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg"
+            >
               Sign up
             </Link>
           </div>
@@ -32,11 +38,16 @@ export default function Home() {
             Create Professional Invoices
           </h1>
           <p className="text-lg text-slate-500">
-            Free invoice generator for USA and Europe. VAT and tax compliant. Export to PDF instantly.
+            Free invoice generator for USA and Europe. VAT and tax compliant.
+            Export to PDF instantly.
           </p>
         </section>
 
-        <Suspense fallback={<div className="text-center py-12 text-slate-500">Loading...</div>}>
+        <Suspense
+          fallback={
+            <div className="text-center py-12 text-slate-500">Loading...</div>
+          }
+        >
           <InvoiceLanding />
         </Suspense>
 
