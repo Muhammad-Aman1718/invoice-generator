@@ -6,6 +6,7 @@ import { CURRENCIES, SI, TAX_TYPES } from "@/constant/data";
 import { LogoUpload } from "./logo-upload";
 import { cn } from "@/lib/utils";
 import Field from "../ui/field";
+import { LineItemsTable } from "./line-items-table";
 
 // ─────────────────────────────────────────────
 //  COLOR THEME — Corporate Navy  (60 · 30 · 10)
@@ -68,7 +69,7 @@ export function InvoiceForm() {
             pattern="[0-9]*"
             placeholder="Enter Invoie #"
             className="bg-transparent border-none outline-none text-white font-bold text-lg w-40 appearance-none"
-            // value={store.invoiceNumber}
+            value={store.invoiceNumber}
             onChange={(e) =>
               store.setField("invoiceNumber", parseInt(e.target.value) || 1)
             }
@@ -230,7 +231,7 @@ export function InvoiceForm() {
         <div className="border-t border-[#1B2A4A]/08" />
 
         {/* Line Items Table */}
-        <div className="rounded-xl overflow-hidden border border-[#1B2A4A]/10 shadow-sm">
+        {/* <div className="rounded-xl overflow-hidden border border-[#1B2A4A]/10 shadow-sm">
           <div
             className="grid grid-cols-12 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-white/80"
             style={{ background: "#1B2A4A" }}
@@ -241,11 +242,34 @@ export function InvoiceForm() {
             <div className="col-span-2 text-center">Discount %</div>
             <div className="col-span-1 text-right">Amount</div>
           </div>
-          {/* <div className="bg-white"> <LineItemsTable  /></div> */}
+          <div className="bg-white"> <LineItemsTable  currency={store.currency} /></div>
 
-          {/* // ── Left: Notes, Terms, Signature ── */}
+        </div> */}
+
+
+   <div
+          className="rounded-xl overflow-hidden shadow-sm"
+          style={{ border: "1px solid #1B2A4A10" }}
+        >
+          {/* ── 30% navy header — columns match LineItemsTable widths ── */}
+          <div
+            className="flex items-center px-4 py-3 text-[10px] font-bold uppercase tracking-widest"
+            style={{ background: "#1B2A4A", color: "rgba(255,255,255,0.75)" }}
+          >
+            <div style={{ width: "40%", paddingLeft: "4px" }}>Item</div>
+            <div style={{ width: "10%", textAlign: "center" }}>Qty</div>
+            <div style={{ width: "15%", textAlign: "center" }}>Rate</div>
+            <div style={{ width: "12%", textAlign: "center" }}>Disc %</div>
+            <div style={{ width: "13%", textAlign: "right" }}>Amount</div>
+            <div style={{ width: "5%", textAlign: "center" }} />
+          </div>
+
+          {/* ── Table body ── */}
+          <LineItemsTable currency={selectedCurrency.symbol} showDiscount />
         </div>
 
+
+          {/* // ── Left: Notes, Terms, Signature ── */}
         {/* Notes + Totals */}
         <div className="grid grid-cols-2 gap-10">
           {/* ── Left: Notes, Terms, Signature ── */}

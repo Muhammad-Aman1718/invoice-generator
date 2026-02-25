@@ -1,8 +1,6 @@
 import { useInvoiceStore } from "@/lib/invoice-store";
-import { cn } from "@/lib/utils";
 import { useState, useRef, useEffect } from "react";
-import { ChevronDown, Upload, X, Percent, Hash } from "lucide-react";
-import { CURRENCIES, TAX_TYPES } from "@/constant/data";
+import { CURRENCIES } from "@/constant/data";
 
 const useInvoiceForm = () => {
   const store = useInvoiceStore();

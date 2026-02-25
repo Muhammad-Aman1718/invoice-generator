@@ -2,7 +2,53 @@
  * Invoice data types. Modular for Guest vs Registered user logic.
  */
 
-export type CurrencyCode = "USD" | "EUR" | "GBP" | "CAD";
+export type CurrencyCode =
+  | "USD"
+  | "EUR"
+  | "GBP"
+  | "CAD"
+  | "AUD"
+  | "JPY"
+  | "CNY"
+  | "INR"
+  | "PKR"
+  | "AED"
+  | "SAR"
+  | "CHF"
+  | "SGD"
+  | "NZD"
+  | "HKD"
+  | "BRL"
+  | "ZAR"
+  | "TRY"
+  | "RUB"
+  | "MXN"
+  | "NOK"
+  | "SEK"
+  | "DKK"
+  | "MYR"
+  | "IDR"
+  | "PHP"
+  | "THB"
+  | "KWD"
+  | "QAR"
+  | "OMR"
+  | "BHD"
+  | "EGP"
+  | "BDT"
+  | "VND"
+  | "LKR"
+  | "NGN"
+  | "KES"
+  | "GHS"
+  | "ARS"
+  | "CLP"
+  | "COP"
+  | "ILS"
+  | "PLN"
+  | "HUF"
+  | "CZK"
+  | "KRW";
 
 export interface LineItem {
   id: string;
@@ -10,6 +56,7 @@ export interface LineItem {
   quantity: number;
   rate: number;
   amount: number;
+  discount: number;
 }
 
 export interface TaxConfig {
@@ -59,7 +106,6 @@ export interface InvoiceData {
   updatedAt?: string;
   userId?: string;
 }
-
 
 export interface InvoiceStore extends InvoiceData {
   setField: <K extends keyof InvoiceData>(

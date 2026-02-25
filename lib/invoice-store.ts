@@ -19,6 +19,7 @@ const createLineItem = (): LineItem => ({
   quantity: 1,
   rate: 0,
   amount: 0,
+  discount: 0,   // New field for line item discount
 });
 
 const defaultInvoiceData: InvoiceData = {
