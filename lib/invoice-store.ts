@@ -8,7 +8,8 @@ import type {
   CurrencyCode,
   TaxConfig,
   DiscountConfig,
-} from "./invoice-types";
+  InvoiceStore,
+} from "../types/invoice-types";
 
 const STORAGE_KEY = "invoice-generator-data";
 
@@ -46,23 +47,13 @@ function addDays(dateStr: string, days: number): string {
   return d.toISOString().split("T")[0];
 }
 
-interface InvoiceStore extends InvoiceData {
-  setField: <K extends keyof InvoiceData>(field: K, value: InvoiceData[K]) => void;
-  setLogo: (dataUrl: string | null) => void;
-  addLineItem: () => void;
-  removeLineItem: (id: string) => void;
-  updateLineItem: (id: string, field: keyof LineItem, value: string | number) => void;
-  incrementInvoiceNumber: () => void;
-  resetInvoice: () => void;
-  loadInvoice: (data: Partial<InvoiceData> & { id?: string }) => void;
-}
-
 export const useInvoiceStore = create<InvoiceStore>()(
   persist(
     (set) => ({
       ...defaultInvoiceData,
 
-      setField: (field, value) => set((state) => ({ ...state, [field]: value })),
+      setField: (field, value) =>
+        set((state) => ({ ...state, [field]: value })),
 
       setLogo: (logoDataUrl) => set({ logoDataUrl }),
 
@@ -79,7 +70,7 @@ export const useInvoiceStore = create<InvoiceStore>()(
       updateLineItem: (id, field, value) =>
         set((state) => ({
           lineItems: state.lineItems.map((item) =>
-            item.id === id ? { ...item, [field]: value } : item
+            item.id === id ? { ...item, [field]: value } : item,
           ),
         })),
 
@@ -104,6 +95,6 @@ export const useInvoiceStore = create<InvoiceStore>()(
         businessEmail: state.businessEmail,
         businessPhone: state.businessPhone,
       }),
-    }
-  )
+    },
+  ),
 );

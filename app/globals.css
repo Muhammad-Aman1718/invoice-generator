@@ -66,3 +66,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Scrollbar Styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Scrollbar ki motayi */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f8fafc; /* Scrollbar ka background path */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1; /* Scrollbar ka color (Gray) */
+  border-radius: 10px;
+  border: 1px solid transparent; /* Thori si space dene ke liye */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6; /* Hover karne par Blue color */
+}

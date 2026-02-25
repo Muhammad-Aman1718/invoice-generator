@@ -34,6 +34,8 @@ export interface InvoiceData {
   businessAddress: string;
   businessEmail: string;
   businessPhone: string;
+  shipTo?: string;
+  poNumber?: string;
   // Client
   clientName: string;
   clientAddress: string;
@@ -56,4 +58,23 @@ export interface InvoiceData {
   createdAt?: string;
   updatedAt?: string;
   userId?: string;
+}
+
+
+export interface InvoiceStore extends InvoiceData {
+  setField: <K extends keyof InvoiceData>(
+    field: K,
+    value: InvoiceData[K],
+  ) => void;
+  setLogo: (dataUrl: string | null) => void;
+  addLineItem: () => void;
+  removeLineItem: (id: string) => void;
+  updateLineItem: (
+    id: string,
+    field: keyof LineItem,
+    value: string | number,
+  ) => void;
+  incrementInvoiceNumber: () => void;
+  resetInvoice: () => void;
+  loadInvoice: (data: Partial<InvoiceData> & { id?: string }) => void;
 }

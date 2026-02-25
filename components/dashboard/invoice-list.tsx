@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/invoice-utils";
 import { calculateSubtotal, calculateGrandTotal } from "@/lib/invoice-utils";
-import type { InvoiceData } from "@/lib/invoice-types";
+import type { InvoiceData } from "@/types/invoice-types";
 import { Download, Pencil, Trash2 } from "lucide-react";
 import { deleteInvoiceFromDb } from "@/lib/supabase/invoices-client";
 import { useRouter } from "next/navigation";

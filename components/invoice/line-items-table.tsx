@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useInvoiceStore } from "@/lib/invoice-store";
 import { calculateLineItemAmount, formatCurrency } from "@/lib/invoice-utils";
-import type { CurrencyCode } from "@/lib/invoice-types";
+import type { CurrencyCode } from "@/types/invoice-types";
 
 interface LineItemsTableProps {
-  currency: CurrencyCode;
+  currency?: CurrencyCode;
 }
 
 export function LineItemsTable({ currency }: LineItemsTableProps) {
@@ -61,7 +61,7 @@ export function LineItemsTable({ currency }: LineItemsTableProps) {
                 <td className="p-2 text-right">
                   <Input type="number" min={0} step={0.01} value={item.rate || ""} onChange={(e) => handleRateChange(item.id, e.target.value)} className="h-8 w-full text-right border-0 bg-transparent focus-visible:ring-0" />
                 </td>
-                <td className="p-2 text-right font-medium tabular-nums">{formatCurrency(item.amount, currency)}</td>
+                <td className="p-2 text-right font-medium tabular-nums">{formatCurrency(item.amount, currency!)}</td>
                 <td className="p-2">
                   <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={() => removeLineItem(item.id)} disabled={!canRemove} aria-label="Remove">
                     <Trash2 className="h-4 w-4 text-red-500" />

@@ -1,4 +1,4 @@
-import type { InvoiceData } from "@/lib/invoice-types";
+import type { InvoiceData } from "@/types/invoice-types";
 import { createClient } from "@/lib/supabase/client";
 
 const INVOICE_KEYS = [

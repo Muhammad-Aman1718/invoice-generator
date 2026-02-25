@@ -3,7 +3,7 @@ import type {
   LineItem,
   TaxConfig,
   DiscountConfig,
-} from "./invoice-types";
+} from "../types/invoice-types";
 
 export const CURRENCIES: Record<
   CurrencyCode,

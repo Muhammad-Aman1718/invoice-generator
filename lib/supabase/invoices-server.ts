@@ -1,4 +1,4 @@
-import type { InvoiceData } from "@/lib/invoice-types";
+import type { InvoiceData } from "@/types/invoice-types";
 import { createClient } from "@/lib/supabase/server";
 
 function deserializeInvoice(row: { data: unknown; id: string }): InvoiceData & { id: string } {

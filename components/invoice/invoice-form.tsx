@@ -1,360 +1,481 @@
-// "use client";
-
-// import { useInvoiceStore } from "@/lib/invoice-store";
-// import { LogoUpload } from "./logo-upload";
-// import { LineItemsTable } from "./line-items-table";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { CURRENCIES, addDays } from "@/lib/invoice-utils";
-// import type { CurrencyCode } from "@/lib/invoice-types";
-// import { cn } from "@/lib/utils";
-
-// const TAX_LABELS = ["Tax", "VAT", "GST", "Sales Tax"];
-
-// export function InvoiceForm() {
-//   const store = useInvoiceStore();
-
-//   const setDueNet = (days: number) => {
-//     store.setField("dueDate", addDays(store.issueDate, days));
-//   };
-
-//   return (
-//     <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-//       <section>
-//         <Card className="border-slate-200 shadow-sm">
-//           <CardHeader>
-//             <CardTitle className="text-base text-indigo-600">Branding & Business</CardTitle>
-//           </CardHeader>
-//           <CardContent className="space-y-4">
-//             <div>
-//               <Label>Company Logo</Label>
-//               <div className="mt-2"><LogoUpload value={store.logoDataUrl} onChange={store.setLogo} /></div>
-//             </div>
-//             <div className="grid gap-4 sm:grid-cols-2">
-//               <div className="sm:col-span-2">
-//                 <Label htmlFor="businessName">Business Name</Label>
-//                 <Input id="businessName" value={store.businessName} onChange={(e) => store.setField("businessName", e.target.value)} placeholder="Your Company Inc." />
-//               </div>
-//               <div className="sm:col-span-2">
-//                 <Label htmlFor="businessAddress">Address</Label>
-//                 <Input id="businessAddress" value={store.businessAddress} onChange={(e) => store.setField("businessAddress", e.target.value)} placeholder="123 Main St, City, Country" />
-//               </div>
-//               <div>
-//                 <Label htmlFor="businessEmail">Email</Label>
-//                 <Input id="businessEmail" type="email" value={store.businessEmail} onChange={(e) => store.setField("businessEmail", e.target.value)} placeholder="billing@company.com" />
-//               </div>
-//               <div>
-//                 <Label htmlFor="businessPhone">Phone</Label>
-//                 <Input id="businessPhone" type="tel" value={store.businessPhone} onChange={(e) => store.setField("businessPhone", e.target.value)} placeholder="+1 234 567 8900" />
-//               </div>
-//             </div>
-//           </CardContent>
-//         </Card>
-//       </section>
-
-//       <section>
-//         <Card className="border-slate-200 shadow-sm">
-//           <CardHeader>
-//             <CardTitle className="text-base text-indigo-600">Client Details</CardTitle>
-//           </CardHeader>
-//           <CardContent className="space-y-4">
-//             <div>
-//               <Label htmlFor="clientName">Client Name</Label>
-//               <Input id="clientName" value={store.clientName} onChange={(e) => store.setField("clientName", e.target.value)} placeholder="Client Company" />
-//             </div>
-//             <div>
-//               <Label htmlFor="clientAddress">Client Address</Label>
-//               <Input id="clientAddress" value={store.clientAddress} onChange={(e) => store.setField("clientAddress", e.target.value)} placeholder="Client address" />
-//             </div>
-//             <div>
-//               <Label htmlFor="clientEmail">Client Email</Label>
-//               <Input id="clientEmail" type="email" value={store.clientEmail} onChange={(e) => store.setField("clientEmail", e.target.value)} placeholder="client@example.com" />
-//             </div>
-//           </CardContent>
-//         </Card>
-//       </section>
-
-//       <section>
-//         <Card className="border-slate-200 shadow-sm">
-//           <CardHeader>
-//             <CardTitle className="text-base text-indigo-600">Invoice Details</CardTitle>
-//           </CardHeader>
-//           <CardContent className="space-y-4">
-//             <div className="grid gap-4 sm:grid-cols-3">
-//               <div>
-//                 <Label htmlFor="invoiceNumber">Invoice #</Label>
-//                 <Input id="invoiceNumber" type="number" min={1} value={store.invoiceNumber} onChange={(e) => store.setField("invoiceNumber", parseInt(e.target.value, 10) || 1)} />
-//               </div>
-//               <div>
-//                 <Label htmlFor="issueDate">Issue Date</Label>
-//                 <Input id="issueDate" type="date" value={store.issueDate} onChange={(e) => store.setField("issueDate", e.target.value)} />
-//               </div>
-//               <div>
-//                 <Label htmlFor="dueDate">Due Date</Label>
-//                 <div className="flex gap-2">
-//                   <Input id="dueDate" type="date" value={store.dueDate} onChange={(e) => store.setField("dueDate", e.target.value)} />
-//                   <div className="flex gap-1">
-//                     <Button type="button" variant="outline" size="sm" onClick={() => setDueNet(30)}>Net 30</Button>
-//                     <Button type="button" variant="outline" size="sm" onClick={() => setDueNet(60)}>Net 60</Button>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-//             <div>
-//               <Label htmlFor="currency">Currency</Label>
-//               <select id="currency" value={store.currency} onChange={(e) => store.setField("currency", e.target.value as CurrencyCode)} className={cn("flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring")}>
-//                 {Object.entries(CURRENCIES).map(([code, { symbol, name }]) => (
-//                   <option key={code} value={code}>{symbol} - {name}</option>
-//                 ))}
-//               </select>
-//             </div>
-//           </CardContent>
-//         </Card>
-//       </section>
-
-//       <section>
-//         <Card className="border-slate-200 shadow-sm">
-//           <CardHeader>
-//             <CardTitle className="text-base text-indigo-600">Line Items</CardTitle>
-//           </CardHeader>
-//           <CardContent><LineItemsTable currency={store.currency} /></CardContent>
-//         </Card>
-//       </section>
-
-//       <section>
-//         <Card className="border-slate-200 shadow-sm">
-//           <CardHeader>
-//             <CardTitle className="text-base text-indigo-600">Tax & Discount</CardTitle>
-//           </CardHeader>
-//           <CardContent className="space-y-4">
-//             <div className="grid gap-4 sm:grid-cols-3">
-//               <div>
-//                 <Label>Tax Label</Label>
-//                 <select value={store.tax.label} onChange={(e) => store.setField("tax", { ...store.tax, label: e.target.value })} className={cn("flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring")}>
-//                   {TAX_LABELS.map((l) => <option key={l} value={l}>{l}</option>)}
-//                 </select>
-//               </div>
-//               <div>
-//                 <Label>Tax Type</Label>
-//                 <select value={store.tax.type} onChange={(e) => store.setField("tax", { ...store.tax, type: e.target.value as "percentage" | "fixed" })} className={cn("flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring")}>
-//                   <option value="percentage">Percentage (%)</option>
-//                   <option value="fixed">Fixed Amount</option>
-//                 </select>
-//               </div>
-//               <div>
-//                 <Label>Tax Value</Label>
-//                 <Input type="number" min={0} step={0.1} value={store.tax.value || ""} onChange={(e) => store.setField("tax", { ...store.tax, value: parseFloat(e.target.value) || 0 })} />
-//               </div>
-//             </div>
-//             <div className="grid gap-4 sm:grid-cols-3">
-//               <div>
-//                 <Label>Discount Label</Label>
-//                 <Input value={store.discount.label} onChange={(e) => store.setField("discount", { ...store.discount, label: e.target.value })} placeholder="Discount" />
-//               </div>
-//               <div>
-//                 <Label>Discount Type</Label>
-//                 <select value={store.discount.type} onChange={(e) => store.setField("discount", { ...store.discount, type: e.target.value as "percentage" | "fixed" })} className={cn("flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring")}>
-//                   <option value="percentage">Percentage (%)</option>
-//                   <option value="fixed">Fixed Amount</option>
-//                 </select>
-//               </div>
-//               <div>
-//                 <Label>Discount Value</Label>
-//                 <Input type="number" min={0} step={0.1} value={store.discount.value || ""} onChange={(e) => store.setField("discount", { ...store.discount, value: parseFloat(e.target.value) || 0 })} />
-//               </div>
-//             </div>
-//           </CardContent>
-//         </Card>
-//       </section>
-
-//       <section>
-//         <Card className="border-slate-200 shadow-sm">
-//           <CardHeader>
-//             <CardTitle className="text-base text-indigo-600">Payment & Notes</CardTitle>
-//           </CardHeader>
-//           <CardContent className="space-y-4">
-//             <div>
-//               <Label htmlFor="paymentInstructions">Payment Instructions</Label>
-//               <textarea id="paymentInstructions" value={store.paymentInstructions} onChange={(e) => store.setField("paymentInstructions", e.target.value)} placeholder="Bank details, PayPal..." rows={3} className={cn("flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring min-h-[80px]")} />
-//             </div>
-//             <div>
-//               <Label htmlFor="notes">Notes</Label>
-//               <textarea id="notes" value={store.notes} onChange={(e) => store.setField("notes", e.target.value)} placeholder="Thank you for your business" rows={2} className={cn("flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring min-h-[60px]")} />
-//             </div>
-//           </CardContent>
-//         </Card>
-//       </section>
-//     </form>
-//   );
-// }
-
-
-
-
-
-
 "use client";
 
-import { useInvoiceStore } from "@/lib/invoice-store";
+import useInvoiceForm from "@/hooks/useInvoiceForm";
+import { ChevronDown, Upload, X, Percent, Hash } from "lucide-react";
+import { CURRENCIES, SI, TAX_TYPES } from "@/constant/data";
 import { LogoUpload } from "./logo-upload";
-import { LineItemsTable } from "./line-items-table";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CURRENCIES } from "@/lib/invoice-utils";
-import type { CurrencyCode } from "@/lib/invoice-types";
 import { cn } from "@/lib/utils";
+import Field from "../ui/field";
 
+// ─────────────────────────────────────────────
+//  COLOR THEME — Corporate Navy  (60 · 30 · 10)
+//  60% → #F5F7FA  background
+//  30% → #1B2A4A  navy (structure, headers)
+//  10% → #3A7BD5  accent (CTAs, highlights)
+// ─────────────────────────────────────────────
+
+
+
+
+// ───────────────────────────────────────────────────────────────────────────
 export function InvoiceForm() {
-  const store = useInvoiceStore();
+  const {
+    currency,
+    setCurrency,
+    showCurrencyDrop,
+    taxType,
+    setTaxType,
+    setTaxRate,
+    showTaxDrop,
+    setShowTaxDrop,
+    customTaxRate,
+    setCustomTaxRate,
+    overallDiscount,
+    setOverallDiscount,
+    signatureUrl,
+    setSignatureUrl,
+    subtotal,
+    discountAmt,
+    taxAmt,
+    total,
+    handleSignature,
+    dropdownRef,
+    taxDropdownRef,
+    selectedCurrency,
+    effectiveTaxRate,
+    setShowCurrencyDrop,
+    sigRef,
+    store,
+  } = useInvoiceForm();
 
   return (
-    <form className="bg-white p-8 rounded-lg shadow-sm border border-slate-100 space-y-8" onSubmit={(e) => e.preventDefault()}>
-      
-      {/* Header Section: Logo & Invoice Title */}
-      <div className="flex flex-col md:flex-row justify-between gap-6">
-        <div className="w-full md:w-1/3">
-          <LogoUpload value={store.logoDataUrl} onChange={store.setLogo} />
+    <form
+      className="rounded-2xl shadow-lg border border-[#1B2A4A]/08  overflow-hidden"
+      style={{ background: "#F5F7FA" }}
+      onSubmit={(e) => e.preventDefault()}
+    >
+      {/* ══ HEADER BAR — 30% navy ══════════════════════════════════════ */}
+      <div
+        className="px-8 py-5 flex items-center justify-between"
+        style={{ background: "#1B2A4A" }}
+      >
+        {/* Invoice number */}
+        <div className="flex items-center gap-2">
+          <Hash size={15} className="text-[#3A7BD5]" />
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="Enter Invoie #"
+            className="bg-transparent border-none outline-none text-white font-bold text-lg w-40 appearance-none"
+            // value={store.invoiceNumber}
+            onChange={(e) =>
+              store.setField("invoiceNumber", parseInt(e.target.value) || 1)
+            }
+          />
         </div>
-        <div className="text-right space-y-2">
-          <h1 className="text-4xl font-light text-[#111827] uppercase tracking-tight">Invoice</h1>
-          <div className="flex items-center justify-end gap-2">
-            <span className="text-slate-400">#</span>
-            <Input 
-              className="w-32 text-right border-slate-200 focus:border-[#007AFF]" 
-              value={store.invoiceNumber} 
-              onChange={(e) => store.setField("invoiceNumber", parseInt(e.target.value) || 1)} 
+
+        <span className="text-2xl font-bold tracking-[0.2em] text-white/90">
+          INVOICE
+        </span>
+
+        <div className="relative" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setShowCurrencyDrop(!showCurrencyDrop)}
+            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-sm font-semibold px-3 py-1.5 rounded-lg transition-all border border-white/15"
+          >
+            <span>{selectedCurrency.symbol}</span>
+            <span>{selectedCurrency.code}</span>
+            <ChevronDown
+              size={12}
+              className={cn(
+                "transition-transform",
+                showCurrencyDrop && "rotate-180",
+              )}
             />
-          </div>
-        </div>
-      </div>
+          </button>
 
-      {/* Addresses Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div className="space-y-3">
-          <Input 
-            placeholder="Who is this from?" 
-            className="border-none px-0 text-lg focus-visible:ring-0 placeholder:text-slate-400"
-            value={store.businessName}
-            onChange={(e) => store.setField("businessName", e.target.value)}
-          />
-          <textarea 
-            placeholder="Address, Phone, etc."
-            className="w-full border-none px-0 focus:ring-0 resize-none text-slate-600"
-            rows={3}
-            value={store.businessAddress}
-            onChange={(e) => store.setField("businessAddress", e.target.value)}
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-4">
-            <div className="flex flex-col">
-              <Label className="text-slate-500 text-xs text-right mb-1">Date</Label>
-              <Input type="date" className="text-right border-slate-200" value={store.issueDate} onChange={(e) => store.setField("issueDate", e.target.value)} />
-            </div>
-            <div className="flex flex-col">
-              <Label className="text-slate-500 text-xs text-right mb-1">Due Date</Label>
-              <Input type="date" className="text-right border-slate-200" value={store.dueDate} onChange={(e) => store.setField("dueDate", e.target.value)} />
-            </div>
-          </div>
-          <div className="space-y-4">
-             <div className="flex flex-col">
-              <Label className="text-slate-500 text-xs text-right mb-1">Currency</Label>
-              <select 
-                value={store.currency} 
-                onChange={(e) => store.setField("currency", e.target.value as CurrencyCode)}
-                className="h-10 rounded-md border border-slate-200 px-3 text-sm bg-white"
-              >
-                {Object.entries(CURRENCIES).map(([code, { symbol }]) => (
-                  <option key={code} value={code}>{code} ({symbol})</option>
+          {showCurrencyDrop && (
+            <div className="absolute right-0 top-10 bg-white rounded-xl shadow-2xl border border-[#1B2A4A]/10 z-50 w-64 overflow-hidden">
+              {/* Scrollable Container */}
+              <div className="max-h-60 overflow-y-auto custom-scrollbar overscroll-contain ">
+                {CURRENCIES.map((c) => (
+                  <button
+                    key={c.code}
+                    type="button"
+                    onClick={() => {
+                      setCurrency(c.code);
+                      setShowCurrencyDrop(false);
+                    }}
+                    className={cn(
+                      "w-full text-left px-4 py-2.5 text-sm flex justify-between items-center hover:bg-[#F5F7FA] transition-all border-b border-gray-50 last:border-none",
+                      c.code === currency
+                        ? "text-[#3A7BD5] font-bold bg-[#3A7BD5]/5"
+                        : "text-[#1B2A4A]",
+                    )}
+                  >
+                    <div className="flex flex-col">
+                      <span className="font-medium">{c.label}</span>
+                      <span className="text-[10px] opacity-50 uppercase">
+                        {c.code}
+                      </span>
+                    </div>
+                    <span className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded text-[#1B2A4A]/60">
+                      {c.symbol}
+                    </span>
+                  </button>
                 ))}
-              </select>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ══ BODY ═══════════════════════════════════════════════════════ */}
+      <div className="p-8 space-y-8">
+        {/* Logo + From + Dates */}
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-3">
+            <Field label="Logo">
+              <LogoUpload value={store.logoDataUrl} onChange={store.setLogo} />
+            </Field>
+          </div>
+
+          <div className="col-span-5 space-y-3">
+            <Field label="From">
+              <input
+                className={SI}
+                placeholder="Your business name"
+                value={store.businessName}
+                onChange={(e) => store.setField("businessName", e.target.value)}
+              />
+            </Field>
+            <textarea
+              className={cn(SI, "resize-none")}
+              placeholder="Address, phone, email..."
+              rows={3}
+              value={store.businessAddress}
+              onChange={(e) =>
+                store.setField("businessAddress", e.target.value)
+              }
+            />
+          </div>
+
+          <div className="col-span-4 space-y-3">
+            <Field label="Issue Date">
+              <input
+                type="date"
+                className={SI}
+                value={store.issueDate}
+                onChange={(e) => store.setField("issueDate", e.target.value)}
+              />
+            </Field>
+            <Field label="Due Date">
+              <input
+                type="date"
+                className={SI}
+                value={store.dueDate}
+                onChange={(e) => store.setField("dueDate", e.target.value)}
+              />
+            </Field>
+            <Field label="PO Number">
+              <input
+                className={SI}
+                placeholder="Optional"
+                onChange={(e) => store.setField("poNumber", e.target.value)}
+              />
+            </Field>
+          </div>
+        </div>
+
+        <div className="border-t border-[#1B2A4A]/08" />
+
+        {/* Bill To / Ship To */}
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <div
+              className="w-6 h-0.5 rounded-full"
+              style={{ background: "#3A7BD5" }}
+            />
+            <Field label="Bill To">
+              <input
+                className={SI}
+                placeholder="Client name"
+                value={store.clientName}
+                onChange={(e) => store.setField("clientName", e.target.value)}
+              />
+            </Field>
+            <textarea
+              className={cn(SI, "resize-none")}
+              placeholder="Client address..."
+              rows={2}
+              value={store.clientAddress}
+              onChange={(e) => store.setField("clientAddress", e.target.value)}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <div className="w-6 h-0.5 rounded-full bg-[#1B2A4A]/15" />
+            <Field label="Ship To (Optional)">
+              <input
+                className={SI}
+                placeholder="Shipping address..."
+                onChange={(e) => store.setField("shipTo", e.target.value)}
+              />
+            </Field>
+          </div>
+        </div>
+
+        <div className="border-t border-[#1B2A4A]/08" />
+
+        {/* Line Items Table */}
+        <div className="rounded-xl overflow-hidden border border-[#1B2A4A]/10 shadow-sm">
+          <div
+            className="grid grid-cols-12 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-white/80"
+            style={{ background: "#1B2A4A" }}
+          >
+            <div className="col-span-5">Item</div>
+            <div className="col-span-2 text-center">Qty</div>
+            <div className="col-span-2 text-center">Rate</div>
+            <div className="col-span-2 text-center">Discount %</div>
+            <div className="col-span-1 text-right">Amount</div>
+          </div>
+          {/* <div className="bg-white"> <LineItemsTable  /></div> */}
+
+          {/* // ── Left: Notes, Terms, Signature ── */}
+        </div>
+
+        {/* Notes + Totals */}
+        <div className="grid grid-cols-2 gap-10">
+          {/* ── Left: Notes, Terms, Signature ── */}
+          <div className="space-y-5">
+            <Field label="Notes">
+              <textarea
+                className={cn(SI, "resize-none min-h-[80px]")}
+                placeholder="Payment instructions, thank you note..."
+                value={store.notes}
+                onChange={(e) => store.setField("notes", e.target.value)}
+              />
+            </Field>
+
+            <Field label="Terms">
+              <textarea
+                className={cn(SI, "resize-none min-h-[60px]")}
+                placeholder="Terms & conditions..."
+                value={store.paymentInstructions}
+                onChange={(e) =>
+                  store.setField("paymentInstructions", e.target.value)
+                }
+              />
+            </Field>
+
+            {/* Signature / Stamp upload */}
+            <Field label="Signature / Stamp">
+              {signatureUrl ? (
+                <div className="relative inline-block">
+                  <img
+                    src={signatureUrl}
+                    alt="Signature"
+                    className="h-16 object-contain rounded-lg border border-[#1B2A4A]/10 bg-white p-2"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setSignatureUrl(null)}
+                    className="absolute -top-2 -right-2 bg-[#1B2A4A] text-white rounded-full p-0.5 hover:bg-red-500 transition-all"
+                  >
+                    <X size={11} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => sigRef.current?.click()}
+                  className="flex items-center gap-2 border-2 border-dashed border-[#1B2A4A]/20 hover:border-[#3A7BD5] rounded-xl px-4 py-3 text-sm text-[#1B2A4A]/40 hover:text-[#3A7BD5] transition-all w-full justify-center"
+                >
+                  <Upload size={14} />
+                  Upload signature or stamp
+                </button>
+              )}
+              <input
+                ref={sigRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleSignature}
+              />
+            </Field>
+          </div>
+
+          {/* ── Right: Totals ── */}
+          <div className="space-y-3">
+            {/* Subtotal */}
+            <div className="flex justify-between text-sm text-[#1B2A4A]/60">
+              <span>Subtotal</span>
+              <span className="font-mono">
+                {selectedCurrency.symbol} {subtotal.toFixed(2)}
+              </span>
+            </div>
+
+            {/* Overall discount */}
+            <div className="flex justify-between items-center gap-3">
+              <span className="text-sm text-[#1B2A4A]/60">
+                Overall Discount
+              </span>
+              <div className="flex items-center gap-1.5 bg-white border border-[#1B2A4A]/15 rounded-lg px-2 py-1">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  min={0}
+                  max={100}
+                  className="w-14 text-right text-sm text-[#1B2A4A] font-mono outline-none bg-transparent"
+                  value={overallDiscount}
+                  onChange={(e) =>
+                    setOverallDiscount(parseFloat(e.target.value) || 0)
+                  }
+                />
+                <Percent size={12} className="text-[#1B2A4A]/40" />
+              </div>
+            </div>
+
+            {overallDiscount > 0 && (
+              <div className="flex justify-between text-sm text-green-600">
+                <span>Discount ({overallDiscount}%)</span>
+                <span className="font-mono">
+                  − {selectedCurrency.symbol} {discountAmt.toFixed(2)}
+                </span>
+              </div>
+            )}
+
+            {/* Tax selector */}
+            <div className="flex justify-between items-center gap-3">
+              {/* Ref ko yahan lagana hai takay poora tax area cover ho */}
+              <div className="relative" ref={taxDropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setShowTaxDrop(!showTaxDrop)}
+                  className="flex items-center gap-1.5 text-sm text-[#1B2A4A]/60 hover:text-[#3A7BD5] transition-all"
+                >
+                  <span>{taxType}</span>
+                  {taxType !== "None" && (
+                    <span className="text-xs font-mono bg-[#3A7BD5]/10 text-[#3A7BD5] px-1.5 py-0.5 rounded">
+                      {taxType === "Custom"
+                        ? `${customTaxRate}%`
+                        : `${effectiveTaxRate}%`}
+                    </span>
+                  )}
+                  <ChevronDown
+                    size={12}
+                    className={cn(
+                      "transition-transform",
+                      showTaxDrop && "rotate-180",
+                    )}
+                  />
+                </button>
+
+                {showTaxDrop && (
+                  <div className="absolute left-0 bottom-full mb-2 bg-white rounded-xl shadow-2xl border border-[#1B2A4A]/10 z-50 w-44 max-h-60 overflow-y-auto custom-scrollbar overscroll-contain">
+                    {TAX_TYPES.map((t) => (
+                      <button
+                        key={t.label}
+                        type="button"
+                        onClick={() => {
+                          setTaxType(t.label);
+                          if (t.label !== "Custom") setTaxRate(t.rate);
+                          setShowTaxDrop(false);
+                        }}
+                        className={cn(
+                          "w-full text-left px-4 py-2.5 text-sm flex justify-between hover:bg-[#F5F7FA] transition-all",
+                          t.label === taxType
+                            ? "text-[#3A7BD5] font-bold"
+                            : "text-[#1B2A4A]",
+                        )}
+                      >
+                        <span>{t.label}</span>
+                        {t.label !== "None" && t.label !== "Custom" && (
+                          <span className="text-xs text-[#1B2A4A]/40">
+                            {t.rate}%
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Custom Input Section */}
+              {taxType === "Custom" ? (
+                <div className="flex items-center gap-1.5 bg-white border border-[#1B2A4A]/15 rounded-lg px-2 py-1">
+                  <input
+                    type="number"
+                    min={0}
+                    max={100}
+                    className="w-14 text-right text-sm text-[#1B2A4A] font-mono outline-none bg-transparent"
+                    value={customTaxRate}
+                    onChange={(e) =>
+                      setCustomTaxRate(parseFloat(e.target.value) || 0)
+                    }
+                  />
+                  <Percent size={12} className="text-[#1B2A4A]/40" />
+                </div>
+              ) : taxType !== "None" ? (
+                <span className="text-sm font-mono text-[#1B2A4A]/60">
+                  {selectedCurrency.symbol} {taxAmt.toFixed(2)}
+                </span>
+              ) : null}
+            </div>
+
+            <div className="border-t-2 border-[#1B2A4A]/08 pt-3 mt-1" />
+
+            {/* Total */}
+            <div className="flex justify-between items-center">
+              <span
+                className="font-bold text-base"
+                style={{ color: "#1B2A4A" }}
+              >
+                Total
+              </span>
+              <span
+                className="font-bold text-base font-mono"
+                style={{ color: "#1B2A4A" }}
+              >
+                {selectedCurrency.symbol} {total.toFixed(2)}
+              </span>
+            </div>
+
+            {/* Balance Due — 10% accent */}
+            <div
+              className="flex justify-between items-center px-4 py-3 rounded-xl font-bold text-sm"
+              style={{
+                background: "#3A7BD510",
+                border: "1.5px solid #3A7BD530",
+                color: "#3A7BD5",
+              }}
+            >
+              <span>Balance Due</span>
+              <span className="font-mono text-base">
+                {selectedCurrency.symbol} {total.toFixed(2)}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bill To / Ship To Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="space-y-2">
-          <Label className="text-slate-400 font-medium">Bill To</Label>
-          <Input 
-            placeholder="Who is this to?" 
-            className="border-slate-200 focus:border-[#007AFF]"
-            value={store.clientName}
-            onChange={(e) => store.setField("clientName", e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-slate-400 font-medium">Ship To</Label>
-          <Input 
-            placeholder="(optional)" 
-            className="border-slate-200 focus:border-[#007AFF]"
-            value={store.clientAddress}
-            onChange={(e) => store.setField("clientAddress", e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Table Section - Custom Styled */}
-      <div className="overflow-hidden rounded-md border border-slate-200">
-        <div className="bg-[#111827] text-white px-4 py-2 grid grid-cols-12 text-sm font-medium">
-          <div className="col-span-6 uppercase tracking-wider text-xs">Item</div>
-          <div className="col-span-2 text-center uppercase tracking-wider text-xs">Quantity</div>
-          <div className="col-span-2 text-center uppercase tracking-wider text-xs">Rate</div>
-          <div className="col-span-2 text-right uppercase tracking-wider text-xs">Amount</div>
-        </div>
-        <div className="p-0">
-          <LineItemsTable currency={store.currency} />
-        </div>
-      </div>
-
-      {/* Notes and Totals Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-6">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <Label className="text-slate-500">Notes</Label>
-            <textarea 
-              className="w-full rounded-md border border-slate-200 p-3 focus:border-[#007AFF] outline-none min-h-[100px]"
-              placeholder="Notes - any relevant information not already covered"
-              value={store.notes}
-              onChange={(e) => store.setField("notes", e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label className="text-slate-500">Terms</Label>
-            <textarea 
-              className="w-full rounded-md border border-slate-200 p-3 focus:border-[#007AFF] outline-none min-h-[80px]"
-              placeholder="Terms and conditions - late fees, payment methods..."
-              value={store.paymentInstructions}
-              onChange={(e) => store.setField("paymentInstructions", e.target.value)}
-            />
-          </div>
-        </div>
-
-        {/* Financial Summary */}
-        <div className="space-y-3 text-right">
-          <div className="flex justify-between items-center text-slate-600">
-            <span>Subtotal</span>
-            <span>{store.currency} 0</span>
-          </div>
-          <div className="flex justify-between items-center gap-4">
-             <span className="text-slate-600">Tax ({store.tax.label})</span>
-             <div className="flex items-center gap-2">
-                <Input type="number" className="w-20 text-right h-8" value={store.tax.value} onChange={(e) => store.setField("tax", {...store.tax, value: e.target.value})} />
-                <span className="text-slate-400">%</span>
-             </div>
-          </div>
-          <div className="flex justify-between items-center pt-4 border-t border-slate-100 font-semibold text-lg text-[#111827]">
-            <span>Total</span>
-            <span>{store.currency} 0</span>
-          </div>
-          <div className="flex justify-between items-center text-[#007AFF] font-medium">
-            <span>Balance Due</span>
-            <span>{store.currency} 0</span>
-          </div>
+      {/* ══ FOOTER BAR ═════════════════════════════════════════════════ */}
+      <div
+        className="px-8 py-3 flex items-center justify-between"
+        style={{ background: "#1B2A4A08", borderTop: "1px solid #1B2A4A12" }}
+      >
+        <p className="text-[11px] text-[#1B2A4A]/35">
+          {selectedCurrency.code} &middot;{" "}
+          {taxType !== "None" ? `${taxType} ${effectiveTaxRate}%` : "No Tax"}{" "}
+          &middot;{" "}
+          {overallDiscount > 0 ? `${overallDiscount}% Discount` : "No Discount"}
+        </p>
+        <div className="flex items-center gap-2 text-[11px] text-[#1B2A4A]/35">
+          <div className="w-1.5 h-1.5 rounded-full bg-[#3A7BD5]/60" />
+          Invoice #{store.invoiceNumber}
         </div>
       </div>
     </form>
