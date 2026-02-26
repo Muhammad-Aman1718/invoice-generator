@@ -1,9 +1,4 @@
-import type {
-  CurrencyCode,
-  LineItem,
-  TaxConfig,
-  DiscountConfig,
-} from "../types/invoice-types";
+import type { CurrencyCode, LineItem } from "../types/invoice-types";
 
 export const CURRENCIES: Record<
   CurrencyCode,
@@ -87,27 +82,27 @@ export function calculateSubtotal(items: LineItem[]): number {
   return items.reduce((sum, item) => sum + item.amount, 0);
 }
 
-export function calculateTaxAmount(subtotal: number, tax: TaxConfig): number {
-  if (tax.type === "percentage") {
-    return Math.round(subtotal * (tax.value / 100) * 100) / 100;
+export function calculateTaxAmount(subtotal: number, tax: number): number {
+  if (typeof tax === "number" && tax > 0 && tax <= 100) {
+    return Math.round(subtotal * (tax / 100) * 100) / 100;
   }
-  return tax.value;
+  return tax;
 }
 
 export function calculateDiscountAmount(
   subtotal: number,
-  discount: DiscountConfig,
+  discount: number,
 ): number {
-  if (discount.type === "percentage") {
-    return Math.round(subtotal * (discount.value / 100) * 100) / 100;
+  if (typeof discount === "number" && discount > 0 && discount <= 100) {
+    return Math.round(subtotal * (discount / 100) * 100) / 100;
   }
-  return discount.value;
+  return discount;
 }
 
 export function calculateGrandTotal(
   subtotal: number,
-  tax: TaxConfig,
-  discount: DiscountConfig,
+  tax: number,
+  discount: number,
 ): number {
   const taxAmount = calculateTaxAmount(subtotal, tax);
   const discountAmount = calculateDiscountAmount(subtotal, discount);

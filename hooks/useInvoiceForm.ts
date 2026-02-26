@@ -5,7 +5,6 @@ import { CURRENCIES } from "@/constant/data";
 const useInvoiceForm = () => {
   const store = useInvoiceStore();
 
-  const [currency, setCurrency] = useState("USD");
   const [showCurrencyDrop, setShowCurrencyDrop] = useState(false);
   const [taxType, setTaxType] = useState("GST");
   const [taxRate, setTaxRate] = useState(10);
@@ -15,15 +14,19 @@ const useInvoiceForm = () => {
   const [signatureUrl, setSignatureUrl] = useState<string | null>(null);
   const sigRef = useRef<HTMLInputElement>(null);
 
-  const selectedCurrency = CURRENCIES.find((c) => c.code === currency)!;
+  const selectedCurrency = CURRENCIES.find((c) => c.code === store.currency)!;
   const effectiveTaxRate =
     taxType === "None" ? 0 : taxType === "Custom" ? customTaxRate : taxRate;
 
-  // Placeholder totals — replace with real computed values from your store
-  const subtotal = 0;
-  const discountAmt = (subtotal * overallDiscount) / 100;
-  const taxAmt = ((subtotal - discountAmt) * effectiveTaxRate) / 100;
-  const total = subtotal - discountAmt + taxAmt;
+  const subtotal = store.subtotal;
+  const overallDiscountVal = subtotal * (store.overallDiscount / 100);
+  const taxableAmount = subtotal - overallDiscountVal;
+  const taxVal = taxableAmount * (store.taxRate / 100);
+
+  const handleTaxChange = (rate: number, type: string) => {
+    setTaxType(type);
+    store.setField("taxRate", rate);
+  };
 
   function handleSignature(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -71,8 +74,6 @@ const useInvoiceForm = () => {
   }, [showCurrencyDrop, showTaxDrop]);
 
   return {
-    currency,
-    setCurrency,
     showCurrencyDrop,
     taxType,
     setTaxType,
@@ -87,10 +88,11 @@ const useInvoiceForm = () => {
     signatureUrl,
     setSignatureUrl,
     setShowCurrencyDrop,
+    handleTaxChange,
     subtotal,
-    discountAmt,
-    taxAmt,
-    total,
+    overallDiscountVal,
+    taxableAmount,
+    taxVal,
     handleSignature,
     dropdownRef,
     taxDropdownRef,

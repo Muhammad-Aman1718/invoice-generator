@@ -21,7 +21,7 @@ export default function NewInvoicePage() {
   const store = useInvoiceStore();
 
   const subtotal = calculateSubtotal(store.lineItems);
-  const grandTotal = calculateGrandTotal(subtotal, store.tax, store.discount);
+  const grandTotal = calculateGrandTotal(subtotal, store.taxRate, store.overallDiscount);
 
   const handleDownload = async () => {
     await generateInvoicePDF("invoice-preview");
@@ -30,7 +30,13 @@ export default function NewInvoicePage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const result = await saveInvoiceToDb(store, grandTotal);
+      const result = await saveInvoiceToDb(store);
+
+
+
+
+
+      
       if (result) router.push("/dashboard");
     } finally {
       setIsSaving(false);

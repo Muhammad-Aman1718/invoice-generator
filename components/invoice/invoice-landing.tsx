@@ -1724,31 +1724,24 @@ import { Download, Eye, Save, X, Hash, Percent } from "lucide-react";
 // and accept the new fields as props so InvoiceLanding stays the
 // single source of truth for currency / tax / discount / signature.
 
-interface PreviewData {
-  currencySymbol: string;
-  currencyCode: string;
-  taxType: string;
-  taxRate: number;
-  overallDiscount: number;
-  signatureUrl: string | null;
-  subtotal: number;
-  discountAmt: number;
-  taxAmt: number;
-  total: number;
-}
+
 
 export function InvoiceLanding() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const store = useInvoiceStore();
   const subtotal = calculateSubtotal(store.lineItems);
-  const grandTotal = calculateGrandTotal(subtotal, store.tax, store.discount);
+  const grandTotal = calculateGrandTotal(
+    subtotal,
+    store.taxRate,
+    store.overallDiscount,
+  );
 
   const handleDownload = async () => {
     await generateInvoicePDF("invoice-preview");
   };
 
   const handleSave = async () => {
-    const result = await saveInvoiceToDb(store, grandTotal);
+    const result = await saveInvoiceToDb(store);
     if (result) {
       window.location.href = "/dashboard";
     } else {

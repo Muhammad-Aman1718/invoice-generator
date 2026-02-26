@@ -5,48 +5,82 @@ import { persist } from "zustand/middleware";
 import type {
   InvoiceData,
   LineItem,
-  CurrencyCode,
-  TaxConfig,
-  DiscountConfig,
   InvoiceStore,
 } from "../types/invoice-types";
 
 const STORAGE_KEY = "invoice-generator-data";
 
+// Helper function to calculate amounts
+// Helper function to calculate amounts based on your logic
+const calculateTotals = (state: Partial<InvoiceStore>) => {
+  const lineItems = state.lineItems || [];
+
+  // 1. Calculate each item's amount (Item Level Discount)
+  const updatedItems = lineItems.map((item) => {
+    const qty = Number(item.quantity) || 0;
+    const rate = Number(item.rate) || 0;
+    const discPercent = Number(item.discount) || 0;
+
+    // Formula: (Qty * Rate) - Discount %
+    const amount = qty * rate * (1 - discPercent / 100);
+    return { ...item, amount };
+  });
+
+  // 2. Subtotal (Sum of all discounted line items)
+  const subtotal = updatedItems.reduce((sum, item) => sum + item.amount, 0);
+
+  // 3. Overall Discount Calculation (Amount to subtract)
+  const overallDiscountRate = Number(state.overallDiscount) || 0;
+  const overallDiscountAmount = subtotal * (overallDiscountRate / 100);
+
+  // Amount after overall discount
+  const amountAfterOverallDiscount = subtotal - overallDiscountAmount;
+
+  // 4. Tax Calculation (GST/Sales Tax on the discounted subtotal)
+  const taxRate = Number(state.taxRate) || 0;
+  const taxAmount = amountAfterOverallDiscount * (taxRate / 100);
+
+  // 5. Final Grand Total
+  const totalAmount = amountAfterOverallDiscount + taxAmount;
+
+  return {
+    lineItems: updatedItems,
+    subtotal,
+    // Hum sirf totals return kar rahe hain, UI inko store se direct read karega
+    totalAmount,
+    // Note: Aap store interface mein taxAmount save kar sakte hain display ke liye
+  };
+};
 const createLineItem = (): LineItem => ({
   id: crypto.randomUUID(),
   description: "",
   quantity: 1,
   rate: 0,
+  discount: 0,
   amount: 0,
-  discount: 0,   // New field for line item discount
 });
 
 const defaultInvoiceData: InvoiceData = {
   logoDataUrl: null,
+  invoiceNumber: 1,
+  currency: "USD",
   businessName: "",
-  businessAddress: "",
-  businessEmail: "",
-  businessPhone: "",
+  bussinessInfo: "",
+  issueDate: new Date().toISOString().split("T")[0],
+  dueDate: new Date().toISOString().split("T")[0],
+  poNumber: "",
   clientName: "",
   clientAddress: "",
-  clientEmail: "",
-  invoiceNumber: 1,
-  issueDate: new Date().toISOString().split("T")[0],
-  dueDate: addDays(new Date().toISOString().split("T")[0], 30),
-  currency: "USD",
+  shipTo: "",
   lineItems: [createLineItem()],
-  tax: { label: "Tax", type: "percentage", value: 0 },
-  discount: { label: "Discount", type: "percentage", value: 0 },
-  paymentInstructions: "",
   notes: "",
+  terms: "",
+  stampUrl: null,
+  subtotal: 0,
+  overallDiscount: 0,
+  taxRate: 0,
+  totalAmount: 0,
 };
-
-function addDays(dateStr: string, days: number): string {
-  const d = new Date(dateStr);
-  d.setDate(d.getDate() + days);
-  return d.toISOString().split("T")[0];
-}
 
 export const useInvoiceStore = create<InvoiceStore>()(
   persist(
@@ -54,26 +88,47 @@ export const useInvoiceStore = create<InvoiceStore>()(
       ...defaultInvoiceData,
 
       setField: (field, value) =>
-        set((state) => ({ ...state, [field]: value })),
+        set((state) => {
+          const newState = { ...state, [field]: value };
+          // Agar tax ya discount change ho toh recalculate karein
+          if (
+            field === "overallDiscount" ||
+            field === "taxRate" ||
+            field === "currency"
+          ) {
+            return { ...newState, ...calculateTotals(newState) };
+          }
+          return newState;
+        }),
 
       setLogo: (logoDataUrl) => set({ logoDataUrl }),
 
       addLineItem: () =>
-        set((state) => ({
-          lineItems: [...state.lineItems, createLineItem()],
-        })),
+        set((state) => {
+          const newState = {
+            ...state,
+            lineItems: [...state.lineItems, createLineItem()],
+          };
+          return { ...newState, ...calculateTotals(newState) };
+        }),
 
       removeLineItem: (id) =>
-        set((state) => ({
-          lineItems: state.lineItems.filter((item) => item.id !== id),
-        })),
+        set((state) => {
+          const newState = {
+            ...state,
+            lineItems: state.lineItems.filter((item) => item.id !== id),
+          };
+          return { ...newState, ...calculateTotals(newState) };
+        }),
 
       updateLineItem: (id, field, value) =>
-        set((state) => ({
-          lineItems: state.lineItems.map((item) =>
+        set((state) => {
+          const updatedLineItems = state.lineItems.map((item) =>
             item.id === id ? { ...item, [field]: value } : item,
-          ),
-        })),
+          );
+          const newState = { ...state, lineItems: updatedLineItems };
+          return { ...newState, ...calculateTotals(newState) };
+        }),
 
       incrementInvoiceNumber: () =>
         set((state) => ({ invoiceNumber: state.invoiceNumber + 1 })),
@@ -81,20 +136,18 @@ export const useInvoiceStore = create<InvoiceStore>()(
       resetInvoice: () => set(defaultInvoiceData),
 
       loadInvoice: (data) =>
-        set((state) => ({
-          ...state,
-          ...data,
-          lineItems: data.lineItems ?? state.lineItems,
-        })),
+        set((state) => {
+          const newState = { ...state, ...data };
+          return { ...newState, ...calculateTotals(newState) };
+        }),
     }),
     {
       name: STORAGE_KEY,
       partialize: (state) => ({
-        logoDataUrl: state.logoDataUrl,
         businessName: state.businessName,
-        businessAddress: state.businessAddress,
-        businessEmail: state.businessEmail,
-        businessPhone: state.businessPhone,
+        bussinessInfo: state.bussinessInfo,
+        currency: state.currency,
+        logoDataUrl: state.logoDataUrl,
       }),
     },
   ),

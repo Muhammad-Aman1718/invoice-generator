@@ -1,11 +1,12 @@
 "use client";
 
 import useInvoiceForm from "@/hooks/useInvoiceForm";
+import Field from "../ui/field";
+
 import { ChevronDown, Upload, X, Percent, Hash } from "lucide-react";
 import { CURRENCIES, SI, TAX_TYPES } from "@/constant/data";
 import { LogoUpload } from "./logo-upload";
 import { cn } from "@/lib/utils";
-import Field from "../ui/field";
 import { LineItemsTable } from "./line-items-table";
 
 // ─────────────────────────────────────────────
@@ -15,40 +16,27 @@ import { LineItemsTable } from "./line-items-table";
 //  10% → #3A7BD5  accent (CTAs, highlights)
 // ─────────────────────────────────────────────
 
-
-
-
 // ───────────────────────────────────────────────────────────────────────────
 export function InvoiceForm() {
   const {
-    currency,
-    setCurrency,
     showCurrencyDrop,
     taxType,
-    setTaxType,
-    setTaxRate,
     showTaxDrop,
-    setShowTaxDrop,
-    customTaxRate,
-    setCustomTaxRate,
-    overallDiscount,
-    setOverallDiscount,
     signatureUrl,
-    setSignatureUrl,
     subtotal,
-    discountAmt,
-    taxAmt,
-    total,
-    handleSignature,
+    overallDiscountVal,
+    taxVal,
     dropdownRef,
     taxDropdownRef,
     selectedCurrency,
-    effectiveTaxRate,
-    setShowCurrencyDrop,
     sigRef,
     store,
+    setShowCurrencyDrop,
+    setShowTaxDrop,
+    handleTaxChange,
+    setSignatureUrl,
+    handleSignature,
   } = useInvoiceForm();
-
   return (
     <form
       className="rounded-2xl shadow-lg border border-[#1B2A4A]/08  overflow-hidden"
@@ -106,12 +94,12 @@ export function InvoiceForm() {
                     key={c.code}
                     type="button"
                     onClick={() => {
-                      setCurrency(c.code);
+                      store.setField("currency", c.code); // Store update hoga
                       setShowCurrencyDrop(false);
                     }}
                     className={cn(
                       "w-full text-left px-4 py-2.5 text-sm flex justify-between items-center hover:bg-[#F5F7FA] transition-all border-b border-gray-50 last:border-none",
-                      c.code === currency
+                      c.code === store.currency
                         ? "text-[#3A7BD5] font-bold bg-[#3A7BD5]/5"
                         : "text-[#1B2A4A]",
                     )}
@@ -156,10 +144,8 @@ export function InvoiceForm() {
               className={cn(SI, "resize-none")}
               placeholder="Address, phone, email..."
               rows={3}
-              value={store.businessAddress}
-              onChange={(e) =>
-                store.setField("businessAddress", e.target.value)
-              }
+              value={store.bussinessInfo}
+              onChange={(e) => store.setField("bussinessInfo", e.target.value)}
             />
           </div>
 
@@ -231,45 +217,10 @@ export function InvoiceForm() {
         <div className="border-t border-[#1B2A4A]/08" />
 
         {/* Line Items Table */}
-        {/* <div className="rounded-xl overflow-hidden border border-[#1B2A4A]/10 shadow-sm">
-          <div
-            className="grid grid-cols-12 px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-white/80"
-            style={{ background: "#1B2A4A" }}
-          >
-            <div className="col-span-5">Item</div>
-            <div className="col-span-2 text-center">Qty</div>
-            <div className="col-span-2 text-center">Rate</div>
-            <div className="col-span-2 text-center">Discount %</div>
-            <div className="col-span-1 text-right">Amount</div>
-          </div>
-          <div className="bg-white"> <LineItemsTable  currency={store.currency} /></div>
 
-        </div> */}
+        <LineItemsTable currency={selectedCurrency.symbol} showDiscount />
 
-
-   <div
-          className="rounded-xl overflow-hidden shadow-sm"
-          style={{ border: "1px solid #1B2A4A10" }}
-        >
-          {/* ── 30% navy header — columns match LineItemsTable widths ── */}
-          <div
-            className="flex items-center px-4 py-3 text-[10px] font-bold uppercase tracking-widest"
-            style={{ background: "#1B2A4A", color: "rgba(255,255,255,0.75)" }}
-          >
-            <div style={{ width: "40%", paddingLeft: "4px" }}>Item</div>
-            <div style={{ width: "10%", textAlign: "center" }}>Qty</div>
-            <div style={{ width: "15%", textAlign: "center" }}>Rate</div>
-            <div style={{ width: "12%", textAlign: "center" }}>Disc %</div>
-            <div style={{ width: "13%", textAlign: "right" }}>Amount</div>
-            <div style={{ width: "5%", textAlign: "center" }} />
-          </div>
-
-          {/* ── Table body ── */}
-          <LineItemsTable currency={selectedCurrency.symbol} showDiscount />
-        </div>
-
-
-          {/* // ── Left: Notes, Terms, Signature ── */}
+        {/* // ── Left: Notes, Terms, Signature ── */}
         {/* Notes + Totals */}
         <div className="grid grid-cols-2 gap-10">
           {/* ── Left: Notes, Terms, Signature ── */}
@@ -287,10 +238,8 @@ export function InvoiceForm() {
               <textarea
                 className={cn(SI, "resize-none min-h-[60px]")}
                 placeholder="Terms & conditions..."
-                value={store.paymentInstructions}
-                onChange={(e) =>
-                  store.setField("paymentInstructions", e.target.value)
-                }
+                value={store.terms}
+                onChange={(e) => store.setField("terms", e.target.value)}
               />
             </Field>
 
@@ -354,20 +303,23 @@ export function InvoiceForm() {
                   min={0}
                   max={100}
                   className="w-14 text-right text-sm text-[#1B2A4A] font-mono outline-none bg-transparent"
-                  value={overallDiscount}
+                  value={store.overallDiscount}
                   onChange={(e) =>
-                    setOverallDiscount(parseFloat(e.target.value) || 0)
+                    store.setField(
+                      "overallDiscount",
+                      parseFloat(e.target.value) || 0,
+                    )
                   }
                 />
                 <Percent size={12} className="text-[#1B2A4A]/40" />
               </div>
             </div>
 
-            {overallDiscount > 0 && (
+            {overallDiscountVal > 0 && (
               <div className="flex justify-between text-sm text-green-600">
-                <span>Discount ({overallDiscount}%)</span>
+                <span>Discount ({store.overallDiscount}%)</span>
                 <span className="font-mono">
-                  − {selectedCurrency.symbol} {discountAmt.toFixed(2)}
+                  − {selectedCurrency.symbol} {overallDiscountVal.toFixed(2)}
                 </span>
               </div>
             )}
@@ -384,9 +336,7 @@ export function InvoiceForm() {
                   <span>{taxType}</span>
                   {taxType !== "None" && (
                     <span className="text-xs font-mono bg-[#3A7BD5]/10 text-[#3A7BD5] px-1.5 py-0.5 rounded">
-                      {taxType === "Custom"
-                        ? `${customTaxRate}%`
-                        : `${effectiveTaxRate}%`}
+                      {store.taxRate}%
                     </span>
                   )}
                   <ChevronDown
@@ -405,8 +355,7 @@ export function InvoiceForm() {
                         key={t.label}
                         type="button"
                         onClick={() => {
-                          setTaxType(t.label);
-                          if (t.label !== "Custom") setTaxRate(t.rate);
+                          handleTaxChange(t.rate, t.label);
                           setShowTaxDrop(false);
                         }}
                         className={cn(
@@ -429,25 +378,9 @@ export function InvoiceForm() {
               </div>
 
               {/* Custom Input Section */}
-              {taxType === "Custom" ? (
-                <div className="flex items-center gap-1.5 bg-white border border-[#1B2A4A]/15 rounded-lg px-2 py-1">
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    className="w-14 text-right text-sm text-[#1B2A4A] font-mono outline-none bg-transparent"
-                    value={customTaxRate}
-                    onChange={(e) =>
-                      setCustomTaxRate(parseFloat(e.target.value) || 0)
-                    }
-                  />
-                  <Percent size={12} className="text-[#1B2A4A]/40" />
-                </div>
-              ) : taxType !== "None" ? (
-                <span className="text-sm font-mono text-[#1B2A4A]/60">
-                  {selectedCurrency.symbol} {taxAmt.toFixed(2)}
-                </span>
-              ) : null}
+              <span className="text-sm font-mono text-[#1B2A4A]/60">
+                {selectedCurrency.symbol} {taxVal.toFixed(2)}
+              </span>
             </div>
 
             <div className="border-t-2 border-[#1B2A4A]/08 pt-3 mt-1" />
@@ -464,22 +397,7 @@ export function InvoiceForm() {
                 className="font-bold text-base font-mono"
                 style={{ color: "#1B2A4A" }}
               >
-                {selectedCurrency.symbol} {total.toFixed(2)}
-              </span>
-            </div>
-
-            {/* Balance Due — 10% accent */}
-            <div
-              className="flex justify-between items-center px-4 py-3 rounded-xl font-bold text-sm"
-              style={{
-                background: "#3A7BD510",
-                border: "1.5px solid #3A7BD530",
-                color: "#3A7BD5",
-              }}
-            >
-              <span>Balance Due</span>
-              <span className="font-mono text-base">
-                {selectedCurrency.symbol} {total.toFixed(2)}
+                {selectedCurrency.symbol} {store.totalAmount.toFixed(2)}
               </span>
             </div>
           </div>
@@ -488,18 +406,31 @@ export function InvoiceForm() {
 
       {/* ══ FOOTER BAR ═════════════════════════════════════════════════ */}
       <div
-        className="px-8 py-3 flex items-center justify-between"
-        style={{ background: "#1B2A4A08", borderTop: "1px solid #1B2A4A12" }}
+        className="px-6 py-4 flex items-center justify-between backdrop-blur-sm"
+        style={{
+          background: "rgba(255, 255, 255, 0.5)",
+          borderTop: "1px solid #e2e8f0",
+        }}
       >
-        <p className="text-[11px] text-[#1B2A4A]/35">
-          {selectedCurrency.code} &middot;{" "}
-          {taxType !== "None" ? `${taxType} ${effectiveTaxRate}%` : "No Tax"}{" "}
-          &middot;{" "}
-          {overallDiscount > 0 ? `${overallDiscount}% Discount` : "No Discount"}
-        </p>
-        <div className="flex items-center gap-2 text-[11px] text-[#1B2A4A]/35">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#3A7BD5]/60" />
-          Invoice #{store.invoiceNumber}
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
+            Pricing Details
+          </span>
+          <p className="text-[11px] font-medium text-slate-600">
+            {store.currency} &middot;{" "}
+            {store.overallDiscount > 0 ? (
+              <span className="text-emerald-600">
+                {store.overallDiscount}% Off (-{overallDiscountVal.toFixed(2)})
+              </span>
+            ) : (
+              "No Discount Applied"
+            )}
+          </p>
+        </div>
+
+        <div className="px-3 py-1 bg-slate-100 rounded-full flex items-center gap-2 text-[10px] font-mono font-semibold text-slate-500 border border-slate-200">
+          <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+          #{store.invoiceNumber}
         </div>
       </div>
     </form>

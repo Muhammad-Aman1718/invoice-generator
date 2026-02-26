@@ -1,110 +1,43 @@
-/**
- * Invoice data types. Modular for Guest vs Registered user logic.
- */
-
 export type CurrencyCode =
   | "USD"
   | "EUR"
   | "GBP"
-  | "CAD"
-  | "AUD"
-  | "JPY"
-  | "CNY"
-  | "INR"
   | "PKR"
+  | "INR"
   | "AED"
-  | "SAR"
-  | "CHF"
-  | "SGD"
-  | "NZD"
-  | "HKD"
-  | "BRL"
-  | "ZAR"
-  | "TRY"
-  | "RUB"
-  | "MXN"
-  | "NOK"
-  | "SEK"
-  | "DKK"
-  | "MYR"
-  | "IDR"
-  | "PHP"
-  | "THB"
-  | "KWD"
-  | "QAR"
-  | "OMR"
-  | "BHD"
-  | "EGP"
-  | "BDT"
-  | "VND"
-  | "LKR"
-  | "NGN"
-  | "KES"
-  | "GHS"
-  | "ARS"
-  | "CLP"
-  | "COP"
-  | "ILS"
-  | "PLN"
-  | "HUF"
-  | "CZK"
-  | "KRW";
+  | string; // Added string for flexibility
 
 export interface LineItem {
   id: string;
   description: string;
   quantity: number;
   rate: number;
-  amount: number;
-  discount: number;
+  discount: number; // percentage on item level
+  amount: number; // total for this item
 }
-
-export interface TaxConfig {
-  label: string;
-  type: "percentage" | "fixed";
-  value: number;
-}
-
-export interface DiscountConfig {
-  label: string;
-  type: "percentage" | "fixed";
-  value: number;
-}
-
-export type InvoiceStatus = "draft" | "sent" | "paid" | "overdue";
 
 export interface InvoiceData {
   id?: string;
-  // Branding / Sender
+  userId?: string;
   logoDataUrl: string | null;
-  businessName: string;
-  businessAddress: string;
-  businessEmail: string;
-  businessPhone: string;
-  shipTo?: string;
-  poNumber?: string;
-  // Client
-  clientName: string;
-  clientAddress: string;
-  clientEmail: string;
-  // Metadata
+  stampUrl: string | null;
   invoiceNumber: number;
+  currency: CurrencyCode;
+  businessName: string;
+  bussinessInfo: string;
   issueDate: string;
   dueDate: string;
-  currency: CurrencyCode;
-  status?: InvoiceStatus;
-  // Line items
+  poNumber?: string;
+  clientName: string;
+  clientAddress: string;
+  shipTo?: string;
   lineItems: LineItem[];
-  // Tax & Discount
-  tax: TaxConfig;
-  discount: DiscountConfig;
-  // Footer
-  paymentInstructions: string;
   notes: string;
-  // Timestamps
-  createdAt?: string;
-  updatedAt?: string;
-  userId?: string;
+  terms: string;
+  subtotal: number;
+  overallDiscount: number; // percentage
+  taxRate: number; // percentage
+  totalAmount: number;
 }
 
 export interface InvoiceStore extends InvoiceData {
@@ -123,4 +56,11 @@ export interface InvoiceStore extends InvoiceData {
   incrementInvoiceNumber: () => void;
   resetInvoice: () => void;
   loadInvoice: (data: Partial<InvoiceData> & { id?: string }) => void;
+}
+
+
+export interface InvoicePreviewProps {
+  className?: string;
+  id?: string;
+  style?: React.CSSProperties;
 }
