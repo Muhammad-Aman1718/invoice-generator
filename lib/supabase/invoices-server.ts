@@ -1,11 +1,12 @@
-import type { InvoiceData, RawInvoiceRow } from "@/types/invoice-types";
+// import type { InvoiceData, RawInvoiceRow } from "@/types/invoice-types";
 import { createClient } from "@/lib/supabase/server";
+import { DBInvoiceRow, InvoiceData } from "@/types/invoice-types";
 
 // invoices-server.ts
 
 // Types jo Supabase se direct aati hain (Snake Case)
 
-function deserializeInvoice(row: RawInvoiceRow): InvoiceData {
+function deserializeInvoice(row: DBInvoiceRow): InvoiceData {
   return {
     id: row.id,
     userId: row.user_id ?? undefined,
@@ -39,7 +40,6 @@ export async function fetchUserInvoicesServer(): Promise<InvoiceData[]> {
     data: { user },
     error: authError,
   } = await supabase.auth.getUser();
-  console.log("Auth Result:", { user, authError });
   if (authError || !user) {
     console.error("Auth Error:", authError);
     return [];
@@ -51,9 +51,6 @@ export async function fetchUserInvoicesServer(): Promise<InvoiceData[]> {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  console.log("data", data);
-  // console.log("usser", user);
-
   if (error) {
     // Ye line aapko terminal mein batayegi ke masla kya hai (e.g., "column grand_total does not exist")
     console.error("Full Supabase Error:", JSON.stringify(error, null, 2));
@@ -61,4 +58,4 @@ export async function fetchUserInvoicesServer(): Promise<InvoiceData[]> {
   }
 
   return (data ?? []).map((row) => deserializeInvoice(row));
-} 
+}

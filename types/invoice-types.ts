@@ -17,7 +17,7 @@ export interface LineItem {
 }
 
 export interface InvoiceData {
-  id: string;
+  id?: string | undefined;
   userId?: string;
   logoDataUrl: string | null;
   stampUrl: string | null;
@@ -40,30 +40,30 @@ export interface InvoiceData {
   totalAmount: number;
 }
 
-export interface RawInvoiceRow {
-  id: string;
-  user_id: string | null;
-  logo_data_url: string | null;
-  stamp_url: string | null;
-  invoice_number: number | null;
-  currency: string | null;
-  business_name: string | null;
-  bussiness_info: string | null; // Note: Double 's' as per your DB
-  issue_date: string | null;
-  due_date: string | null;
-  po_number: string | null;
-  client_name: string | null;
-  client_address: string | null;
-  ship_to: string | null;
-  line_items: any; // JSONB
-  notes: string | null;
-  terms: string | null;
-  subtotal: number | string | null;
-  overall_discount: number | string | null;
-  tax_rate: number | string | null;
-  total_amount: number | string | null;
-  created_at: string | null;
-  updated_at: string | null;
+export interface DBInvoiceRow {
+  id?: string;
+  user_id: string;
+  logo_data_url: string;
+  stamp_url: string;
+  invoice_number: number;
+  currency: string;
+  business_name: string;
+  bussiness_info: string; // Double 's' as per your DB schema
+  issue_date: string;
+  due_date: string;
+  po_number: string;
+  client_name: string;
+  client_address: string;
+  ship_to: string;
+  line_items: any[]; // JSONB data
+  notes: string;
+  terms: string;
+  subtotal: number | string;
+  overall_discount: number | string;
+  tax_rate: number | string;
+  total_amount: number | string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface InvoiceStore extends InvoiceData {
@@ -83,7 +83,6 @@ export interface InvoiceStore extends InvoiceData {
   resetInvoice: () => void;
   loadInvoice: (data: Partial<InvoiceData> & { id?: string }) => void;
 }
-
 
 export interface InvoicePreviewProps {
   className?: string;

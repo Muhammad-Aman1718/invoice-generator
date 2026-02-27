@@ -6,21 +6,13 @@ import { InvoiceData } from "@/types/invoice-types"; // Type import karein
 export async function InvoiceContent() {
   // 1. Data fetch karein (Ab ye naya InvoiceData interface return karega)
   const invoices = await fetchUserInvoicesServer();
-  console.log("Fetched Invoices in InvoiceContent:", invoices); // Debug log
 
   // 2. Stats Calculation
   const stats = invoices.reduce(
     (acc, inv) => {
-      // Ab hum seedha 'totalAmount' use karenge jo aapke naye interface ka hissa hai
       const amount = inv.totalAmount || 0;
-
       acc.totalInvoiced += amount;
-
-      // Agar aapne database mein status save kiya hai (default 'pending' rakha hai)
-      // Note: Agar interface mein status nahi hai, toh main yahan ternary logic use kar raha hoon
-      // kyunke aapki purani DB structure mein status tha.
       const status = (inv as any).status || "pending";
-
       if (status === "paid") {
         acc.totalPaid += amount;
       } else {

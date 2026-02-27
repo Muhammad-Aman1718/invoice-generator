@@ -170,6 +170,7 @@ export function InvoiceForm() {
               <input
                 className={SI}
                 placeholder="Optional"
+                value={store.poNumber}
                 onChange={(e) => store.setField("poNumber", e.target.value)}
               />
             </Field>

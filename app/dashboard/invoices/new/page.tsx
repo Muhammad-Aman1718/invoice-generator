@@ -31,12 +31,6 @@ export default function NewInvoicePage() {
     setIsSaving(true);
     try {
       const result = await saveInvoiceToDb(store);
-
-
-
-
-
-      
       if (result) router.push("/dashboard");
     } finally {
       setIsSaving(false);

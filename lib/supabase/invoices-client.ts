@@ -1,57 +1,13 @@
-import type { InvoiceData } from "@/types/invoice-types";
-import { createClient } from "@/lib/supabase/client";
-import { INVOICE_KEYS } from "@/constant/data";
-
-// function serializeInvoice(data: InvoiceData): Record<string, unknown> {
-//   const obj: Record<string, unknown> = {};
-//   for (const k of INVOICE_KEYS) {
-//     obj[k] = data[k];
-//   }
-//   return obj;
-// }
-
-// function deserializeInvoice(row: {
-//   data: unknown;
-//   id: string;
-// }): InvoiceData & { id: string } {
-//   const d = row.data as Record<string, unknown>;
-//   return {
-//     id: row.id,
-//     logoDataUrl: (d.logoDataUrl as string) ?? null,
-//     businessName: (d.businessName as string) ?? "",
-//     businessAddress: (d.businessAddress as string) ?? "",
-//     businessEmail: (d.businessEmail as string) ?? "",
-//     businessPhone: (d.businessPhone as string) ?? "",
-//     clientName: (d.clientName as string) ?? "",
-//     clientAddress: (d.clientAddress as string) ?? "",
-//     clientEmail: (d.clientEmail as string) ?? "",
-//     invoiceNumber: (d.invoiceNumber as number) ?? 1,
-//     issueDate:
-//       (d.issueDate as string) ?? new Date().toISOString().split("T")[0],
-//     dueDate: (d.dueDate as string) ?? "",
-//     currency: (d.currency as InvoiceData["currency"]) ?? "USD",
-//     lineItems: (d.lineItems as InvoiceData["lineItems"]) ?? [],
-//     tax: (d.tax as InvoiceData["tax"]) ?? {
-//       label: "Tax",
-//       type: "percentage",
-//       value: 0,
-//     },
-//     discount: (d.discount as InvoiceData["discount"]) ?? {
-//       label: "Discount",
-//       type: "percentage",
-//       value: 0,
-//     },
-//     paymentInstructions: (d.paymentInstructions as string) ?? "",
-//     notes: (d.notes as string) ?? "",
-//   };
-// }
+import type { DBInvoiceRow, InvoiceData } from "@/types/invoice-types";
+import { supabase } from "@/lib/supabase/client";
 
 /**
  * DB Row ko InvoiceData interface mein convert karta hai
  */
-function mapRowToInvoice(row: any): InvoiceData & { id: string } {
+
+function mapRowToInvoice(row: DBInvoiceRow): InvoiceData & { id: string } {
   return {
-    id: row.id,
+    id: row.id!,
     userId: row.user_id,
     logoDataUrl: row.logo_data_url,
     stampUrl: row.stamp_url,
@@ -78,8 +34,6 @@ function mapRowToInvoice(row: any): InvoiceData & { id: string } {
 export async function saveInvoiceToDb(
   data: InvoiceData,
 ): Promise<{ id: string } | null> {
-  const supabase = createClient();
-
   const {
     data: { user },
     error: authError,
@@ -119,7 +73,6 @@ export async function saveInvoiceToDb(
         .update(payload)
         .eq("id", data.id)
         .eq("user_id", user.id);
-
       if (error) throw error;
       return { id: data.id };
     } else {
@@ -139,42 +92,9 @@ export async function saveInvoiceToDb(
   }
 }
 
-// export async function fetchInvoiceById(
-//   id: string,
-// ): Promise<(InvoiceData & { id: string }) | null> {
-//   const supabase = createClient();
-//   const {
-//     data: { user },
-//   } = await supabase.auth.getUser();
-//   if (!user) return null;
-//   const { data, error } = await supabase
-//     .from("invoices")
-//     .select("id, data")
-//     .eq("id", id)
-//     .eq("user_id", user.id)
-//     .single();
-//   if (error || !data) return null;
-//   return deserializeInvoice({ id: data.id, data: data.data });
-// }
-
-// export async function deleteInvoiceFromDb(id: string): Promise<void> {
-//   const supabase = createClient();
-//   const {
-//     data: { user },
-//   } = await supabase.auth.getUser();
-//   if (!user) return;
-//   const { error } = await supabase
-//     .from("invoices")
-//     .delete()
-//     .eq("id", id)
-//     .eq("user_id", user.id);
-//   if (error) throw error;
-// }
-
 export async function fetchInvoiceById(
   id: string,
 ): Promise<(InvoiceData & { id: string }) | null> {
-  const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -193,7 +113,6 @@ export async function fetchInvoiceById(
 }
 
 export async function deleteInvoiceFromDb(id: string): Promise<void> {
-  const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

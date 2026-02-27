@@ -107,17 +107,21 @@
 //   );
 // }
 
-
-
-
-
 "use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/invoice-utils";
 import type { InvoiceData } from "@/types/invoice-types";
-import { Download, Pencil, Trash2, MoreHorizontal, FileText, Calendar, User } from "lucide-react";
+import {
+  Download,
+  Pencil,
+  Trash2,
+  MoreHorizontal,
+  FileText,
+  Calendar,
+  User,
+} from "lucide-react";
 import { deleteInvoiceFromDb } from "@/lib/supabase/invoices-client";
 import { useRouter } from "next/navigation";
 import {
@@ -130,14 +134,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface InvoiceListProps {
-  invoices: (InvoiceData & { id: string })[];
+  // invoices: (InvoiceData & { id: string })[];
+  invoices: InvoiceData[];
 }
 
 export function InvoiceList({ invoices }: InvoiceListProps) {
   const router = useRouter();
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this invoice? This action cannot be undone.")) return;
+    if (
+      !confirm(
+        "Are you sure you want to delete this invoice? This action cannot be undone.",
+      )
+    )
+      return;
     await deleteInvoiceFromDb(id);
     router.refresh();
   };
@@ -146,9 +156,11 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
     return (
       <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white p-20 text-center shadow-sm">
         <div className="bg-slate-50 p-4 rounded-full mb-4">
-            <FileText className="h-10 w-10 text-slate-400" />
+          <FileText className="h-10 w-10 text-slate-400" />
         </div>
-        <h3 className="text-lg font-bold text-slate-900">No invoices created</h3>
+        <h3 className="text-lg font-bold text-slate-900">
+          No invoices created
+        </h3>
         <p className="text-slate-500 max-w-[250px] mx-auto mt-1">
           Get started by creating your first professional invoice.
         </p>
@@ -211,7 +223,9 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                 <td className="p-5 text-slate-600">
                   <div className="flex items-center gap-2">
                     <User size={14} className="text-slate-400" />
-                    <span className="font-medium">{inv.clientName || "Unnamed Client"}</span>
+                    <span className="font-medium">
+                      {inv.clientName || "Unnamed Client"}
+                    </span>
                   </div>
                 </td>
 
@@ -219,7 +233,11 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                 <td className="p-5 text-slate-500">
                   <div className="flex items-center gap-2">
                     <Calendar size={14} />
-                    <span>{inv.issueDate ? new Date(inv.issueDate).toLocaleDateString() : "—"}</span>
+                    <span>
+                      {inv.issueDate
+                        ? new Date(inv.issueDate).toLocaleDateString()
+                        : "—"}
+                    </span>
                   </div>
                 </td>
 
@@ -232,26 +250,47 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                 <td className="p-5 text-center">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0 rounded-full hover:bg-slate-200">
+                      <Button
+                        variant="ghost"
+                        className="h-8 w-8 p-0 rounded-full hover:bg-slate-200"
+                      >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48 rounded-xl p-2 shadow-xl border-slate-100">
-                      <DropdownMenuLabel className="text-xs text-slate-400">Manage Invoice</DropdownMenuLabel>
+                    <DropdownMenuContent
+                      align="end"
+                      className="w-48 rounded-xl p-2 shadow-xl border-slate-100"
+                    >
+                      <DropdownMenuLabel className="text-xs text-slate-400">
+                        Manage Invoice
+                      </DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild className="rounded-lg focus:bg-indigo-50 focus:text-indigo-600 cursor-pointer">
-                        <Link href={`/dashboard/invoices/${inv.id}`} className="flex items-center w-full">
+                      <DropdownMenuItem
+                        asChild
+                        className="rounded-lg focus:bg-indigo-50 focus:text-indigo-600 cursor-pointer"
+                      >
+                        <Link
+                          href={`/dashboard/invoices/${inv.id}`}
+                          className="flex items-center w-full"
+                        >
                           <Pencil size={14} className="mr-2" /> Edit Invoice
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="rounded-lg focus:bg-indigo-50 focus:text-indigo-600 cursor-pointer">
-                        <Link href={`/dashboard/invoices/${inv.id}?download=1`} target="_blank" className="flex items-center w-full">
+                      <DropdownMenuItem
+                        asChild
+                        className="rounded-lg focus:bg-indigo-50 focus:text-indigo-600 cursor-pointer"
+                      >
+                        <Link
+                          href={`/dashboard/invoices/${inv.id}?download=1`}
+                          target="_blank"
+                          className="flex items-center w-full"
+                        >
                           <Download size={14} className="mr-2" /> Download PDF
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem 
-                        onClick={() => handleDelete(inv.id)}
+                      <DropdownMenuItem
+                        onClick={() => handleDelete(inv.id!)}
                         className="rounded-lg focus:bg-red-50 focus:text-red-600 text-red-500 cursor-pointer"
                       >
                         <Trash2 size={14} className="mr-2" /> Delete Invoice

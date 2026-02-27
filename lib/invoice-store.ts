@@ -61,7 +61,7 @@ const createLineItem = (): LineItem => ({
 });
 
 const defaultInvoiceData: InvoiceData = {
-  id: crypto.randomUUID(),
+  id: undefined , // ID generate karne ka logic aapke DB mein hoga
   logoDataUrl: null,
   invoiceNumber: 1,
   currency: "USD",
@@ -134,7 +134,11 @@ export const useInvoiceStore = create<InvoiceStore>()(
       incrementInvoiceNumber: () =>
         set((state) => ({ invoiceNumber: state.invoiceNumber + 1 })),
 
-      resetInvoice: () => set(defaultInvoiceData),
+      resetInvoice: () => {
+        set(defaultInvoiceData);
+
+        localStorage.removeItem("invoice-generator-data");
+      },
 
       loadInvoice: (data) =>
         set((state) => {
@@ -145,10 +149,20 @@ export const useInvoiceStore = create<InvoiceStore>()(
     {
       name: STORAGE_KEY,
       partialize: (state) => ({
-        businessName: state.businessName,
-        bussinessInfo: state.bussinessInfo,
-        currency: state.currency,
-        logoDataUrl: state.logoDataUrl,
+        // logoDataUrl: state.logoDataUrl,
+        // businessName: state.businessName,
+        // bussinessInfo: state.bussinessInfo,
+        // currency: state.currency,
+        // clientName: state.clientName,
+        // clientAddress: state.clientAddress,
+        // shipTo: state.shipTo,
+        // notes: state.notes,
+        // terms: state.terms,
+        // overallDiscount: state.overallDiscount,
+        // taxRate: state.taxRate,
+        // lineItems: state.lineItems,
+        // subtotal: state.subtotal,
+        // totalAmount: state.totalAmount,
       }),
     },
   ),
