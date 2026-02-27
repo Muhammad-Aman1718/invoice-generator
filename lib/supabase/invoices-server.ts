@@ -1,59 +1,64 @@
-import type { InvoiceData } from "@/types/invoice-types";
+import type { InvoiceData, RawInvoiceRow } from "@/types/invoice-types";
 import { createClient } from "@/lib/supabase/server";
 
-function deserializeInvoice(row: {
-  data: unknown;
-  id: string;
-}): InvoiceData & { id: string } {
-  const d = row.data as Record<string, unknown>;
+// invoices-server.ts
+
+// Types jo Supabase se direct aati hain (Snake Case)
+
+function deserializeInvoice(row: RawInvoiceRow): InvoiceData {
   return {
     id: row.id,
-    logoDataUrl: (d.logoDataUrl as string) ?? null,
-    businessName: (d.businessName as string) ?? "",
-    businessAddress: (d.businessAddress as string) ?? "",
-    businessEmail: (d.businessEmail as string) ?? "",
-    businessPhone: (d.businessPhone as string) ?? "",
-    clientName: (d.clientName as string) ?? "",
-    clientAddress: (d.clientAddress as string) ?? "",
-    clientEmail: (d.clientEmail as string) ?? "",
-    invoiceNumber: (d.invoiceNumber as number) ?? 1,
-    issueDate:
-      (d.issueDate as string) ?? new Date().toISOString().split("T")[0],
-    dueDate: (d.dueDate as string) ?? "",
-    currency: (d.currency as InvoiceData["currency"]) ?? "USD",
-    lineItems: (d.lineItems as InvoiceData["lineItems"]) ?? [],
-    tax: (d.tax as InvoiceData["tax"]) ?? {
-      label: "Tax",
-      type: "percentage",
-      value: 0,
-    },
-    discount: (d.discount as InvoiceData["discount"]) ?? {
-      label: "Discount",
-      type: "percentage",
-      value: 0,
-    },
-    paymentInstructions: (d.paymentInstructions as string) ?? "",
-    notes: (d.notes as string) ?? "",
+    userId: row.user_id ?? undefined,
+    logoDataUrl: row.logo_data_url ?? null,
+    stampUrl: row.stamp_url ?? null,
+    invoiceNumber: row.invoice_number ?? 0,
+    currency: (row.currency as string) ?? "USD",
+    businessName: row.business_name ?? "",
+    bussinessInfo: row.bussiness_info ?? "", // Mapping DB snake_case to camelCase
+    issueDate: row.issue_date ?? "",
+    dueDate: row.due_date ?? "",
+    poNumber: row.po_number ?? "",
+    clientName: row.client_name ?? "",
+    clientAddress: row.client_address ?? "",
+    shipTo: row.ship_to ?? "",
+    lineItems: Array.isArray(row.line_items) ? row.line_items : [],
+    notes: row.notes ?? "",
+    terms: row.terms ?? "",
+    // Numeric values ko hamesha Number() mein wrap karein kyunke DB se string bhi aa sakti hai
+    subtotal: Number(row.subtotal) || 0,
+    overallDiscount: Number(row.overall_discount) || 0,
+    taxRate: Number(row.tax_rate) || 0,
+    totalAmount: Number(row.total_amount) || 0,
   };
 }
 
-export async function fetchUserInvoicesServer(): Promise<
-  (InvoiceData & { id: string })[]
-> {
+export async function fetchUserInvoicesServer(): Promise<InvoiceData[]> {
   const supabase = await createClient();
+
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser();
-  if (!user) return [];
+  console.log("Auth Result:", { user, authError });
+  if (authError || !user) {
+    console.error("Auth Error:", authError);
+    return [];
+  }
 
   const { data, error } = await supabase
     .from("invoices")
-    .select("id, data, grand_total, currency, status, created_at")
+    .select("*")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  if (error) throw error;
-  return (data ?? []).map((r) =>
-    deserializeInvoice({ id: r.id, data: r.data }),
-  );
-}
+  console.log("data", data);
+  // console.log("usser", user);
+
+  if (error) {
+    // Ye line aapko terminal mein batayegi ke masla kya hai (e.g., "column grand_total does not exist")
+    console.error("Full Supabase Error:", JSON.stringify(error, null, 2));
+    throw new Error(error.message);
+  }
+
+  return (data ?? []).map((row) => deserializeInvoice(row));
+} 

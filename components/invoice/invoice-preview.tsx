@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useInvoiceStore } from "@/lib/invoice-store";
@@ -19,6 +20,8 @@ import useInvoicePreview from "@/hooks/useInvoicePreview";
 //  10% → #3A7BD5  accent — only for key highlights & left border stripe
 // ─────────────────────────────────────────────────────────────────────────────
 
+export const dynamic = "force-dynamic";
+
 export function InvoicePreview({
   className,
   id = "invoice-preview",
@@ -31,6 +34,7 @@ export function InvoicePreview({
     store,
     fmt,
   } = useInvoicePreview();
+  if (!store) return null;
 
   return (
     <article

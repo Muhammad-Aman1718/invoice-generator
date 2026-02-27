@@ -48,7 +48,7 @@ export default function EditInvoicePage() {
     store.setField("id", id);
     setIsSaving(true);
     try {
-      await saveInvoiceToDb({ ...store, id }, grandTotal);
+      await saveInvoiceToDb({ ...store, id }, );
       router.push("/dashboard");
     } finally {
       setIsSaving(false);

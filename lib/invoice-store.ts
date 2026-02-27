@@ -61,6 +61,7 @@ const createLineItem = (): LineItem => ({
 });
 
 const defaultInvoiceData: InvoiceData = {
+  id: crypto.randomUUID(),
   logoDataUrl: null,
   invoiceNumber: 1,
   currency: "USD",

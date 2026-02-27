@@ -2,18 +2,18 @@
 
 import { DollarSign, CheckCircle, Clock } from "lucide-react";
 import { formatCurrency } from "@/lib/invoice-utils";
-
 interface StatsCardsProps {
-  totalInvoiced: number;
-  totalPaid: number;
-  totalPending: number;
+  stats: {
+    totalInvoiced: number;
+    totalPaid: number;
+    totalPending: number;
+  };
 }
-
-export function StatsCards({ totalInvoiced, totalPaid, totalPending }: StatsCardsProps) {
+export function StatsCards({ stats }: StatsCardsProps) {
   const cards = [
-    { label: "Total Invoiced", value: totalInvoiced, icon: DollarSign },
-    { label: "Paid", value: totalPaid, icon: CheckCircle, color: "text-emerald-600" },
-    { label: "Pending", value: totalPending, icon: Clock, color: "text-amber-600" },
+    { label: "Total Invoiced", value: stats.totalInvoiced, icon: DollarSign },
+    { label: "Paid", value: stats.totalPaid, icon: CheckCircle, color: "text-emerald-600" },
+    { label: "Pending", value: stats.totalPending, icon: Clock, color: "text-amber-600" },
   ];
 
   return (
