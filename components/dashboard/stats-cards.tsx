@@ -9,7 +9,7 @@ interface StatsCardsProps {
     totalPending: number;
   };
 }
-export function StatsCards({ stats }: StatsCardsProps) {
+export function StatsCards({ stats, currency = "USD" }: { stats: any, currency?: string }) {
   const cards = [
     { label: "Total Invoiced", value: stats.totalInvoiced, icon: DollarSign },
     { label: "Paid", value: stats.totalPaid, icon: CheckCircle, color: "text-emerald-600" },
@@ -28,8 +28,8 @@ export function StatsCards({ stats }: StatsCardsProps) {
             <span className="text-sm font-medium text-slate-500">{label}</span>
           </div>
           <p className={`mt-2 text-2xl font-semibold ${color ?? "text-slate-900"}`}>
-            {formatCurrency(value, "USD")}
-          </p>
+    {formatCurrency(value, currency)}
+  </p>
         </div>
       ))}
     </div>

@@ -1,4 +1,8 @@
-import type { DBInvoiceRow, InvoiceData } from "@/types/invoice-types";
+import type {
+  DBInvoiceRow,
+  InvoiceData,
+  InvoiceStatus,
+} from "@/types/invoice-types";
 import { supabase } from "@/lib/supabase/client";
 
 /**
@@ -12,7 +16,7 @@ function mapRowToInvoice(row: DBInvoiceRow): InvoiceData & { id: string } {
     logoDataUrl: row.logo_data_url,
     stampUrl: row.stamp_url,
     invoiceNumber: row.invoice_number,
-    currency: row.currency as any,
+    currency: row.currency as string,
     businessName: row.business_name,
     bussinessInfo: row.bussiness_info,
     issueDate: row.issue_date,
@@ -26,6 +30,7 @@ function mapRowToInvoice(row: DBInvoiceRow): InvoiceData & { id: string } {
     terms: row.terms,
     subtotal: Number(row.subtotal),
     overallDiscount: Number(row.overall_discount),
+    status: row.status as InvoiceStatus, // Agar status field hai toh use karein, warna default "pending"
     taxRate: Number(row.tax_rate),
     totalAmount: Number(row.total_amount),
   };
@@ -74,6 +79,7 @@ export async function saveInvoiceToDb(
         .eq("id", data.id)
         .eq("user_id", user.id);
       if (error) throw error;
+      // localStorage.removeItem("invoice-generator-data"); // Local storage se data remove karein after save
       return { id: data.id };
     } else {
       // Insert
@@ -84,6 +90,7 @@ export async function saveInvoiceToDb(
         .single();
 
       if (error) throw error;
+      // localStorage.removeItem("invoice-generator-data"); // Local storage se data remove karein after save
       return inserted;
     }
   } catch (err: any) {
@@ -112,17 +119,38 @@ export async function fetchInvoiceById(
   return mapRowToInvoice(data);
 }
 
-export async function deleteInvoiceFromDb(id: string): Promise<void> {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+// @/lib/supabase/invoices-client.ts
 
-  const { error } = await supabase
+export async function deleteInvoiceFromDb(id: string) {
+  // 1. Pehle session check karein
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;
+
+  if (!user) {
+    console.error("No active session found!");
+    return { success: false, error: "Authentication required" };
+  }
+
+  console.log("Attempting to delete ID:", id, "for User:", user.id);
+
+  // 2. Delete request with select() taake confirmation mile
+  const { data, error, count } = await supabase
     .from("invoices")
     .delete()
     .eq("id", id)
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .select(); // Select lagane se deleted row wapas aati hai
 
-  if (error) throw error;
+  if (error) {
+    console.error("Supabase DB Error:", error.message);
+    throw error;
+  }
+
+  // Agar data khali hai, iska matlab hai ID ya UserID match nahi hui (RLS issue)
+  if (!data || data.length === 0) {
+    console.warn("No row was deleted. Check if ID exists and belongs to this user.");
+    return { success: false, error: "Invoice not found or permission denied" };
+  }
+
+  return { success: true, data };
 }

@@ -1,7 +1,10 @@
 // import type { InvoiceData, RawInvoiceRow } from "@/types/invoice-types";
 import { createClient } from "@/lib/supabase/server";
-import { DBInvoiceRow, InvoiceData } from "@/types/invoice-types";
-
+import {
+  DBInvoiceRow,
+  InvoiceData,
+  InvoiceStatus,
+} from "@/types/invoice-types";
 // invoices-server.ts
 
 // Types jo Supabase se direct aati hain (Snake Case)
@@ -29,23 +32,24 @@ function deserializeInvoice(row: DBInvoiceRow): InvoiceData {
     subtotal: Number(row.subtotal) || 0,
     overallDiscount: Number(row.overall_discount) || 0,
     taxRate: Number(row.tax_rate) || 0,
+    status: row.status as InvoiceStatus, // Agar status field hai toh use karein, warna default "pending"
     totalAmount: Number(row.total_amount) || 0,
   };
 }
 
 export async function fetchUserInvoicesServer(): Promise<InvoiceData[]> {
-  const supabase = await createClient();
+  const supabaseServer = await createClient();
 
   const {
     data: { user },
     error: authError,
-  } = await supabase.auth.getUser();
+  } = await supabaseServer.auth.getUser();
   if (authError || !user) {
     console.error("Auth Error:", authError);
     return [];
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseServer
     .from("invoices")
     .select("*")
     .eq("user_id", user.id)

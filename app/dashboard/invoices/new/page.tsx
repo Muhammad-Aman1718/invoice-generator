@@ -21,7 +21,11 @@ export default function NewInvoicePage() {
   const store = useInvoiceStore();
 
   const subtotal = calculateSubtotal(store.lineItems);
-  const grandTotal = calculateGrandTotal(subtotal, store.taxRate, store.overallDiscount);
+  const grandTotal = calculateGrandTotal(
+    subtotal,
+    store.taxRate,
+    store.overallDiscount,
+  );
 
   const handleDownload = async () => {
     await generateInvoicePDF("invoice-preview");
@@ -31,7 +35,10 @@ export default function NewInvoicePage() {
     setIsSaving(true);
     try {
       const result = await saveInvoiceToDb(store);
-      if (result) router.push("/dashboard");
+      if (result) {
+        store.resetInvoice(); // Store reset karein after successful save
+        router.push("/dashboard");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -88,11 +95,11 @@ export default function NewInvoicePage() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8 items-start">
+      <div className=" gap-8 items-start">
         <div
           className={cn(
             "transition-opacity duration-200",
-            mode === "edit" ? "block" : "hidden lg:block lg:opacity-50",
+            mode === "edit" ? "block" : "hidden  lg:opacity-50",
           )}
         >
           <InvoiceForm />
@@ -100,7 +107,7 @@ export default function NewInvoicePage() {
         <div
           className={cn(
             "transition-opacity duration-200",
-            mode === "preview" ? "block" : "hidden lg:block lg:opacity-50",
+            mode === "preview" ? "block" : "hidden  lg:opacity-50",
           )}
         >
           <div className="lg:sticky lg:top-24">

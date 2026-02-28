@@ -61,7 +61,7 @@ const createLineItem = (): LineItem => ({
 });
 
 const defaultInvoiceData: InvoiceData = {
-  id: undefined , // ID generate karne ka logic aapke DB mein hoga
+  id: undefined, // ID generate karne ka logic aapke DB mein hoga
   logoDataUrl: null,
   invoiceNumber: 1,
   currency: "USD",
@@ -81,6 +81,7 @@ const defaultInvoiceData: InvoiceData = {
   overallDiscount: 0,
   taxRate: 0,
   totalAmount: 0,
+  status: "pending",
 };
 
 export const useInvoiceStore = create<InvoiceStore>()(
@@ -136,7 +137,6 @@ export const useInvoiceStore = create<InvoiceStore>()(
 
       resetInvoice: () => {
         set(defaultInvoiceData);
-
         localStorage.removeItem("invoice-generator-data");
       },
 
@@ -149,20 +149,25 @@ export const useInvoiceStore = create<InvoiceStore>()(
     {
       name: STORAGE_KEY,
       partialize: (state) => ({
-        // logoDataUrl: state.logoDataUrl,
-        // businessName: state.businessName,
-        // bussinessInfo: state.bussinessInfo,
-        // currency: state.currency,
-        // clientName: state.clientName,
-        // clientAddress: state.clientAddress,
-        // shipTo: state.shipTo,
-        // notes: state.notes,
-        // terms: state.terms,
-        // overallDiscount: state.overallDiscount,
-        // taxRate: state.taxRate,
-        // lineItems: state.lineItems,
-        // subtotal: state.subtotal,
-        // totalAmount: state.totalAmount,
+        logoDataUrl: state.logoDataUrl,
+        businessName: state.businessName,
+        bussinessInfo: state.bussinessInfo,
+        currency: state.currency,
+        clientName: state.clientName,
+        stampUrl: state.stampUrl,
+        clientAddress: state.clientAddress,
+        shipTo: state.shipTo,
+        notes: state.notes,
+        terms: state.terms,
+        overallDiscount: state.overallDiscount,
+        taxRate: state.taxRate,
+        lineItems: state.lineItems,
+        subtotal: state.subtotal,
+        totalAmount: state.totalAmount,
+        invoiceNumber: state.invoiceNumber,
+        issueDate: state.issueDate,
+        dueDate: state.dueDate,
+        poNumber: state.poNumber,
       }),
     },
   ),

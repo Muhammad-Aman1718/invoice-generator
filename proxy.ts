@@ -1,3 +1,4 @@
+// @/proxy.ts
 import { updateSession } from "@/lib/supabase/proxy";
 import { type NextRequest } from "next/server";
 

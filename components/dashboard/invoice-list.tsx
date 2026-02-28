@@ -107,6 +107,8 @@
 //   );
 // }
 
+// @/components/dashboard/invoice-list.tsx
+
 "use client";
 
 import Link from "next/link";
@@ -121,6 +123,8 @@ import {
   FileText,
   Calendar,
   User,
+  CheckCircle,
+  Clock,
 } from "lucide-react";
 import { deleteInvoiceFromDb } from "@/lib/supabase/invoices-client";
 import { useRouter } from "next/navigation";
@@ -132,14 +136,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { supabase } from "@/lib/supabase/client";
 
 interface InvoiceListProps {
-  // invoices: (InvoiceData & { id: string })[];
   invoices: InvoiceData[];
 }
 
 export function InvoiceList({ invoices }: InvoiceListProps) {
   const router = useRouter();
+
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    const { error } = await supabase
+      .from("invoices")
+      .update({ status: newStatus })
+      .eq("id", id);
+
+    if (error) {
+      alert("Error updating status");
+    } else {
+      router.refresh();
+      // window.location.reload(); // Fauri refresh taake stats update ho jayein
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (
@@ -148,7 +166,8 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
       )
     )
       return;
-    await deleteInvoiceFromDb(id);
+    const result = await deleteInvoiceFromDb(id);
+    console.log("Delete Result:", result);
     router.refresh();
   };
 
@@ -172,7 +191,7 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
       </div>
     );
   }
-
+  // console.log("Rendering InvoiceList with invoices:", invoices); // Debug log to check data
   return (
     <div className="rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/50 overflow-hidden">
       <div className="overflow-x-auto">
@@ -205,15 +224,19 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                 {/* Invoice Number & Icon */}
                 <td className="p-5">
                   <div className="flex items-center gap-3">
-                    <div className="hidden sm:flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
-                      <FileText size={18} />
-                    </div>
+                    {/* ... icon code ... */}
                     <div>
-                      <p className="font-bold text-slate-900 leading-none mb-1">
+                      <p className="font-bold text-slate-900 mb-1">
                         #{inv.invoiceNumber}
                       </p>
-                      <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
-                        Paid
+                      <span
+                        className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${
+                          inv.status === "paid"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-amber-100 text-amber-700"
+                        }`}
+                      >
+                        {inv.status || "pending"}
                       </span>
                     </div>
                   </div>
@@ -287,6 +310,23 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                         >
                           <Download size={14} className="mr-2" /> Download PDF
                         </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuLabel>Status Actions</DropdownMenuLabel>
+                      <DropdownMenuItem
+                        onClick={() => handleStatusChange(inv.id!, "paid")}
+                      >
+                        <CheckCircle
+                          size={14}
+                          className="mr-2 text-emerald-600"
+                        />{" "}
+                        Mark as Paid
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => handleStatusChange(inv.id!, "pending")}
+                      >
+                        <Clock size={14} className="mr-2 text-amber-600" /> Mark
+                        as Pending
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem

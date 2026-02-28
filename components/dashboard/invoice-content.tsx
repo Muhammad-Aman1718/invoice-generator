@@ -1,3 +1,4 @@
+// @/components/dashboard/invoice-content.tsx
 import { fetchUserInvoicesServer } from "@/lib/supabase/invoices-server";
 import { InvoiceList } from "@/components/dashboard/invoice-list";
 import { StatsCards } from "@/components/dashboard/stats-cards";
@@ -10,10 +11,11 @@ export async function InvoiceContent() {
   // 2. Stats Calculation
   const stats = invoices.reduce(
     (acc, inv) => {
-      const amount = inv.totalAmount || 0;
+      const amount = Number(inv.totalAmount) || 0; // Type casting
       acc.totalInvoiced += amount;
-      const status = (inv as any).status || "pending";
-      if (status === "paid") {
+
+      // Status check ko exact rakhein (Database mein small 'paid' hai ya 'Paid'?)
+      if (inv.status === "paid") {
         acc.totalPaid += amount;
       } else {
         acc.totalPending += amount;

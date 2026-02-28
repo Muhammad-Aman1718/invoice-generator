@@ -1,3 +1,4 @@
+// @lib/supabase/server.ts
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
@@ -32,3 +33,5 @@ export async function createClient() {
     },
   );
 }
+
+// export const supabaseServer = await createClient();

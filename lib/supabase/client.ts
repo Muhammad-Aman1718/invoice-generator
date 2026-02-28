@@ -1,4 +1,6 @@
+// @lib/supabase/client.ts
 import { createBrowserClient } from "@supabase/ssr";
+
 
 export function createClient() {
   return createBrowserClient(
@@ -7,4 +9,5 @@ export function createClient() {
   );
 }
 
-export const supabase = createClient();
+
+export const supabase =  createClient();

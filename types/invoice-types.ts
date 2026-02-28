@@ -16,6 +16,8 @@ export interface LineItem {
   amount: number; // total for this item
 }
 
+export type InvoiceStatus = 'pending' | 'paid' | 'cancelled';
+
 export interface InvoiceData {
   id?: string | undefined;
   userId?: string;
@@ -38,6 +40,7 @@ export interface InvoiceData {
   overallDiscount: number; // percentage
   taxRate: number; // percentage
   totalAmount: number;
+  status: InvoiceStatus; // Optional status field
 }
 
 export interface DBInvoiceRow {
@@ -62,6 +65,7 @@ export interface DBInvoiceRow {
   overall_discount: number | string;
   tax_rate: number | string;
   total_amount: number | string;
+  status: string;
   created_at?: string;
   updated_at?: string;
 }
