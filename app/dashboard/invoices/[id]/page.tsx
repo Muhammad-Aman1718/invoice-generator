@@ -38,7 +38,7 @@ export default function EditInvoicePage() {
   }, [loaded, doDownload]);
 
   const subtotal = calculateSubtotal(store.lineItems);
-  const grandTotal = calculateGrandTotal(subtotal, store.tax, store.discount);
+  const grandTotal = calculateGrandTotal(subtotal, store.taxRate, store.overallDiscount);
 
   const handleDownload = async () => {
     await generateInvoicePDF("invoice-preview");
@@ -49,6 +49,7 @@ export default function EditInvoicePage() {
     setIsSaving(true);
     try {
       await saveInvoiceToDb({ ...store, id }, );
+      localStorage.removeItem("invoice-generator-data"); // Local storage se data remove karein after save
       router.push("/dashboard");
     } finally {
       setIsSaving(false);

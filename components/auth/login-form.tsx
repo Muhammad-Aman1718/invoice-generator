@@ -120,9 +120,11 @@
 
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { showToast } from "@/utils/showToast";
 
 // ─────────────────────────────────────────────
 //  COLOR THEME — Corporate Navy  (60 · 30 · 10)
@@ -140,21 +142,43 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const queryString = searchParams.toString();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
     setIsLoading(true);
     setError(null);
+
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
+
       if (error) throw error;
-      router.push("/dashboard");
+
+      if (data.session) {
+        showToast.success("Welcome back!", "Redirecting you now...");
+
+        // Parameters check karein
+        const nextPath = searchParams.get("next") || "/dashboard";
+        const action = searchParams.get("action");
+
+        // Final URL construct karein
+        const finalUrl = action ? `${nextPath}?action=${action}` : nextPath;
+
+        // Sabse pehle refresh karein taake server/middleware ko session mil jaye
+        router.refresh();
+
+        // Phir push karein
+        setTimeout(() => router.push(finalUrl), 100);
+      }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      const msg = err instanceof Error ? err.message : "Invalid credentials";
+      setError(msg);
+      showToast.error("Login Failed", msg);
     } finally {
       setIsLoading(false);
     }
@@ -385,7 +409,7 @@ export function LoginForm({
       <p className="text-center text-xs" style={{ color: "#1B2A4A60" }}>
         Don&apos;t have an account?{" "}
         <Link
-          href="/auth/sign-up"
+          href={`/auth/sign-up${queryString ? `?${queryString}` : ""}`}
           className="font-bold transition-all hover:underline"
           style={{ color: "#3A7BD5" }}
         >

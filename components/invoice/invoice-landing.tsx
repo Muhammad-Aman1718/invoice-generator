@@ -36,7 +36,6 @@ export function InvoiceLanding() {
   const handleDownload = async () => {
     await generateInvoicePDF("invoice-preview");
   };
-
   const handleSave = async () => {
     const {
       data: { session },
@@ -44,16 +43,22 @@ export function InvoiceLanding() {
 
     if (session) {
       const result = await saveInvoiceToDb(store);
-
       if (result) {
-        window.location.href = "/dashboard";
+        window.location.href = "/dashboard/invoices/new";
       } else {
-        alert("Error saving invoice. Please try again.");
+        alert("Error saving invoice.");
       }
     } else {
+      // Save to LocalStorage
       localStorage.setItem("pending_invoice", JSON.stringify(store));
-      window.location.href =
-        "/auth/sign-up?next=/dashboard&action=save_pending";
+      console.log("Invoice saved to localStorage for later:", store);
+      // Redirect to Login with encoded params
+      const returnPath = "/dashboard/invoices/new";
+      const loginUrl = new URL("/auth/login", window.location.origin);
+      loginUrl.searchParams.set("next", returnPath);
+      loginUrl.searchParams.set("action", "save_pending");
+
+      window.location.href = loginUrl.toString();
     }
   };
   return (

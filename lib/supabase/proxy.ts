@@ -1,4 +1,5 @@
-// // @/lib/supabase/proxy.ts
+// // // @/lib/supabase/proxy.ts
+
 // import { createServerClient } from "@supabase/ssr";
 // import { NextResponse, type NextRequest } from "next/server";
 // import { hasEnvVars } from "../utils";
@@ -35,47 +36,37 @@
 //     },
 //   );
 
-//   // Do not run code between createServerClient and
-//   // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
-//   // issues with users being randomly logged out.
+//   // IMPORTANT: getUser() session ko refresh karta hai.
+//   // Agar session purana ho jaye toh ye naya token mangwa leta hai.
+//   const {
+//     data: { user },
+//   } = await supabase.auth.getUser();
 
-//   // IMPORTANT: If you remove getClaims() and you use server-side rendering
-//   // with the Supabase client, your users may be randomly logged out.
-//   const { data } = await supabase.auth.getClaims();
-//   const user = data?.claims;
+//   // Route Protection Logic
+//   const isAuthPage =
+//     request.nextUrl.pathname.startsWith("/auth") ||
+//     request.nextUrl.pathname.startsWith("/login");
+//   const isHomePage = request.nextUrl.pathname === "/";
 
-//   if (
-//     request.nextUrl.pathname !== "/" &&
-//     !user &&
-//     !request.nextUrl.pathname.startsWith("/login") &&
-//     !request.nextUrl.pathname.startsWith("/auth")
-//   ) {
-//     // no user, potentially respond by redirecting the user to the login page
+//   // Case 1: Agar user nahi hai aur woh protected route (Dashboard) par jane ki koshish kare
+//   if (!user && !isAuthPage && !isHomePage) {
 //     const url = request.nextUrl.clone();
-//     url.pathname = "/auth/login";
+//     url.pathname = "/auth/login"; // Ensure karein ke path sahi hai
 //     return NextResponse.redirect(url);
 //   }
 
-//   // IMPORTANT: You *must* return the supabaseResponse object as it is.
-//   // If you're creating a new response object with NextResponse.next() make sure to:
-//   // 1. Pass the request in it, like so:
-//   //    const myNewResponse = NextResponse.next({ request })
-//   // 2. Copy over the cookies, like so:
-//   //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-//   // 3. Change the myNewResponse object to fit your needs, but avoid changing
-//   //    the cookies!
-//   // 4. Finally:
-//   //    return myNewResponse
-//   // If this is not done, you may be causing the browser and server to go out
-//   // of sync and terminate the user's session prematurely!
+//   // Case 2: Agar user login hai aur login page par jane ki koshish kare, toh dashboard bhej dein
+//   if (user && isAuthPage) {
+//     console.log("User is already logged in, redirecting to dashboard.", user);
+//     const url = request.nextUrl.clone();
+//     url.pathname = "/dashboard";
+//     return NextResponse.redirect(url);
+//   }
 
 //   return supabaseResponse;
 // }
 
-
-
-
-
+// @/lib/supabase/proxy.ts
 
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
@@ -113,29 +104,39 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  // IMPORTANT: getUser() session ko refresh karta hai. 
-  // Agar session purana ho jaye toh ye naya token mangwa leta hai.
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const url = request.nextUrl.clone();
+  const pathname = url.pathname;
 
-  // Route Protection Logic
-  const isAuthPage = request.nextUrl.pathname.startsWith("/auth") || 
-                     request.nextUrl.pathname.startsWith("/login");
-  const isHomePage = request.nextUrl.pathname === "/";
+  // Parameters check karein
+  const nextParam = url.searchParams.get("next");
+  const actionParam = url.searchParams.get("action");
 
-  // Case 1: Agar user nahi hai aur woh protected route (Dashboard) par jane ki koshish kare
-  if (!user && !isAuthPage && !isHomePage) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/auth/login"; // Ensure karein ke path sahi hai
+  const isAuthPage =
+    pathname.startsWith("/auth") || pathname.startsWith("/login");
+  const isHomePage = pathname === "/";
+
+  // CASE 1: Logged-in user agar Home Page ya Auth Pages par jaye
+  if (user && (isHomePage || isAuthPage)) {
+    // Priority: Agar 'next' parameter hai (Save Invoice wala case), toh wahan bheinjein
+    if (nextParam) {
+      const redirectUrl = new URL(nextParam, request.url);
+      if (actionParam) redirectUrl.searchParams.set("action", actionParam);
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    // Default: Hamesha dashboard par bheinjein (Home page par nahi jane dena)
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
-  // Case 2: Agar user login hai aur login page par jane ki koshish kare, toh dashboard bhej dein
-  if (user && isAuthPage) {
-    console.log("User is already logged in, redirecting to dashboard.",  user);
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+  // CASE 2: Guest user (Logged-out) agar protected routes par jane ki koshish kare
+  if (!user && !isAuthPage && !isHomePage) {
+    url.pathname = "/auth/login";
+    // Current path save karein taake login ke baad wapas aa sake
+    url.searchParams.set("next", pathname);
     return NextResponse.redirect(url);
   }
 
