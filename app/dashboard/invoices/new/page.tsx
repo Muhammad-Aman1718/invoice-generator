@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InvoiceForm } from "@/components/invoice/invoice-form";
 import { InvoicePreview } from "@/components/invoice/invoice-preview";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { calculateSubtotal, calculateGrandTotal } from "@/lib/invoice-utils";
 import { useRouter } from "next/navigation";
 import { Download, Eye, Edit3 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase/client";
 
 type Mode = "edit" | "preview";
 
@@ -27,6 +28,28 @@ export default function NewInvoicePage() {
     store.overallDiscount,
   );
 
+  const [nextInvoiceNo, setNextInvoiceNo] = useState<number | null>(null);
+
+useEffect(() => {
+  const fetchInvoiceNumber = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (user) {
+      // Humne jo SQL function banaya tha usay call karein
+      const { data, error } = await supabase.rpc('get_next_invoice_number', {
+        target_user_id: user.id
+      });
+
+      if (!error) {
+        setNextInvoiceNo(data);
+        // Agar aapke pass 'store' hai toh usme bhi update kar dein
+        // setStore(prev => ({ ...prev, invoiceNumber: data }));
+      }
+    }
+  };
+
+  fetchInvoiceNumber();
+}, []);
   const handleDownload = async () => {
     await generateInvoicePDF("invoice-preview");
   };

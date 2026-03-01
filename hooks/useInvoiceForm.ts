@@ -1,6 +1,8 @@
 import { useInvoiceStore } from "@/lib/invoice-store";
 import { useState, useRef, useEffect } from "react";
 import { CURRENCIES } from "@/constant/data";
+import { usePathname } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
 
 const useInvoiceForm = () => {
   const store = useInvoiceStore();
@@ -72,6 +74,45 @@ const useInvoiceForm = () => {
       window.removeEventListener("scroll", handleEvents, true);
     };
   }, [showCurrencyDrop, showTaxDrop]);
+
+
+    const pathname = usePathname();
+    const isNewInvoice = pathname.endsWith("/new");
+  
+    useEffect(() => {
+      const fetchAndSetNumber = async () => {
+        if (!isNewInvoice) return;
+  
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (user) {
+          const { data, error } = await supabase
+            .from("invoices")
+            .select("invoice_number")
+            .eq("user_id", user.id)
+            .order("created_at", { ascending: false })
+            .limit(1)
+            .single();
+  
+          console.log(
+            "Latest Invoice Number Fetched:",
+            data?.invoice_number,
+            "Error:",
+            error,
+          );
+  
+          // 2. Agar DB mein data hai toh +1, warna pehli invoice ke liye 1
+          const nextNo =
+            !error && data ? (parseInt(data.invoice_number) || 0) + 1 : 1;
+          store.setField("invoiceNumber", nextNo);
+        }
+      };
+  
+      fetchAndSetNumber();
+    }, [isNewInvoice, supabase]);
+
+
 
   return {
     showCurrencyDrop,

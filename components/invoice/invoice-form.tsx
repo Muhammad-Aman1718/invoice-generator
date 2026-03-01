@@ -8,6 +8,9 @@ import { CURRENCIES, SI, TAX_TYPES } from "@/constant/data";
 import { LogoUpload } from "./logo-upload";
 import { cn } from "@/lib/utils";
 import { LineItemsTable } from "./line-items-table";
+import { createClient, supabase } from "@/lib/supabase/client";
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 // ─────────────────────────────────────────────
 //  COLOR THEME — Corporate Navy  (60 · 30 · 10)
@@ -37,6 +40,7 @@ export function InvoiceForm() {
     setSignatureUrl,
     handleSignature,
   } = useInvoiceForm();
+
   return (
     <form
       className="rounded-2xl shadow-lg border border-[#1B2A4A]/08  overflow-hidden"
@@ -49,18 +53,25 @@ export function InvoiceForm() {
         style={{ background: "#1B2A4A" }}
       >
         {/* Invoice number */}
-        <div className="flex items-center gap-2">
+
+        <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 focus-within:border-[#3A7BD5] transition-all">
           <Hash size={15} className="text-[#3A7BD5]" />
           <input
             type="text"
             inputMode="numeric"
-            pattern="[0-9]*"
-            placeholder="Enter Invoie #"
-            className="bg-transparent border-none outline-none text-white font-bold text-lg w-40 appearance-none"
-            value={store.invoiceNumber}
-            onChange={(e) =>
-              store.setField("invoiceNumber", parseInt(e.target.value) || 1)
-            }
+            placeholder="Invoice #"
+            className="bg-transparent border-none outline-none text-white font-bold text-lg w-32 appearance-none"
+            // Value handle karein taake 0 ki jagah khali nazar aaye typing ke waqt
+            value={store.invoiceNumber === 0 ? "" : store.invoiceNumber}
+            onChange={(e) => {
+              const val = e.target.value;
+              console.log("Invoice Number Input Changed:", val);
+              if (/^\d*$/.test(val)) {
+                // USER KI MARZI: User yahan jo type karega woh final hoga
+                const num = val === "" ? 0 : parseInt(val);
+                store.setField("invoiceNumber", num);
+              }
+            }}
           />
         </div>
 
