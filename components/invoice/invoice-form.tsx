@@ -25,20 +25,16 @@ export function InvoiceForm() {
     showCurrencyDrop,
     taxType,
     showTaxDrop,
-    signatureUrl,
     subtotal,
     overallDiscountVal,
     taxVal,
     dropdownRef,
     taxDropdownRef,
     selectedCurrency,
-    sigRef,
     store,
     setShowCurrencyDrop,
     setShowTaxDrop,
     handleTaxChange,
-    setSignatureUrl,
-    handleSignature,
   } = useInvoiceForm();
 
   return (
@@ -161,19 +157,21 @@ export function InvoiceForm() {
           </div>
 
           <div className="col-span-4 space-y-3">
+            `
             <Field label="Issue Date">
               <input
                 type="date"
                 className={SI}
-                value={store.issueDate}
+                value={store.issueDate || ""}
                 onChange={(e) => store.setField("issueDate", e.target.value)}
-              />
+              />{" "}
             </Field>
+            `
             <Field label="Due Date">
               <input
                 type="date"
                 className={SI}
-                value={store.dueDate}
+                value={store.dueDate || ""}
                 onChange={(e) => store.setField("dueDate", e.target.value)}
               />
             </Field>
@@ -256,7 +254,7 @@ export function InvoiceForm() {
             </Field>
 
             {/* Signature / Stamp upload */}
-            <Field label="Signature / Stamp">
+            {/* <Field label="Signature / Stamp">
               {signatureUrl ? (
                 <div className="relative inline-block">
                   <img
@@ -266,7 +264,10 @@ export function InvoiceForm() {
                   />
                   <button
                     type="button"
-                    onClick={() => setSignatureUrl(null)}
+                    onClick={() => {
+                      setSignatureUrl(null); // Local UI clear
+                      store.setField("stampUrl", null); // Store/DB clear
+                    }}
                     className="absolute -top-2 -right-2 bg-[#1B2A4A] text-white rounded-full p-0.5 hover:bg-red-500 transition-all"
                   >
                     <X size={11} />
@@ -288,6 +289,14 @@ export function InvoiceForm() {
                 accept="image/*"
                 className="hidden"
                 onChange={handleSignature}
+              />
+            </Field> */}
+
+            <Field label="Signature / Stamp">
+              <LogoUpload
+                value={store.stampUrl} // Store ka stamp wala field
+                onChange={(val) => store.setField("stampUrl", val)} // Store update logic
+                className="min-h-[100px]" // Aap height choti bhi kar sakte hain stamp ke liye
               />
             </Field>
           </div>

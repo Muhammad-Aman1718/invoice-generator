@@ -104,6 +104,7 @@ export const useInvoiceStore = create<InvoiceStore>()(
         }),
 
       setLogo: (logoDataUrl) => set({ logoDataUrl }),
+      setStampUrl: (stampUrl) => set({ stampUrl }),
 
       addLineItem: () =>
         set((state) => {

@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { CURRENCIES } from "@/constant/data";
 import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
+import { resizeImage } from "@/components/invoice/logo-upload";
 
 const useInvoiceForm = () => {
   const store = useInvoiceStore();
@@ -30,12 +31,33 @@ const useInvoiceForm = () => {
     store.setField("taxRate", rate);
   };
 
-  function handleSignature(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleSignature(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file || !file.type.startsWith("image/")) return;
+
     const reader = new FileReader();
-    reader.onload = () => setSignatureUrl(reader.result as string);
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      const img = new Image();
+
+      img.onload = async () => {
+        // Yahan hum Signature ke liye alag MAX size de sakte hain
+        // Signature ke liye 250x100 ka size kafi hota hai
+        const resizedDataUrl = await resizeImage(img, 250, 100);
+
+        // 1. UI Preview ke liye (Local State)
+        setSignatureUrl(resizedDataUrl);
+
+        // 2. DB mein save karne ke liye (Store/Global State)
+        store.setField("stampUrl", resizedDataUrl);
+      };
+
+      img.src = dataUrl;
+    };
     reader.readAsDataURL(file);
+
+    // Input reset karein taake same file dobara select ho sake
+    e.target.value = "";
   }
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -75,44 +97,60 @@ const useInvoiceForm = () => {
     };
   }, [showCurrencyDrop, showTaxDrop]);
 
+  const pathname = usePathname();
+  const isNewInvoice = pathname.endsWith("/new");
 
-    const pathname = usePathname();
-    const isNewInvoice = pathname.endsWith("/new");
-  
-    useEffect(() => {
-      const fetchAndSetNumber = async () => {
-        if (!isNewInvoice) return;
-  
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (user) {
-          const { data, error } = await supabase
-            .from("invoices")
-            .select("invoice_number")
-            .eq("user_id", user.id)
-            .order("created_at", { ascending: false })
-            .limit(1)
-            .single();
-  
-          console.log(
-            "Latest Invoice Number Fetched:",
-            data?.invoice_number,
-            "Error:",
-            error,
-          );
-  
-          // 2. Agar DB mein data hai toh +1, warna pehli invoice ke liye 1
-          const nextNo =
-            !error && data ? (parseInt(data.invoice_number) || 0) + 1 : 1;
-          store.setField("invoiceNumber", nextNo);
-        }
-      };
-  
-      fetchAndSetNumber();
-    }, [isNewInvoice, supabase]);
+  useEffect(() => {
+    const fetchAndSetNumber = async () => {
+      if (!isNewInvoice) return;
 
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const { data, error } = await supabase
+          .from("invoices")
+          .select("invoice_number")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .single();
 
+        console.log(
+          "Latest Invoice Number Fetched:",
+          data?.invoice_number,
+          "Error:",
+          error,
+        );
+
+        // 2. Agar DB mein data hai toh +1, warna pehli invoice ke liye 1
+        const nextNo =
+          !error && data ? (parseInt(data.invoice_number) || 0) + 1 : 1;
+        store.setField("invoiceNumber", nextNo);
+      }
+    };
+
+    fetchAndSetNumber();
+  }, [isNewInvoice, supabase]);
+
+ useEffect(() => {
+  if (isNewInvoice) {
+    // 1. Aaj ki local date nikalne ka sahi tareeka
+    const now = new Date();
+    
+    // offset ko minutes se milliseconds mein convert karke local time nikalna
+    const offset = now.getTimezoneOffset() * 60000; 
+    const localISODate = new Date(now.getTime() - offset).toISOString().split("T")[0];
+
+    // 2. Ab store mein set karein
+    if (store.issueDate !== localISODate) {
+      store.setField("issueDate", localISODate);
+    }
+    if (store.dueDate !== localISODate) {
+      store.setField("dueDate", localISODate);
+    }
+  }
+}, [isNewInvoice]);
 
   return {
     showCurrencyDrop,

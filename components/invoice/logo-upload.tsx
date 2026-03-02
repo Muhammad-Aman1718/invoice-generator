@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 const MAX_W = 200;
 const MAX_H = 120;
 
-function resizeImage(img: HTMLImageElement, maxW: number, maxH: number): Promise<string> {
+export async function resizeImage(img: HTMLImageElement, maxW: number, maxH: number): Promise<string> {
   return new Promise((resolve) => {
     let { width, height } = img;
     if (width <= maxW && height <= maxH) {

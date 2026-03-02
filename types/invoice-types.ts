@@ -76,6 +76,7 @@ export interface InvoiceStore extends InvoiceData {
     value: InvoiceData[K],
   ) => void;
   setLogo: (dataUrl: string | null) => void;
+  setStampUrl: (dataUrl: string | null) => void;
   addLineItem: () => void;
   removeLineItem: (id: string) => void;
   updateLineItem: (

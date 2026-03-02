@@ -44,6 +44,7 @@ export async function saveInvoiceToDb(
     error: authError,
   } = await supabase.auth.getUser();
   if (authError || !user) return null;
+  console.log("Attempting to save invoice with data:", data);
 
   // DB Schema ke mutabiq payload taiyar karein
   const payload = {
@@ -69,6 +70,7 @@ export async function saveInvoiceToDb(
     total_amount: data.totalAmount,
     updated_at: new Date().toISOString(),
   };
+  console.log("Saving Invoice with Payload:", payload);
 
   try {
     if (data.id) {
@@ -90,7 +92,6 @@ export async function saveInvoiceToDb(
         .single();
 
       if (error) throw error;
-      // localStorage.removeItem("invoice-generator-data"); // Local storage se data remove karein after save
       return inserted;
     }
   } catch (err: any) {
