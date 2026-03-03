@@ -98,3 +98,27 @@ input::-webkit-inner-spin-button {
 /* input[type=number] {
   -moz-appearance: textfield;
 } */
+
+
+/* Scrollbar ki width */
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Background track (Mist Gray shade) */
+textarea::-webkit-scrollbar-track {
+  background: none; 
+  border-radius: 10px;
+}
+
+/* Moving handle (Midnight Blue) */
+textarea::-webkit-scrollbar-thumb {
+  background: #191970; 
+  border-radius: 10px;
+  border: 2px solid #f1f1f1; /* Is se handle ke charon taraf thori space feel hogi */
+}
+
+/* Handle on hover (Thora light blue) */
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #2a2a8a; 
+}

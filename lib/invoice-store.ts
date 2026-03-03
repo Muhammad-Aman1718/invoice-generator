@@ -51,15 +51,21 @@ const calculateTotals = (state: Partial<InvoiceStore>) => {
     // Note: Aap store interface mein taxAmount save kar sakte hain display ke liye
   };
 };
-const createLineItem = (): LineItem => ({
-  id: crypto.randomUUID(),
-  description: "",
-  quantity: 1,
-  rate: 0,
-  discount: 0,
-  amount: 0,
-});
+const createLineItem = (): LineItem => {
+  // Check karein agar randomUUID available hai (HTTPS/Localhost check)
+  const id = typeof window !== "undefined" && window.crypto?.randomUUID 
+    ? window.crypto.randomUUID() 
+    : Math.random().toString(36).substring(2, 11); // Fallback agar crypto na chale
 
+  return {
+    id: id,
+    description: "",
+    quantity: 1,
+    rate: 0,
+    discount: 0,
+    amount: 0,
+  };
+};
 const defaultInvoiceData: InvoiceData = {
   id: undefined, // ID generate karne ka logic aapke DB mein hoga
   logoDataUrl: null,

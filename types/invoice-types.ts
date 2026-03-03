@@ -8,7 +8,7 @@ export type CurrencyCode =
   | string; // Added string for flexibility
 
 export interface LineItem {
-  id: string;
+  id: string | undefined;
   description: string;
   quantity: number;
   rate: number;
