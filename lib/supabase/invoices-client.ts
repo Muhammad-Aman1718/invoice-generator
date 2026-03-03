@@ -44,7 +44,6 @@ export async function saveInvoiceToDb(
     error: authError,
   } = await supabase.auth.getUser();
   if (authError || !user) return null;
-  console.log("Attempting to save invoice with data:", data);
 
   // DB Schema ke mutabiq payload taiyar karein
   const payload = {
@@ -70,7 +69,6 @@ export async function saveInvoiceToDb(
     total_amount: data.totalAmount,
     updated_at: new Date().toISOString(),
   };
-  console.log("Saving Invoice with Payload:", payload);
 
   try {
     if (data.id) {
@@ -132,7 +130,6 @@ export async function deleteInvoiceFromDb(id: string) {
     return { success: false, error: "Authentication required" };
   }
 
-  console.log("Attempting to delete ID:", id, "for User:", user.id);
 
   // 2. Delete request with select() taake confirmation mile
   const { data, error, count } = await supabase

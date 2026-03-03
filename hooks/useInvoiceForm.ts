@@ -116,13 +116,7 @@ const useInvoiceForm = () => {
           .limit(1)
           .single();
 
-        console.log(
-          "Latest Invoice Number Fetched:",
-          data?.invoice_number,
-          "Error:",
-          error,
-        );
-
+      
         // 2. Agar DB mein data hai toh +1, warna pehli invoice ke liye 1
         const nextNo =
           !error && data ? (parseInt(data.invoice_number) || 0) + 1 : 1;
