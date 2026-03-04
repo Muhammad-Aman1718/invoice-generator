@@ -7,6 +7,13 @@ export type CurrencyCode =
   | "AED"
   | string; // Added string for flexibility
 
+export type Tab = "edit" | "preview";
+
+export interface LineItemsTableProps {
+  currency?: string;
+  showDiscount?: boolean;
+}
+
 export interface LineItem {
   id: string | undefined;
   description: string;
@@ -16,7 +23,7 @@ export interface LineItem {
   amount: number; // total for this item
 }
 
-export type InvoiceStatus = 'pending' | 'paid' | 'cancelled';
+export type InvoiceStatus = "pending" | "paid" | "cancelled";
 
 export interface InvoiceData {
   id?: string | undefined;
@@ -41,6 +48,7 @@ export interface InvoiceData {
   taxRate: number; // percentage
   totalAmount: number;
   status: InvoiceStatus; // Optional status field
+  currencySymbol?: string ;
 }
 
 export interface DBInvoiceRow {

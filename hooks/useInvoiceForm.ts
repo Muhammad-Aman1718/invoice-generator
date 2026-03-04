@@ -102,49 +102,61 @@ const useInvoiceForm = () => {
 
   useEffect(() => {
     const fetchAndSetNumber = async () => {
+      // 1. Pehle check karein ke kya ye new invoice hai
       if (!isNewInvoice) return;
 
+      // 2. Auth session check karein
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (user) {
-        const { data, error } = await supabase
-          .from("invoices")
-          .select("invoice_number")
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(1)
-          .single();
+        data: { session },
+      } = await supabase.auth.getSession();
 
-      
-        // 2. Agar DB mein data hai toh +1, warna pehli invoice ke liye 1
-        const nextNo =
-          !error && data ? (parseInt(data.invoice_number) || 0) + 1 : 1;
-        store.setField("invoiceNumber", nextNo);
+      // Agar session nahi hai (user login nahi hai), toh return kar jayein
+      if (!session || !session.user) {
+        console.log("User not logged in, skipping invoice number fetch.");
+        return;
       }
+
+      const user = session.user;
+
+      // 3. Agar user login hai, tabhi DB query karein
+      const { data, error } = await supabase
+        .from("invoices")
+        .select("invoice_number")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      // 4. DB logic: +1 karein ya 1 se start karein
+      const nextNo =
+        !error && data ? (parseInt(data.invoice_number) || 0) + 1 : 1;
+
+      store.setField("invoiceNumber", nextNo);
     };
 
     fetchAndSetNumber();
-  }, [isNewInvoice, supabase]);
+  }, [isNewInvoice, supabase, store]);
 
- useEffect(() => {
-  if (isNewInvoice) {
-    // 1. Aaj ki local date nikalne ka sahi tareeka
-    const now = new Date();
-    
-    // offset ko minutes se milliseconds mein convert karke local time nikalna
-    const offset = now.getTimezoneOffset() * 60000; 
-    const localISODate = new Date(now.getTime() - offset).toISOString().split("T")[0];
+  useEffect(() => {
+    if (isNewInvoice) {
+      // 1. Aaj ki local date nikalne ka sahi tareeka
+      const now = new Date();
 
-    // 2. Ab store mein set karein
-    if (store.issueDate !== localISODate) {
-      store.setField("issueDate", localISODate);
+      // offset ko minutes se milliseconds mein convert karke local time nikalna
+      const offset = now.getTimezoneOffset() * 60000;
+      const localISODate = new Date(now.getTime() - offset)
+        .toISOString()
+        .split("T")[0];
+
+      // 2. Ab store mein set karein
+      if (store.issueDate !== localISODate) {
+        store.setField("issueDate", localISODate);
+      }
+      if (store.dueDate !== localISODate) {
+        store.setField("dueDate", localISODate);
+      }
     }
-    if (store.dueDate !== localISODate) {
-      store.setField("dueDate", localISODate);
-    }
-  }
-}, [isNewInvoice]);
+  }, [isNewInvoice]);
 
   return {
     showCurrencyDrop,
