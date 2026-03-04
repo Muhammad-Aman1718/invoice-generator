@@ -65,9 +65,9 @@ export default function Home() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         {/* Ad Slot */}
-        <div className="mb-8">
+        {/* <div className="mb-8">
           <AdSlot variant="header" />
-        </div>
+        </div> */}
 
         {/* ══ HERO SECTION ═══════════════════════════════════════════════ */}
         <section className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
@@ -165,9 +165,9 @@ export default function Home() {
         </Suspense>
 
         {/* Ad Slot bottom */}
-        <div className="mt-10">
+        {/* <div className="mt-10">
           <AdSlot variant="success-modal" />
-        </div>
+        </div> */}
       </div>
 
       <Footer />
