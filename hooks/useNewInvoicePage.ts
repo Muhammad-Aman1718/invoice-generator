@@ -68,14 +68,10 @@
 
 // export default useNewInvoicePage;
 
-
-
-
-
 import { useEffect, useState } from "react";
 import { useInvoiceStore } from "@/lib/invoice-store";
 import { calculateGrandTotal, calculateSubtotal } from "@/lib/invoice-utils";
-import { generateInvoicePDF } from "@/lib/pdf-generator";
+import { buildInvoiceData, generateInvoicePDF } from "@/lib/pdf-generator";
 import { supabase } from "@/lib/supabase/client";
 import { saveInvoiceToDb } from "@/lib/supabase/invoices-client";
 import { Tab } from "@/types/invoice-types";
@@ -97,7 +93,9 @@ const useNewInvoicePage = () => {
 
   useEffect(() => {
     const fetchNumber = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (user) {
         const { data, error } = await supabase.rpc("get_next_invoice_number", {
           target_user_id: user.id,
@@ -108,10 +106,25 @@ const useNewInvoicePage = () => {
     fetchNumber();
   }, []);
 
-  const handleDownload = async () => {
-    await generateInvoicePDF("invoice-preview-new");
-  };
+  const subtotalAmount = store.subtotal;
+  const overallDiscountAmount = subtotalAmount * (store.overallDiscount / 100);
+  const taxableAmount = subtotalAmount - overallDiscountAmount;
+  const taxAmount = taxableAmount * (store.taxRate / 100);
 
+  const handleDownload = async () => {
+    try {
+      const invoiceData = buildInvoiceData(
+        store,
+        subtotalAmount,
+        overallDiscountAmount,
+        taxAmount,
+      );
+
+      await generateInvoicePDF(invoiceData);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
   const handleSave = async () => {
     setIsSaving(true);
     try {

@@ -75,14 +75,9 @@
 
 // export default useEditInvoicePage;
 
-
-
-
-
-
 import { useInvoiceStore } from "@/lib/invoice-store";
 import { calculateGrandTotal, calculateSubtotal } from "@/lib/invoice-utils";
-import { generateInvoicePDF } from "@/lib/pdf-generator";
+import { buildInvoiceData, generateInvoicePDF } from "@/lib/pdf-generator";
 import {
   fetchInvoiceById,
   saveInvoiceToDb,
@@ -112,6 +107,11 @@ const useEditInvoicePage = () => {
     store.overallDiscount,
   );
 
+  const subtotalAmount = store.subtotal;
+  const overallDiscountAmount = subtotalAmount * (store.overallDiscount / 100);
+  const taxableAmount = subtotalAmount - overallDiscountAmount;
+  const taxAmount = taxableAmount * (store.taxRate / 100);
+
   useEffect(() => {
     if (id) {
       fetchInvoiceById(id).then((inv) => {
@@ -120,13 +120,40 @@ const useEditInvoicePage = () => {
       });
     }
   }, [id]);
-
   useEffect(() => {
-    if (loaded && doDownload) generateInvoicePDF("invoice-preview-edit");
-  }, [loaded, doDownload]);
+    if (loaded && doDownload) {
+      // Pehle data prepare karein
+      const invoiceData = buildInvoiceData(
+        store,
+        subtotalAmount,
+        overallDiscountAmount,
+        taxAmount,
+      );
+      // Ab object pass karein
+      generateInvoicePDF(invoiceData);
+    }
+  }, [
+    loaded,
+    doDownload,
+    store,
+    subtotalAmount,
+    overallDiscountAmount,
+    taxAmount,
+  ]);
 
   const handleDownload = async () => {
-    await generateInvoicePDF("invoice-preview-edit");
+    try {
+      const invoiceData = buildInvoiceData(
+        store,
+        subtotalAmount,
+        overallDiscountAmount,
+        taxAmount,
+      );
+
+      await generateInvoicePDF(invoiceData);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
   };
 
   const handleSave = async () => {
