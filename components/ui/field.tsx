@@ -6,16 +6,21 @@ export default function Field({
   label,
   children,
   className,
+  htmlFor,
 }: {
   label: string;
   children: React.ReactNode;
   className?: string;
+  htmlFor?: string;
 }) {
   return (
     <div className={cn("space-y-1.5", className)}>
-      <p className="text-[10px] font-bold uppercase tracking-widest text-[#1B2A4A]/50">
+      <label
+        htmlFor={htmlFor}
+        className="text-[10px] font-bold uppercase tracking-widest text-[#1B2A4A]/50"
+      >
         {label}
-      </p>
+      </label>
       {children}
     </div>
   );

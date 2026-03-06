@@ -12,6 +12,33 @@ import Footer from "@/components/footer";
 //  10% → #FFC107  amber accent
 // ─────────────────────────────────────────────
 
+import { Metadata } from "next";
+
+const defaultUrl = "https://invoice-gen.vercel.app";
+
+export const metadata: Metadata = {
+  title: "Invoice Gen",
+  description:
+    "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use.",
+  keywords: [
+    "Invoice Generator",
+    "PDF Invoice Maker",
+    "VAT Compliant",
+    "Tax Compliant",
+    "USA",
+    "Europe",
+  ],
+  openGraph: {
+    title: "Invoice SaaS | Professional PDF Invoice Maker",
+    description:
+      "Create VAT and tax compliant invoices. Export to PDF instantly.",
+    url: defaultUrl,
+    siteName: "Invoice SaaS",
+    locale: "en_US",
+    type: "website",
+  },
+};
+
 export default function Home() {
   return (
     <main className="min-h-screen" style={{ backgroundColor: "#ECEFF1" }}>

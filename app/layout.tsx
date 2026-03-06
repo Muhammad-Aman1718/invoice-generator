@@ -10,7 +10,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Invoice SaaS | Professional PDF Invoice Maker | VAT & Tax Compliant",
+  title: "Invoice Gen",
   description:
     "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use.",
   keywords: [

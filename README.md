@@ -1,102 +1,322 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Invoice Generator
+
+<h1 align="center">
+  
+  Invoice Generator
+  <br>
+</h1>
 
 <p align="center">
- The fastest way to build apps with Next.js and Supabase
+  A modern, full-featured invoice generation application built with Next.js, React, and Supabase. Create, manage, and export professional invoices with ease.
 </p>
 
 <p align="center">
   <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
+  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+  <a href="#installation"><strong>Installation</strong></a> ·
+  <a href="#getting-started"><strong>Getting Started</strong></a> ·
+  <a href="#project-structure"><strong>Project Structure</strong></a> ·
+  <a href="#authentication"><strong>Authentication</strong></a>
 </p>
-<br/>
 
-## Features
+---
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Proxy
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+## 📋 Overview
 
-## Demo
+**Invoice Generator** is a comprehensive web application designed to simplify invoice creation and management. Generate professional invoices, customize them with your branding, and download them as PDF with just a few clicks. Built with modern web technologies and secured with Supabase authentication.
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+## ✨ Features
 
-## Deploy to Vercel
+### Core Invoice Features
+- ✅ **Create & Manage Invoices** - Create new invoices with intuitive form interface
+- ✅ **Real-time Preview** - See invoice changes live before saving
+- ✅ **Custom Branding** - Upload your company logo to personalize invoices
+- ✅ **Line Items Management** - Add, edit, and delete multiple line items with quantities and prices
+- ✅ **Multiple Currencies** - Support for various currencies with symbol formatting
+- ✅ **PDF Export** - Generate and download professional PDF invoices
+- ✅ **Invoice Dashboard** - View, manage, and track all your invoices in one place
+- ✅ **Invoice Templates** - Pre-designed templates with professional layouts
 
-Vercel deployment will guide you through creating a Supabase account and project.
+### User Features
+- ✅ **User Authentication** - Secure login and registration with Supabase
+- ✅ **Password Management** - Change password and password recovery functionality
+- ✅ **User Sessions** - Cookie-based session management across the entire app
+- ✅ **Protected Routes** - Secure dashboard accessible only to authenticated users
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+### Technical Features
+- ✅ **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
+- ✅ **Dark/Light Theme Support** - Theme toggle with next-themes integration
+- ✅ **SSR Ready** - Full server-side rendering support for optimal performance
+- ✅ **TypeScript** - Type-safe codebase for reliability and maintainability
+- ✅ **Toast Notifications** - User-friendly notifications with Sonner
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
+## 🛠️ Tech Stack
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+### Frontend
+- **Next.js 15** - React framework with App Router
+- **React 19** - UI library
+- **TypeScript** - Type safety and developer experience
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - High-quality React components
+- **Lucide React** - Beautiful SVG icons
+- **Zustand** - Lightweight state management
+- **date-fns** - Date formatting and manipulation
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+### Backend & Database
+- **Supabase** - PostgreSQL database with authentication
+- **Supabase Auth** - Cookie-based session management
+- **supabase-ssr** - SSR-optimized Supabase package
 
-## Clone and run locally
+### PDF & Export
+- **@react-pdf/renderer** - PDF generation from React components
+- **Pako** - Data compression utilities
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+### UI & Styling
+- **Tailwind CSS** - Responsive design
+- **next-themes** - Dark mode support
+- **Sonner** - Toast notifications
+- **Radix UI** - Accessible component primitives
 
-2. Create a Next.js app using the Supabase Starter template npx command
+### Development
+- **ESLint** - Code quality and consistency
+- **PostCSS** - CSS processing
 
-   ```bash
-   npx create-next-app --example with-supabase with-supabase-app
-   ```
+## 🚀 Installation
 
-   ```bash
-   yarn create next-app --example with-supabase with-supabase-app
-   ```
+### Prerequisites
+- Node.js 18+ and npm/yarn/pnpm
+- Supabase account ([Create one here](https://supabase.com))
 
-   ```bash
-   pnpm create next-app --example with-supabase with-supabase-app
-   ```
+### Step 1: Clone the Repository
 
-3. Use `cd` to change into the app's directory
+```bash
+git clone <repository-url>
+cd invoice-generator
+```
 
-   ```bash
-   cd with-supabase-app
-   ```
+### Step 2: Install Dependencies
 
-4. Rename `.env.example` to `.env.local` and update the following:
+Using npm:
+```bash
+npm install
+```
 
-  ```env
-  NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
-  ```
-  > [!NOTE]
-  > This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
-  > Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_ANON_KEY`; its value can be used in this example.
-  > See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
+Using yarn:
+```bash
+yarn install
+```
 
-  Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+Using pnpm:
+```bash
+pnpm install
+```
 
-5. You can now run the Next.js local development server:
+### Step 3: Configure Supabase
 
-   ```bash
-   npm run dev
-   ```
+1. Create a Supabase project at [supabase.com](https://supabase.com)
+2. Get your project credentials:
+   - **Project URL**
+   - **Anon/Publishable Key**
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+3. Create `.env.local` file in the root directory:
 
-6. This template comes with the default shadcn/ui style initialized. If you instead want other ui.shadcn styles, delete `components.json` and [re-install shadcn/ui](https://ui.shadcn.com/docs/installation/next)
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+### Step 4: Set Up Database Schema
+
+The project includes SQL migrations for setting up the invoice schema. Run the migration script located in `supabase/migrations/001_invoice_schema.sql` in your Supabase dashboard.
+
+### Step 5: Run the Development Server
+
+```bash
+npm run dev
+```
+
+The application will be available at [http://localhost:3000](http://localhost:3000)
+
+## 📚 Getting Started
+
+### First Time Users
+
+1. **Sign Up** - Create an account using the sign-up page
+2. **Access Dashboard** - View your invoice dashboard after login
+3. **Create Invoice** - Click on "New Invoice" to create your first invoice
+4. **Customize** - Add your company logo and fill in invoice details
+5. **Preview** - Check the real-time preview before saving
+6. **Download** - Export as PDF with a single click
+
+### Main Routes
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Landing page with invoice creation info |
+| `/auth/login` | User login page |
+| `/auth/sign-up` | User registration page |
+| `/auth/forgot-password` | Password recovery |
+| `/dashboard` | Main dashboard with invoice list |
+| `/dashboard/invoices/new` | Create new invoice |
+| `/dashboard/invoices/[id]` | View/Edit specific invoice |
+
+## 📦 Project Structure
+
+```
+invoice-generator/
+├── app/                           # Next.js app router
+│   ├── auth/                      # Authentication routes
+│   │   ├── login/
+│   │   ├── sign-up/
+│   │   ├── forgot-password/
+│   │   └── callback/
+│   ├── dashboard/                 # Dashboard routes
+│   │   ├── page.tsx               # Dashboard home
+│   │   └── invoices/
+│   │       ├── new/               # Create new invoice
+│   │       └── [id]/              # View invoice
+│   ├── layout.tsx                 # Root layout
+│   ├── page.tsx                   # Landing page
+│   └── globals.css                # Global styles
+│
+├── components/                    # React components
+│   ├── auth/                      # Auth forms
+│   │   ├── login-form.tsx
+│   │   └── sign-up-form.tsx
+│   ├── dashboard/                 # Dashboard components
+│   │   ├── invoice-list.tsx
+│   │   ├── invoice-content.tsx
+│   │   ├── stats-cards.tsx
+│   │   └── app-sidebar.tsx
+│   ├── invoice/                   # Invoice components
+│   │   ├── invoice-form.tsx       # Invoice creation form
+│   │   ├── invoice-preview.tsx    # Invoice preview
+│   │   ├── invoice-landing.tsx
+│   │   ├── line-items-table.tsx   # Line items management
+│   │   └── logo-upload.tsx        # Logo upload
+│   ├── ui/                        # shadcn/ui components
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── input.tsx
+│   │   ├── dropdown-menu.tsx
+│   │   └── label.tsx
+│   ├
+│   ├── footer.tsx
+│   └── ads/                       # Ad slots
+│
+├── hooks/                         # Custom React hooks
+│   ├── useInvoiceForm.ts          # Invoice form logic
+│   ├── useLineItemsTable.ts       # Line items management
+│   ├── useNewInvoicePage.ts       # New invoice page logic
+│   ├── useEditInvoicePage.ts      # Edit invoice logic
+│   ├── useInvoicePreview.ts       # Preview logic
+│   ├── useLoginForm.ts            # Login form logic
+│   └── useSignUpForm.ts           # Sign-up form logic
+│
+├── lib/                           # Utility functions & services
+│   ├── invoice-store.ts           # Zustand invoice store
+│   ├── invoice-utils.ts           # Invoice utilities
+│   ├── pdf-generator.tsx          # PDF generation logic
+│   ├── utils.ts                   # General utilities
+│   └── supabase/                  # Supabase clients & services
+│       ├── client.ts              # Client-side Supabase
+│       ├── server.ts              # Server-side Supabase
+│       ├── invoices-client.ts     # Invoices client methods
+│       ├── invoices-server.ts     # Invoices server methods
+│       └── proxy.ts               # Proxy configuration
+│
+├── types/                         # TypeScript types
+│   ├── invoice-types.ts           # Invoice-related types
+│   └── dom-to-image-more.d.ts     # Type definitions
+│
+├── utils/                         # Utility functions
+│   ├── showToast.tsx              # Toast notifications
+│
+├── constant/                      # Constants
+│   └── data.ts                    # Application constants
+│
+├── supabase/                      # Supabase configuration
+│   └── migrations/                # Database migrations
+│       └── 001_invoice_schema.sql
+│
+├── next.config.ts                 # Next.js configuration
+├── tailwind.config.ts             # Tailwind CSS config
+├── tsconfig.json                  # TypeScript config
+├── postcss.config.mjs             # PostCSS config
+├── components.json                # shadcn/ui config
+├── eslint.config.mjs              # ESLint config
+└── package.json                   # Project dependencies
+
+```
+
+## 🔐 Authentication
+
+The app uses **Supabase Auth** with cookie-based sessions, providing:
+
+- **Email/Password Authentication** - Secure user registration and login
+- **Session Persistence** - User sessions maintained across page navigations
+- **Protected Routes** - Dashboard and invoice pages require authentication
+- **Password Recovery** - Forgot password functionality for account recovery
+- **Account Management** - Update password and manage account settings
+
+### Authentication Flow
+
+1. User registers via sign-up page
+2. Supabase creates user account with email verification
+3. User logs in with credentials
+4. Session stored securely in HTTP-only cookies
+5. User gains access to protected dashboard and invoice features
+
+## 🎨 Design System
+
+The application uses a **60-30-10 color scheme**:
+- **60% - Light Background** (#ECEFF1) - Primary background
+- **30% - Navy Blue** (#191970) - Headers and primary elements
+- **10% - Amber Accent** (#FFC107) - Highlights and CTAs
+
+## 🚀 Development Commands
+
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Run ESLint
+npm run lint
+```
+
+## 📝 Environment Variables
+
+Create a `.env.local` file with the following variables:
+
+```env
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit issues and enhancement requests.
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 📞 Support
+
+For issues, bug reports, or feature requests, please open an issue in the repository.
+
+---
+
+<p align="center">
+  Made with ❤️ for invoice generation
+</p>
 
 ## Feedback and issues
 

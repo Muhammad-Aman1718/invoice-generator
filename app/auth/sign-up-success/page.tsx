@@ -1,5 +1,29 @@
 import Link from "next/link";
 import { FileText, MailCheck } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up Success | Invoice Gen",
+  description:
+    "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use.",
+  keywords: [
+    "Invoice Generator",
+    "PDF Invoice Maker",
+    "VAT Compliant",
+    "Tax Compliant",
+    "USA",
+    "Europe",
+  ],
+  openGraph: {
+    title: "Invoice SaaS | Professional PDF Invoice Maker",
+    description:
+      "Create VAT and tax compliant invoices. Export to PDF instantly.",
+    url: "https://invoice-gen.vercel.app/auth/sign-up-success",
+    siteName: "Invoice SaaS",
+    locale: "en_US",
+    type: "website",
+  },
+};
 
 export default function Page() {
   return (

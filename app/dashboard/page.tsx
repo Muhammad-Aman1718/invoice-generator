@@ -3,6 +3,31 @@ import { InvoiceContent } from "@/components/dashboard/invoice-content";
 import { DashboardSkeleton } from "@/components/dashboard/dashboardSkeleton";
 import { LayoutDashboard } from "lucide-react";
 
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard | Invoice Gen",
+  description:
+    "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use.",
+  keywords: [
+    "Invoice Generator",
+    "PDF Invoice Maker",
+    "VAT Compliant",
+    "Tax Compliant",
+    "USA",
+    "Europe",
+  ],
+  openGraph: {
+    title: "Invoice SaaS | Professional PDF Invoice Maker",
+    description:
+      "Create VAT and tax compliant invoices. Export to PDF instantly.",
+    url: "https://invoice-gen.vercel.app/dashboard",
+    siteName: "Invoice SaaS",
+    locale: "en_US",
+    type: "website",
+  },
+};
+
 export default function DashboardPage() {
   return (
     <div

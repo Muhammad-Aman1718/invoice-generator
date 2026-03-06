@@ -30,7 +30,6 @@ const useInvoiceLanding = () => {
   const taxableAmount = subtotalAmount - overallDiscountAmount;
   const taxAmount = taxableAmount * (store.taxRate / 100);
 
-  const fmt = (amount: number) => formatCurrency(amount, store.currency);
 
   const handleDownload = async () => {
     setIsDownloading(true);
