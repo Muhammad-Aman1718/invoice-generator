@@ -2,15 +2,8 @@ import Link from "next/link";
 import { FileText, Zap, Globe, Shield } from "lucide-react";
 import { Suspense } from "react";
 import { InvoiceLanding } from "@/components/invoice/invoice-landing";
-import { AdSlot } from "@/components/ads/ad-slot";
+// import { AdSlot } from "@/components/ads/ad-slot";
 import Footer from "@/components/footer";
-
-// ─────────────────────────────────────────────
-//  COLOR THEME  (60 · 30 · 10)
-//  60% → #ECEFF1  background
-//  30% → #191970  midnight blue
-//  10% → #FFC107  amber accent
-// ─────────────────────────────────────────────
 
 import { Metadata } from "next";
 
@@ -55,12 +48,20 @@ export default function Home() {
           style={{ height: "60px" }}
         >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group" aria-label="Invoice Gen - Home">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 group"
+            aria-label="Invoice Gen - Home"
+          >
             <div
               className="w-8 h-8 rounded-lg flex items-center justify-center transition-all group-hover:scale-105"
               style={{ background: "#FFC107" }}
             >
-              <FileText size={15} style={{ color: "#191970" }} aria-hidden="true" />
+              <FileText
+                size={15}
+                style={{ color: "#191970" }}
+                aria-hidden="true"
+              />
             </div>
             <span className="font-black text-lg text-white tracking-tight max-xs:hidden">
               Invoice<span style={{ color: "#FFC107" }}>Gen</span>

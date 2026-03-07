@@ -17,31 +17,6 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import useEditInvoicePage from "@/hooks/useEditInvoicePage";
 
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Edit Invoice | Invoice Gen",
-  description:
-    "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use.",
-  keywords: [
-    "Invoice Generator",
-    "PDF Invoice Maker",
-    "VAT Compliant",
-    "Tax Compliant",
-    "USA",
-    "Europe",
-  ],
-  openGraph: {
-    title: "Invoice SaaS | Professional PDF Invoice Maker",
-    description:
-      "Create VAT and tax compliant invoices. Export to PDF instantly.",
-    url: "https://invoice-gen.vercel.app/dashboard/invoices/[id]",
-    siteName: "Invoice SaaS",
-    locale: "en_US",
-    type: "website",
-  },
-};
-
 type Tab = "edit" | "preview";
 
 // ── INNER COMPONENT ──
