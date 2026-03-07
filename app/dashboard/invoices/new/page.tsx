@@ -58,9 +58,10 @@ function NewInvoiceContent() {
   } = useNewInvoicePage();
 
   return (
-    <div
+    <main
       className="flex flex-col h-[100dvh] w-full overflow-hidden"
       style={{ background: "#ECEFF1" }}
+      aria-labelledby="new-invoice-title"
     >
       {/* ── NAVBAR ── */}
       <nav
@@ -75,8 +76,9 @@ function NewInvoiceContent() {
             <Link
               href="/dashboard"
               className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 bg-white/10 text-white/70 hover:bg-white/20 hover:text-white transition-all"
+              aria-label="Back to dashboard"
             >
-              <ArrowLeft size={15} />
+              <ArrowLeft size={15} aria-hidden="true" />
             </Link>
             <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 bg-amber-400/20">
               <FileText size={13} className="text-amber-400" />
@@ -219,7 +221,7 @@ function NewInvoiceContent() {
           background: rgba(25, 25, 112, 0.2);
         }
       `}</style>
-    </div>
+    </main>
   );
 }
 

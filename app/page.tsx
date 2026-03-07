@@ -55,12 +55,12 @@ export default function Home() {
           style={{ height: "60px" }}
         >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
+          <Link href="/" className="flex items-center gap-2.5 group" aria-label="Invoice Gen - Home">
             <div
               className="w-8 h-8 rounded-lg flex items-center justify-center transition-all group-hover:scale-105"
               style={{ background: "#FFC107" }}
             >
-              <FileText size={15} style={{ color: "#191970" }} />
+              <FileText size={15} style={{ color: "#191970" }} aria-hidden="true" />
             </div>
             <span className="font-black text-lg text-white tracking-tight max-xs:hidden">
               Invoice<span style={{ color: "#FFC107" }}>Gen</span>
@@ -73,6 +73,7 @@ export default function Home() {
               href="/auth/login"
               className="text-xs sm:text-sm font-semibold px-3 py-2 rounded-xl transition-all text-white/65 hover:text-white hover:bg-white/10"
               style={{ color: "rgba(255,255,255,0.65)" }}
+              aria-label="Sign in to your account"
             >
               Sign in
             </Link>
@@ -83,6 +84,7 @@ export default function Home() {
                 backgroundColor: "#FFC107",
                 boxShadow: "0 4px 14px rgba(255,193,7,0.35)",
               }}
+              aria-label="Sign up for free account"
             >
               Sign up free
             </Link>

@@ -30,20 +30,22 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <div
+    <main
       className="p-4 sm:p-6 md:p-8 space-y-6"
       style={{ background: "#ECEFF1", minHeight: "100vh" }}
+      aria-labelledby="dashboard-title"
     >
       {/* Page header */}
-      <div className="flex items-center gap-3">
+      <header className="flex items-center gap-3">
         <div
           className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{ background: "#191970" }}
+          aria-hidden="true"
         >
           <LayoutDashboard size={16} style={{ color: "#FFC107" }} />
         </div>
         <div>
-          <h1 className="text-xl font-black" style={{ color: "#191970" }}>
+          <h1 id="dashboard-title" className="text-xl font-black" style={{ color: "#191970" }}>
             Dashboard
           </h1>
           <p
@@ -53,11 +55,11 @@ export default function DashboardPage() {
             Overview of your invoices
           </p>
         </div>
-      </div>
+      </header>
 
       <Suspense fallback={<DashboardSkeleton />}>
         <InvoiceContent />
       </Suspense>
-    </div>
+    </main>
   );
 }

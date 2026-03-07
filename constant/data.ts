@@ -67,3 +67,10 @@ export const SI =
   "bg-white border border-[#1B2A4A]/15 rounded-lg px-3 py-2 text-sm text-[#1B2A4A] " +
   "placeholder:text-[#1B2A4A]/25 focus:outline-none focus:border-[#3A7BD5] " +
   "focus:ring-1 focus:ring-[#3A7BD5]/20 transition-all w-full";
+
+export const STATIC_PAGES = [
+  "/",
+  "/dashboard",
+  "/dashboard/invoices/new",
+  "/dashboard/invoices/edit",
+];
