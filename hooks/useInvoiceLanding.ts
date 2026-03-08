@@ -1,3 +1,5 @@
+"use client";
+
 import { useInvoiceStore } from "@/lib/invoice-store";
 import {
   calculateGrandTotal,
@@ -9,6 +11,7 @@ import { buildInvoiceData, generateInvoicePDF } from "@/lib/pdf-generator";
 import { supabase } from "@/lib/supabase/client";
 import { saveInvoiceToDb } from "@/lib/supabase/invoices-client";
 import { Tab } from "@/types/invoice-types";
+import { showToast } from "@/utils/showToast";
 import { useState } from "react";
 
 const useInvoiceLanding = () => {
@@ -30,22 +33,23 @@ const useInvoiceLanding = () => {
   const taxableAmount = subtotalAmount - overallDiscountAmount;
   const taxAmount = taxableAmount * (store.taxRate / 100);
 
-
   const handleDownload = async () => {
+    const toastId = showToast.loading("Preparing your PDF...");
     setIsDownloading(true);
     try {
-      // 1. Store aur utilities se data prepare karein
-      // Note: ensure karein ke ye variables (subtotal, etc.) aapke hook mein available hain
       const invoiceData = buildInvoiceData(
-        store, // Aapka Zustand store
-        subtotalAmount, // calculateSubtotal se aya hua
-        overallDiscountAmount, // (subtotal * store.overallDiscount) / 100
-        taxAmount, // (subtotal - discountAmount) * (store.taxRate / 100)
+        store,
+        subtotalAmount,
+        overallDiscountAmount,
+        taxAmount,
       );
 
-      // 2. Ab element ID ki jagah direct 'invoiceData' send karein
       await generateInvoicePDF(invoiceData);
+      showToast.dismiss(toastId);
+      showToast.success("Success", "Invoice downloaded successfully!");
     } catch (error) {
+      showToast.dismiss(toastId);
+      showToast.error("Download Error", "Could not generate PDF. Please try again.");
       console.error("PDF Download Error:", error);
     } finally {
       setIsDownloading(false);
@@ -54,28 +58,48 @@ const useInvoiceLanding = () => {
 
   const handleSave = async () => {
     setIsSaving(true);
+    const toastId = showToast.loading("Saving invoice...");
+    
     try {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
       if (session) {
         const result = await saveInvoiceToDb(store);
+        showToast.dismiss(toastId);
+        
         if (result) {
+          showToast.success("Invoice Saved", "Your invoice has been stored in your account.");
+          // Chonkay window.location page reload karti hai, toast foran gayab ho sakta hai
+          // isliye hum redirect se pehle thora wait karwa sakte hain ya direct redirect karein
           window.location.href = "/dashboard/invoices/new";
         } else {
-          alert("Error saving invoice.");
+          showToast.error("Save Failed", "Something went wrong while saving to database.");
         }
       } else {
+        // Guest user logic
+        showToast.dismiss(toastId);
+        showToast.info("Login Required", "Redirecting to login to save your progress...");
+        
         localStorage.setItem("pending_invoice", JSON.stringify(store));
         const loginUrl = new URL("/auth/login", window.location.origin);
         loginUrl.searchParams.set("next", "/dashboard/invoices/new");
         loginUrl.searchParams.set("action", "save_pending");
-        window.location.href = loginUrl.toString();
+        
+        // Timeout taake user info message parh sakay
+        setTimeout(() => {
+          window.location.href = loginUrl.toString();
+        }, 1000);
       }
+    } catch (error) {
+      showToast.dismiss(toastId);
+      showToast.error("Error", "An unexpected error occurred.");
     } finally {
       setIsSaving(false);
     }
   };
+
   return {
     isPreviewOpen,
     setIsPreviewOpen,

@@ -24,12 +24,6 @@ export function InvoiceLanding() {
 
   return (
     <div className="space-y-4">
-      {/* ══ ACTION BAR ══════════════════════════════════════════════════
-          FIX: Below 460px → 2 rows so buttons never overlap logo/title
-          Row 1 (always): logo + title
-          Row 2 (<460px): tab toggle + download + save
-          ≥460px: single row as before                                   */}
-
       <div
         className="rounded-2xl overflow-hidden"
         style={{
@@ -71,6 +65,7 @@ export function InvoiceLanding() {
               >
                 {(["edit", "preview"] as Tab[]).map((t) => (
                   <button
+                    aria-label="show tab"
                     key={t}
                     onClick={() => setMobileTab(t)}
                     className="flex items-center justify-center p-1.5 rounded-md transition-all"
@@ -92,12 +87,14 @@ export function InvoiceLanding() {
                   type="button"
                   onClick={() => setIsPreviewOpen(true)}
                   className="hidden sm:flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border border-white/10 text-white/80 bg-white/5 hover:bg-white/10"
+                  aria-label="show preview"
                 >
                   <Eye size={13} /> Preview
                 </button>
 
                 {/* Download: Icon only on mobile, text on 400px+ */}
                 <button
+                  aria-label="download PDF"
                   type="button"
                   onClick={handleDownload}
                   disabled={isDownloading}
@@ -115,6 +112,7 @@ export function InvoiceLanding() {
 
                 {/* Save Button: Compact on mobile */}
                 <button
+                  aria-label="save invoice"
                   type="button"
                   onClick={handleSave}
                   disabled={isSaving}
@@ -137,13 +135,6 @@ export function InvoiceLanding() {
           </div>
         </div>
       </div>
-
-      {/* ══ CONTENT AREA ════════════════════════════════════════════════
-          FIX: Wrap in a fixed-height container so form scroll does NOT
-          push the preview out of view. Each panel scrolls independently.
-
-          Mobile: tabs — edit OR preview (unchanged)
-          Desktop (sm+): always show form | preview via modal (unchanged) */}
 
       {/* Mobile Form Tab */}
       <div
@@ -176,6 +167,7 @@ export function InvoiceLanding() {
         </div>
 
         <button
+          aria-label="download PDF"
           onClick={handleDownload}
           className="mt-2 w-full flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-black active:scale-95 transition-all"
           style={{
@@ -220,6 +212,7 @@ export function InvoiceLanding() {
                 <h3 className="text-sm font-black text-white">Preview Mode</h3>
               </div>
               <button
+                aria-label="close preview"
                 onClick={() => setIsPreviewOpen(false)}
                 className="p-2 text-white/50 hover:text-white transition-colors"
               >
@@ -255,6 +248,7 @@ export function InvoiceLanding() {
                   Edit
                 </button>
                 <button
+                  aria-label="download PDF"
                   onClick={handleDownload}
                   disabled={isDownloading}
                   className="flex-[2] min-[480px]:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black bg-[#FFC107] text-[#191970] shadow-lg shadow-amber-500/20 disabled:opacity-50"
