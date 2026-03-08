@@ -160,9 +160,10 @@ interface UploadProps {
   value: string | null;
   onChange: (url: string | null) => void;
   className?: string;
+  id?: string;
 }
 
-export function LogoUpload({ value, onChange, className }: UploadProps) {
+export function LogoUpload({ value, onChange, className, id }: UploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = (e: React.DragEvent) => {
@@ -177,6 +178,7 @@ export function LogoUpload({ value, onChange, className }: UploadProps) {
       onDragOver={(e) => e.preventDefault()}
     >
       <input
+        id={id}
         ref={inputRef}
         type="file"
         accept="image/*"
@@ -256,7 +258,7 @@ export function LogoUpload({ value, onChange, className }: UploadProps) {
           >
             <ImageIcon size={14} style={{ color: "rgba(25,25,112,0.35)" }} />
           </div>
-          <span style={{ fontSize: "10px", fontWeight: 700, color: "rgba(25,25,112,0.4)" }}>
+          <span style={{ fontSize: "10px", fontWeight: 700, color: "rgba(25,25,112,0.8)" }}>
             Upload logo · max {LOGO_MAX_W}×{LOGO_MAX_H}px
           </span>
         </button>

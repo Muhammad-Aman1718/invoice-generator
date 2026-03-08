@@ -67,6 +67,7 @@ function NewInvoiceContent() {
           <div className="hidden lg:flex items-center gap-2">
             <button
               onClick={() => setShowPreviewPanel((p) => !p)}
+              aria-label="show panel"
               className={cn(
                 "flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl border transition-all",
                 showPreviewPanel
@@ -79,6 +80,7 @@ function NewInvoiceContent() {
             <button
               onClick={handleDownload}
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/10 transition-all"
+              aria-label="download PDF"
             >
               <Download size={13} /> Download
             </button>
@@ -86,6 +88,7 @@ function NewInvoiceContent() {
               onClick={handleSave}
               disabled={isSaving}
               className="flex items-center gap-1.5 text-xs font-black px-4 py-1.5 rounded-xl bg-amber-400 text-[#191970] hover:bg-amber-300 transition-all shadow-lg shadow-amber-400/20"
+              aria-label="save invoice"
             >
               {isSaving ? (
                 <Loader2 size={13} className="animate-spin" />
@@ -101,6 +104,7 @@ function NewInvoiceContent() {
             <button
               onClick={handleDownload}
               className="p-2 rounded-xl bg-white/10 text-white/70 hover:bg-white/20 transition-all"
+              aria-label="download PDF"
             >
               <Download size={16} />
             </button>
@@ -108,6 +112,7 @@ function NewInvoiceContent() {
               onClick={handleSave}
               disabled={isSaving}
               className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-amber-400 text-[#191970] font-black text-xs"
+              aria-label="save invoice"
             >
               {isSaving ? (
                 <Loader2 size={13} className="animate-spin" />
@@ -126,11 +131,12 @@ function NewInvoiceContent() {
               <button
                 key={t}
                 onClick={() => setTab(t)}
+                aria-label={`switch to ${t} tab`}
                 className={cn(
                   "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-black capitalize transition-all",
                   tab === t
                     ? "bg-amber-400 text-[#191970]"
-                    : "text-white/50 hover:text-white/80",
+                    : "text-white/90 hover:text-white/80",
                 )}
               >
                 {t === "edit" ? <Edit3 size={12} /> : <Eye size={12} />} {t}

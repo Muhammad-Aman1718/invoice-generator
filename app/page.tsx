@@ -139,7 +139,7 @@ export default function Home() {
           </h1>
           <p
             className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto"
-            style={{ color: "rgba(25,25,112,0.6)" }}
+            style={{ color: "rgba(25,25,112,0.8)" }}
           >
             Free invoice generator for USA and Europe. VAT and tax compliant.
             Export to PDF instantly — no account needed.

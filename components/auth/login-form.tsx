@@ -757,7 +757,7 @@ export function LoginForm({
         </form>
 
         <footer className="text-center text-xs border-t border-slate-100 pt-5">
-          <p className="text-slate-500 font-medium">
+          <p className="text-[#191970]/70 font-medium">
             New to our platform?{" "}
             <Link
               href={`/auth/sign-up${queryString ? `?${queryString}` : ""}`}

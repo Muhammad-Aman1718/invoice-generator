@@ -382,11 +382,7 @@
 "use client";
 
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { showToast } from "@/utils/showToast";
 import { Eye, EyeOff, FileText } from "lucide-react";
 import useSignUpForm from "@/hooks/useSignUpForm";
 
@@ -653,7 +649,7 @@ export function SignUpForm({
         </form>
 
         {/* ── Footer ── */}
-        <p className="text-center text-xs font-medium border-t pt-5 border-[#191970]/5 text-[#191970]/60">
+        <p className="text-center text-xs font-medium border-t pt-5 border-[#191970]/5 text-[#191970]/70">
           Already have an account?{" "}
           <Link
             href={`/auth/login${queryString ? `?${queryString}` : ""}`}

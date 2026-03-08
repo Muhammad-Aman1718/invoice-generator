@@ -39,7 +39,7 @@ function EditInvoiceContent() {
   }
 
   return (
-    <div
+    <main
       className="flex flex-col h-[100dvh] w-full overflow-hidden"
       style={{ background: "#ECEFF1" }}
     >
@@ -77,16 +77,19 @@ function EditInvoiceContent() {
                   ? "bg-amber-400/10 border-amber-400/50 text-amber-400"
                   : "border-white/10 text-white/60 hover:text-white",
               )}
+              aria-label="show panel"
             >
               <SplitSquareHorizontal size={13} /> Split View
             </button>
             <button
               onClick={handleDownload}
               className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl border border-white/10 text-white/70 hover:bg-white/10 transition-all"
+              aria-label="download PDF"
             >
               <Download size={13} /> Download
             </button>
             <button
+              aria-label="save invoice"
               onClick={handleSave}
               disabled={isSaving}
               className="flex items-center gap-1.5 text-xs font-black px-4 py-1.5 rounded-xl bg-amber-400 text-[#191970] hover:bg-amber-300 transition-all shadow-lg shadow-amber-400/20"
@@ -103,12 +106,14 @@ function EditInvoiceContent() {
           {/* Mobile Actions */}
           <div className="flex lg:hidden items-center gap-2">
             <button
+              aria-label="download PDF"
               onClick={handleDownload}
               className="p-2 rounded-xl bg-white/10 text-white/70"
             >
               <Download size={16} />
             </button>
             <button
+              aria-label="save invoice"
               onClick={handleSave}
               disabled={isSaving}
               className="px-4 py-1.5 rounded-xl bg-amber-400 text-[#191970] font-black text-xs"
@@ -127,13 +132,14 @@ function EditInvoiceContent() {
           <div className="flex bg-white/5 p-0.5 rounded-xl w-full max-w-[400px]">
             {(["edit", "preview"] as Tab[]).map((t) => (
               <button
+                aria-label={`switch to ${t} tab`}
                 key={t}
                 onClick={() => setTab(t)}
                 className={cn(
                   "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-black capitalize transition-all",
                   tab === t
                     ? "bg-amber-400 text-[#191970]"
-                    : "text-white/50 hover:text-white/80",
+                    : "text-white/80 hover:text-white/80",
                 )}
               >
                 {t === "edit" ? <Edit3 size={12} /> : <Eye size={12} />} {t}
@@ -200,7 +206,7 @@ function EditInvoiceContent() {
           background: rgba(25, 25, 112, 0.2);
         }
       `}</style>
-    </div>
+    </main>
   );
 }
 

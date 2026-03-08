@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { supabase } from "@/lib/supabase/client";
+import { showToast } from "@/utils/showToast";
 
 interface InvoiceListProps {
   invoices: InvoiceData[];
@@ -32,19 +33,66 @@ interface InvoiceListProps {
 export function InvoiceList({ invoices }: InvoiceListProps) {
   const router = useRouter();
 
-  const handleStatusChange = async (id: string, newStatus: string) => {
-    const { error } = await supabase
-      .from("invoices")
-      .update({ status: newStatus })
-      .eq("id", id);
-    if (error) alert("Error updating status");
-    else router.refresh();
+  const handleStatusChange = async (
+    id: string,
+    newStatus: string,
+    invoiceNumber: number,
+  ) => {
+    const toastId = showToast.loading(
+      `Updating status for #${invoiceNumber}...`,
+    );
+    try {
+      const { error } = await supabase
+        .from("invoices")
+        .update({ status: newStatus })
+        .eq("id", id);
+
+      showToast.dismiss(toastId);
+
+      if (error) {
+        showToast.error(
+          "Update Failed",
+          "Could not change the invoice status.",
+        );
+      } else {
+        showToast.success(
+          "Status Updated",
+          `Invoice #${invoiceNumber} is now ${newStatus}.`,
+        );
+        router.refresh();
+      }
+    } catch (err) {
+      showToast.dismiss(toastId);
+      showToast.error("System Error", "Something went wrong while updating.");
+    }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this invoice? This cannot be undone.")) return;
-    await deleteInvoiceFromDb(id);
-    router.refresh();
+  const handleDelete = async (id: string, invoiceNumber: number) => {
+    // Standard confirm ki jagah hum toast bhi use kar sakte thay but for safety confirm thek hai
+    if (!confirm(`Delete invoice #${invoiceNumber}? This cannot be undone.`))
+      return;
+
+    const toastId = showToast.loading(`Deleting #${invoiceNumber}...`);
+
+    try {
+      await deleteInvoiceFromDb(id);
+      showToast.dismiss(toastId);
+      showToast.success(
+        "Deleted",
+        `Invoice #${invoiceNumber} has been removed.`,
+      );
+      router.refresh();
+    } catch (err) {
+      showToast.dismiss(toastId);
+      showToast.error("Delete Failed", "Invoice could not be deleted.");
+    }
+  };
+
+  const handleDownloadFeedback = (invoiceNumber: number) => {
+    showToast.info(
+      "Preparing PDF",
+      `Generating download for #${invoiceNumber}...`,
+    );
   };
 
   // ── Shared action dropdown ─────────────────────────────────────────────
@@ -83,7 +131,7 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
         <div className="px-2 py-1.5 mb-1">
           <p
             className="text-[9px] font-black uppercase tracking-widest"
-            style={{ color: "rgba(25,25,112,0.35)" }}
+            style={{ color: "rgba(25,25,112,0.7)" }}
           >
             Invoice #{inv.invoiceNumber}
           </p>
@@ -125,6 +173,7 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
             target="_blank"
             className="flex items-center gap-2.5 w-full px-3 py-2 rounded-xl text-xs font-semibold transition-all"
             style={{ color: "#191970" }}
+            onClick={() => handleDownloadFeedback(inv.invoiceNumber)}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "#ECEFF1";
             }}
@@ -149,14 +198,14 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
         />
         <p
           className="px-3 pb-1 text-[9px] font-black uppercase tracking-widest"
-          style={{ color: "rgba(25,25,112,0.3)" }}
+          style={{ color: "rgba(25,25,112,0.7)" }}
         >
           Change Status
         </p>
 
         {/* Mark as Paid */}
         <DropdownMenuItem
-          onClick={() => handleStatusChange(inv.id!, "paid")}
+          onClick={() => handleStatusChange(inv.id!, "paid", inv.invoiceNumber)}
           className="rounded-xl cursor-pointer p-0 focus:bg-transparent"
         >
           <div
@@ -197,7 +246,9 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
 
         {/* Mark as Pending */}
         <DropdownMenuItem
-          onClick={() => handleStatusChange(inv.id!, "pending")}
+          onClick={() =>
+            handleStatusChange(inv.id!, "pending", inv.invoiceNumber)
+          }
           className="rounded-xl cursor-pointer p-0 focus:bg-transparent"
         >
           <div
@@ -244,7 +295,7 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
 
         {/* Delete */}
         <DropdownMenuItem
-          onClick={() => handleDelete(inv.id!)}
+          onClick={() => handleDelete(inv.id!, inv.invoiceNumber)}
           className="rounded-xl cursor-pointer p-0 focus:bg-transparent"
         >
           <div
@@ -281,14 +332,14 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
           className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
           style={{ background: "#ECEFF1" }}
         >
-          <FileText size={24} style={{ color: "rgba(25,25,112,0.3)" }} />
+          <FileText size={24} style={{ color: "rgba(25,25,112,0.7)" }} />
         </div>
         <h3 className="text-base font-black mb-1" style={{ color: "#191970" }}>
           No invoices yet
         </h3>
         <p
           className="text-xs max-w-[220px] mb-6 leading-relaxed"
-          style={{ color: "rgba(25,25,112,0.45)" }}
+          style={{ color: "rgba(25,25,112,0.7)" }}
         >
           Create your first invoice and track payments easily.
         </p>
@@ -342,7 +393,7 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                     className={`py-3 px-4 text-[10px] font-black uppercase tracking-widest`}
                     style={{
                       textAlign: h.align as any,
-                      color: "rgba(25,25,112,0.4)",
+                      color: "rgba(25,25,112,0.8)",
                     }}
                   >
                     {h.label}
@@ -367,7 +418,6 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                       idx % 2 !== 0 ? "#ECEFF1" : "#fff";
                   }}
                 >
-                  {/* Invoice # */}
                   <td className="px-4 py-3.5">
                     <p
                       className="font-black text-sm"
@@ -403,11 +453,11 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                     <div className="flex items-center gap-1.5">
                       <Calendar
                         size={11}
-                        style={{ color: "rgba(25,25,112,0.3)" }}
+                        style={{ color: "rgba(25,25,112,0.8)" }}
                       />
                       <span
                         className="text-xs"
-                        style={{ color: "rgba(25,25,112,0.55)" }}
+                        style={{ color: "rgba(25,25,112,0.8)" }}
                       >
                         {inv.issueDate
                           ? new Date(inv.issueDate).toLocaleDateString(
@@ -436,16 +486,16 @@ export function InvoiceList({ invoices }: InvoiceListProps) {
                   {/* Status */}
                   <td className="px-4 py-3.5 text-center">
                     <span
-                      className="inline-flex items-center gap-1 text-[10px] font-black px-2.5 py-1 rounded-full"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full"
                       style={
                         inv.status === "paid"
                           ? {
-                              background: "rgba(16,185,129,0.1)",
-                              color: "#059669",
+                              background: "rgba(6, 95, 70, 0.1)", // Light emerald background
+                              color: "#065F46", // Darker emerald for better contrast
                             }
                           : {
-                              background: "rgba(245,158,11,0.12)",
-                              color: "#D97706",
+                              background: "rgba(146, 64, 14, 0.1)", // Light amber background
+                              color: "#92400E", // Darker amber for better contrast
                             }
                       }
                     >

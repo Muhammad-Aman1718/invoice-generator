@@ -29,7 +29,7 @@ export async function InvoiceContent() {
         <div className="flex items-center justify-between mb-4">
           <h2
             className="text-sm font-black uppercase tracking-widest"
-            style={{ color: "rgba(25,25,112,0.5)" }}
+            style={{ color: "rgba(25,25,112,0.8)" }}
           >
             Recent Invoices
           </h2>

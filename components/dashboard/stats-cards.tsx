@@ -114,7 +114,7 @@ export function StatsCards({
             <div>
               <p
                 className="text-[10px] font-black uppercase tracking-widest mb-2"
-                style={{ color: "rgba(25,25,112,0.4)" }}
+                style={{ color: "rgba(25,25,112,0.8)" }}
               >
                 {label}
               </p>

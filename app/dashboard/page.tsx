@@ -40,7 +40,6 @@ export default function DashboardPage() {
         <div
           className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{ background: "#191970" }}
-          aria-hidden="true"
         >
           <LayoutDashboard size={16} style={{ color: "#FFC107" }} />
         </div>
@@ -50,7 +49,7 @@ export default function DashboardPage() {
           </h1>
           <p
             className="text-xs font-medium"
-            style={{ color: "rgba(25,25,112,0.45)" }}
+            style={{ color: "rgba(25,25,112,0.8)" }}
           >
             Overview of your invoices
           </p>
