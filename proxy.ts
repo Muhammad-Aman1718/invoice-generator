@@ -1,5 +1,5 @@
 // @/proxy.ts
-import { updateSession } from "@/lib/supabase/proxy";
+import { updateSession } from "@/src/lib/supabase/proxy";
 import { type NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
@@ -13,8 +13,9 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - robots.txt, sitemap.xml (SEO files)
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
-     * Feel free to modify this pattern to include more paths.
+     * Public footer pages: features, pricing, templates, changelog, help-center, blog, api-docs, status, privacy-policy, terms-of-service, gdpr-compliance, cookie-policy
      */
     "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],

@@ -1,0 +1,59 @@
+[
+  {
+    "id": "b9b79dcc-7fb7-45a1-b04f-85551f7aec95",
+    "aud": "authenticated",
+    "role": "",
+    "email": "ag3734359@gmail.com",
+    "phone": "",
+    "confirmation_sent_at": "2026-07-04T20:16:12.363289976Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": ["email"]
+    },
+    "user_metadata": {},
+    "identities": [],
+    "created_at": "2026-07-04T20:16:12.363289976Z",
+    "updated_at": "2026-07-04T20:16:12.363289976Z",
+    "is_anonymous": false
+  },    
+
+  {
+    "id": "632b65fb-c1bf-4cf7-a676-9c043db94ec1",
+    "aud": "authenticated",
+    "role": "authenticated",
+    "email": "ag3734359@gmail.com",
+    "phone": "",
+    "confirmation_sent_at": "2026-07-04T20:18:24.418093039Z",
+    "app_metadata": {
+      "provider": "email",
+      "providers": ["email"]
+    },
+    "user_metadata": {
+      "email": "ag3734359@gmail.com",
+      "email_verified": false,
+      "phone_verified": false,
+      "sub": "632b65fb-c1bf-4cf7-a676-9c043db94ec1"
+    },
+    "identities": [
+      {
+        "identity_id": "d4334787-8f54-4341-9fff-72e8e5e251c9",
+        "id": "632b65fb-c1bf-4cf7-a676-9c043db94ec1",
+        "user_id": "632b65fb-c1bf-4cf7-a676-9c043db94ec1",
+        "identity_data": {
+          "email": "ag3734359@gmail.com",
+          "email_verified": false,
+          "phone_verified": false,
+          "sub": "632b65fb-c1bf-4cf7-a676-9c043db94ec1"
+        },
+        "provider": "email",
+        "last_sign_in_at": "2026-07-04T20:18:24.408002229Z",
+        "created_at": "2026-07-04T20:18:24.40807Z",
+        "updated_at": "2026-07-04T20:18:24.40807Z",
+        "email": "ag3734359@gmail.com"
+      }
+    ],
+    "created_at": "2026-07-04T20:18:24.387889Z",
+    "updated_at": "2026-07-04T20:18:27.049552Z",
+    "is_anonymous": false
+  }
+]
