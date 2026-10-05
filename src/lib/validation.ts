@@ -109,6 +109,9 @@ export function getFirstIssueMessage(error: z.ZodError): string {
   const issue = error.issues[0];
   if (!issue) return "Invalid request";
   const path = issue.path.join(".");
-  const message = /received nan|Required/i.test(issue.message) ? "is required" : issue.message;
+  // Zod's built-in wording ("Required", "Expected number, received nan") reads badly
+  // after a field path; custom messages such as "Name is required" are kept as-is.
+  const isMissingValue = issue.message === "Required" || /received nan/i.test(issue.message);
+  const message = isMissingValue ? "is required" : issue.message;
   return path ? `${path}: ${message}` : message;
 }
