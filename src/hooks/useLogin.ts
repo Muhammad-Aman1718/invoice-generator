@@ -1,67 +1,43 @@
 "use client";
-import { createClient } from "@/src/lib/supabase/client";
-import { showToast } from "@/src/utils/showToast";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
 
-const useLogin = () => {
+import { useState, type FormEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { createClient } from "@/src/lib/supabase/client";
+import { buildNextUrl } from "@/src/lib/redirects";
+import { getErrorMessage } from "@/src/lib/utils";
+import { showToast } from "@/src/utils/showToast";
+
+export default function useLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPass, setShowPass] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const queryString = searchParams.toString();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const supabase = createClient();
+  const handleLogin = async (event: FormEvent) => {
+    event.preventDefault();
     setIsLoading(true);
-    setError(null);
     try {
-      const { error, data } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error } = await createClient().auth.signInWithPassword({ email, password });
       if (error) throw error;
-      if (data.session) {
-        showToast.success("Welcome back!", "Redirecting you now...");
-        const nextPath = searchParams.get("next") || "/dashboard";
-        const action = searchParams.get("action");
-        const finalUrl = action ? `${nextPath}?action=${action}` : nextPath;
-        router.refresh();
-        setTimeout(() => router.push(finalUrl), 100);
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Invalid credentials";
-      setError(msg);
-      showToast.error("Login Failed", msg);
+      showToast.success("Welcome back!", "Redirecting you now…");
+      router.replace(buildNextUrl(searchParams, window.location.origin));
+      router.refresh();
+    } catch (error) {
+      showToast.error("Sign-in failed", getErrorMessage(error, "Invalid credentials"));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleOAuth = async (provider: "google" | "github") => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-  };
   return {
     email,
     setEmail,
     password,
     setPassword,
-    showPass,
-    setShowPass,
-    error,
     isLoading,
     handleLogin,
-    handleOAuth,
-    queryString,
+    queryString: searchParams.toString(),
+    isVerified: searchParams.get("verified") === "true",
   };
-};
-
-export default useLogin;
+}

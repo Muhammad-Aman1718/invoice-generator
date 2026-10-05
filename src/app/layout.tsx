@@ -1,145 +1,95 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import "./globals.css";
 import { Toaster } from "sonner";
-// global navigation components
-// import Header from "@/src/components/header";
-// import Footer from "@/src/components/footer";
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+import "./globals.css";
+import { SITE_CONFIG } from "@/src/constant/site";
+import { PLANS } from "@/src/constant/plans";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(defaultUrl),
+  metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: "Invoice Gen - Professional PDF Invoice Maker",
-    template: "%s | Invoice Gen"
+    default: `${SITE_CONFIG.name} — Professional PDF Invoice Maker`,
+    template: `%s | ${SITE_CONFIG.name}`,
   },
-  description:
-    "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use. Generate tax-compliant invoices instantly.",
+  description: SITE_CONFIG.description,
+  applicationName: SITE_CONFIG.name,
   keywords: [
-    "Invoice Generator",
-    "PDF Invoice Maker",
-    "VAT Compliant",
-    "Tax Compliant",
-    "GST Support",
-    "USA Invoices",
-    "Europe Invoices",
-    "Free Invoice Software",
-    "Business Invoicing",
-    "Professional Invoices"
+    "invoice generator",
+    "PDF invoice maker",
+    "free invoice template",
+    "VAT invoice",
+    "GST invoice",
+    "invoice software",
+    "freelancer invoice",
+    "small business invoicing",
   ],
-  authors: [{ name: "Invoice Gen Team" }],
-  creator: "Invoice Gen",
-  publisher: "Invoice Gen",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
+  authors: [{ name: `${SITE_CONFIG.name} Team` }],
+  creator: SITE_CONFIG.name,
+  formatDetection: { email: false, address: false, telephone: false },
   openGraph: {
-    title: "Invoice Gen - Professional PDF Invoice Maker",
-    description:
-      "Create VAT and tax compliant invoices. Export to PDF instantly. Free invoice generator for businesses.",
-    url: defaultUrl,
-    siteName: "Invoice Gen",
+    title: `${SITE_CONFIG.name} — Professional PDF Invoice Maker`,
+    description: SITE_CONFIG.description,
+    url: SITE_CONFIG.url,
+    siteName: SITE_CONFIG.name,
     locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: `${defaultUrl}/og-image.png`,
-        width: 1200,
-        height: 630,
-        alt: "Invoice Gen - Professional Invoice Generator",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Invoice Gen - Professional PDF Invoice Maker",
-    description: "Create VAT and tax compliant invoices. Export to PDF instantly.",
-    images: [`${defaultUrl}/og-image.png`],
+    title: `${SITE_CONFIG.name} — Professional PDF Invoice Maker`,
+    description: SITE_CONFIG.description,
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
-  verification: {
-    google: "your-google-site-verification-code",
-  },
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
+    verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION },
+  }),
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  display: "swap",
-  subsets: ["latin"],
-});
+export const viewport: Viewport = {
+  themeColor: "#191970",
+  width: "device-width",
+  initialScale: 1,
+};
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Invoice Gen",
-    "description": "Professional PDF invoice generator with VAT and GST support for USA and Europe businesses.",
-    "url": defaultUrl,
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web Browser",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
-    },
-    "creator": {
-      "@type": "Organization",
-      "name": "Invoice Gen Team"
-    },
-    "featureList": [
-      "PDF Invoice Generation",
-      "VAT/GST Compliance",
-      "Multi-currency Support",
-      "Professional Templates",
-      "Real-time Preview",
-      "Secure Authentication"
-    ]
-  };
+const geistSans = Geist({ variable: "--font-geist-sans", display: "swap", subsets: ["latin"] });
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: SITE_CONFIG.name,
+  description: SITE_CONFIG.description,
+  url: SITE_CONFIG.url,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web Browser",
+  offers: Object.values(PLANS).map((p) => ({
+    "@type": "Offer",
+    name: p.name,
+    price: String(p.price.month),
+    priceCurrency: "USD",
+  })),
+  featureList: [
+    "PDF invoice generation",
+    "VAT/GST tax presets",
+    "Multi-currency support",
+    "Client management",
+    "Revenue reports",
+  ],
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
+    <html lang="en">
+      <body className={`${geistSans.className} antialiased`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-      </head>
-      <body
-        className={`${geistSans.className} antialiased`}
-        cz-shortcut-listen="true"
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {/* <Header /> */}
-          {children}
-          {/* <Footer /> */}
-          <Toaster position="top-center" richColors />
-        </ThemeProvider>
+        {children}
+        <Toaster position="top-right" richColors closeButton />
       </body>
     </html>
   );

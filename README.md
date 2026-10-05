@@ -1,329 +1,139 @@
-# Invoice Generator
+# InvoiceGen
 
-<h1 align="center">
-  
-  Invoice Generator
-  <br>
-</h1>
+A full invoicing SaaS built with **Next.js 16 (App Router)**, **React 19**, **Supabase** and **Tailwind CSS**.
+Create professional invoices in the browser, save clients, track payments on a dashboard, and sell
+Pro/Business subscriptions.
 
-<p align="center">
-  A modern, full-featured invoice generation application built with Next.js, React, and Supabase. Create, manage, and export professional invoices with ease.
-</p>
+Theme: 60·30·10 — mist `#ECEFF1`, navy `#191970`, amber `#FFC107`.
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
-  <a href="#installation"><strong>Installation</strong></a> ·
-  <a href="#getting-started"><strong>Getting Started</strong></a> ·
-  <a href="#project-structure"><strong>Project Structure</strong></a> ·
-  <a href="#authentication"><strong>Authentication</strong></a>
-</p>
+## Features
 
----
+| Area              | What's included                                                                                                                                      |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Free builder**  | Live preview, PDF export, 40+ currencies, VAT/GST presets, logo & signature — no account needed (draft saved in the browser)                         |
+| **Dashboard**     | Overview with KPIs, 6‑month revenue chart, setup checklist, recent invoices                                                                          |
+| **Invoices**      | Search, status filters, sort, pagination, duplicate, mark paid/pending/cancelled, PDF download, CSV export (Pro), automatic _overdue_ status         |
+| **Clients**       | Client book with CRUD; pick a client in the editor to fill "Bill To"                                                                                 |
+| **Reports** (Pro) | 12‑month trend, collection rate, average invoice, top clients, date ranges                                                                           |
+| **Billing**       | Free / Pro / Business plans, usage meters, Stripe Checkout + customer portal, manual upgrades when Stripe isn't configured                           |
+| **Settings**      | Profile, business details & logo, invoice defaults (currency, tax, payment terms, notes, terms), password change, GDPR data export, account deletion |
+| **Roles**         | `user` / `admin`. Admin area: platform KPIs, est. MRR, users table with plan/role changes and suspension                                             |
+| **Legal**         | Privacy Policy, Terms of Service, Refund Policy, Cookie Policy, GDPR page, cookie notice, terms checkbox on sign‑up                                  |
+| **API**           | Validated JSON REST API (`/api/...`) documented at `/api-docs`                                                                                       |
 
-## 📋 Overview
+## Getting started
 
-**Invoice Generator** is a comprehensive web application designed to simplify invoice creation and management. Generate professional invoices, customize them with your branding, and download them as PDF with just a few clicks. Built with modern web technologies and secured with Supabase authentication.
-
-## ✨ Features
-
-### Core Invoice Features
-- ✅ **Create & Manage Invoices** - Create new invoices with intuitive form interface
-- ✅ **Real-time Preview** - See invoice changes live before saving
-- ✅ **Custom Branding** - Upload your company logo to personalize invoices
-- ✅ **Line Items Management** - Add, edit, and delete multiple line items with quantities and prices
-- ✅ **Multiple Currencies** - Support for various currencies with symbol formatting
-- ✅ **PDF Export** - Generate and download professional PDF invoices
-- ✅ **Invoice Dashboard** - View, manage, and track all your invoices in one place
-- ✅ **Invoice Templates** - Pre-designed templates with professional layouts
-
-### User Features
-- ✅ **User Authentication** - Secure login and registration with Supabase
-- ✅ **Password Management** - Change password and password recovery functionality
-- ✅ **User Sessions** - Cookie-based session management across the entire app
-- ✅ **Protected Routes** - Secure dashboard accessible only to authenticated users
-
-### Technical Features
-- ✅ **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
-- ✅ **Dark/Light Theme Support** - Theme toggle with next-themes integration
-- ✅ **SSR Ready** - Full server-side rendering support for optimal performance
-- ✅ **TypeScript** - Type-safe codebase for reliability and maintainability
-- ✅ **Toast Notifications** - User-friendly notifications with Sonner
-
-## 🛠️ Tech Stack
-
-### Frontend
-- **Next.js 15** - React framework with App Router
-- **React 19** - UI library
-- **TypeScript** - Type safety and developer experience
-- **Tailwind CSS** - Utility-first CSS framework
-- **shadcn/ui** - High-quality React components
-- **Lucide React** - Beautiful SVG icons
-- **Zustand** - Lightweight state management
-- **date-fns** - Date formatting and manipulation
-
-### Backend & Database
-- **Supabase** - PostgreSQL database with authentication
-- **Supabase Auth** - Cookie-based session management
-- **supabase-ssr** - SSR-optimized Supabase package
-
-### PDF & Export
-- **@react-pdf/renderer** - PDF generation from React components
-- **Pako** - Data compression utilities
-
-### UI & Styling
-- **Tailwind CSS** - Responsive design
-- **next-themes** - Dark mode support
-- **Sonner** - Toast notifications
-- **Radix UI** - Accessible component primitives
-
-### Development
-- **ESLint** - Code quality and consistency
-- **PostCSS** - CSS processing
-
-## 🚀 Installation
-
-### Prerequisites
-- Node.js 18+ and npm/yarn/pnpm
-- Supabase account ([Create one here](https://supabase.com))
-
-### Step 1: Clone the Repository
-
-```bash
-git clone <repository-url>
-cd invoice-generator
-```
-
-### Step 2: Install Dependencies
-
-Using npm:
 ```bash
 npm install
-```
-
-Using yarn:
-```bash
-yarn install
-```
-
-Using pnpm:
-```bash
-pnpm install
-```
-
-### Step 3: Configure Supabase
-
-1. Create a Supabase project at [supabase.com](https://supabase.com)
-2. Get your project credentials:
-   - **Project URL**
-   - **Anon/Publishable Key**
-
-3. Create `.env.local` file in the root directory:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-### Step 4: Set Up Database Schema
-
-The project includes SQL migrations for setting up the invoice schema. Run the migration script located in `supabase/migrations/001_invoice_schema.sql` in your Supabase dashboard.
-
-### Step 5: Run the Development Server
-
-```bash
+cp .env.example .env.local   # fill in your Supabase URL + publishable key
 npm run dev
 ```
 
-The application will be available at [http://localhost:3000](http://localhost:3000)
+### 1. Database (required)
 
-## 📚 Getting Started
+Open **Supabase → SQL Editor**, paste and run
+[`src/supabase/migrations/002CompleteSchema.sql`](src/supabase/migrations/002CompleteSchema.sql).
 
-### First Time Users
+It is idempotent (safe to re-run, safe on an existing database) and creates/updates:
 
-1. **Sign Up** - Create an account using the sign-up page
-2. **Access Dashboard** - View your invoice dashboard after login
-3. **Create Invoice** - Click on "New Invoice" to create your first invoice
-4. **Customize** - Add your company logo and fill in invoice details
-5. **Preview** - Check the real-time preview before saving
-6. **Download** - Export as PDF with a single click
+- `profiles` (role, business defaults, suspension), `clients`, `invoices`, `subscriptions`
+- Row Level Security: users only see their own rows; admins can read all
+- Triggers: new user → profile + free subscription; users cannot change their own role;
+  **Free plan limits enforced in the database** (10 invoices / month, 5 clients)
+- RPCs: `get_next_invoice_number`, `is_admin`, `effective_plan`, `delete_my_account`
 
-### Main Routes
+### 2. Make yourself an admin
 
-| Route | Purpose |
-|-------|---------|
-| `/` | Landing page with invoice creation info |
-| `/auth/login` | User login page |
-| `/auth/sign-up` | User registration page |
-| `/auth/forgot-password` | Password recovery |
-| `/dashboard` | Main dashboard with invoice list |
-| `/dashboard/invoices/new` | Create new invoice |
-| `/dashboard/invoices/[id]` | View/Edit specific invoice |
-
-## 📦 Project Structure
-
-```
-invoice-generator/
-├── app/                           # Next.js app router
-│   ├── auth/                      # Authentication routes
-│   │   ├── login/
-│   │   ├── sign-up/
-│   │   ├── forgot-password/
-│   │   └── callback/
-│   ├── dashboard/                 # Dashboard routes
-│   │   ├── page.tsx               # Dashboard home
-│   │   └── invoices/
-│   │       ├── new/               # Create new invoice
-│   │       └── [id]/              # View invoice
-│   ├── layout.tsx                 # Root layout
-│   ├── page.tsx                   # Landing page
-│   └── globals.css                # Global styles
-│
-├── components/                    # React components
-│   ├── auth/                      # Auth forms
-│   │   ├── login-form.tsx
-│   │   └── sign-up-form.tsx
-│   ├── dashboard/                 # Dashboard components
-│   │   ├── invoice-list.tsx
-│   │   ├── invoice-content.tsx
-│   │   ├── stats-cards.tsx
-│   │   └── app-sidebar.tsx
-│   ├── invoice/                   # Invoice components
-│   │   ├── invoice-form.tsx       # Invoice creation form
-│   │   ├── invoice-preview.tsx    # Invoice preview
-│   │   ├── invoice-landing.tsx
-│   │   ├── line-items-table.tsx   # Line items management
-│   │   └── logo-upload.tsx        # Logo upload
-│   ├── ui/                        # shadcn/ui components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── input.tsx
-│   │   ├── dropdown-menu.tsx
-│   │   └── label.tsx
-│   ├
-│   ├── footer.tsx
-│   └── ads/                       # Ad slots
-│
-├── hooks/                         # Custom React hooks
-│   ├── useInvoiceForm.ts          # Invoice form logic
-│   ├── useLineItemsTable.ts       # Line items management
-│   ├── useNewInvoicePage.ts       # New invoice page logic
-│   ├── useEditInvoicePage.ts      # Edit invoice logic
-│   ├── useInvoicePreview.ts       # Preview logic
-│   ├── useLoginForm.ts            # Login form logic
-│   └── useSignUpForm.ts           # Sign-up form logic
-│
-├── lib/                           # Utility functions & services
-│   ├── invoice-store.ts           # Zustand invoice store
-│   ├── invoice-utils.ts           # Invoice utilities
-│   ├── pdf-generator.tsx          # PDF generation logic
-│   ├── utils.ts                   # General utilities
-│   └── supabase/                  # Supabase clients & services
-│       ├── client.ts              # Client-side Supabase
-│       ├── server.ts              # Server-side Supabase
-│       ├── invoices-client.ts     # Invoices client methods
-│       ├── invoices-server.ts     # Invoices server methods
-│       └── proxy.ts               # Proxy configuration
-│
-├── types/                         # TypeScript types
-│   ├── invoice-types.ts           # Invoice-related types
-│   └── dom-to-image-more.d.ts     # Type definitions
-│
-├── utils/                         # Utility functions
-│   ├── showToast.tsx              # Toast notifications
-│
-├── constant/                      # Constants
-│   └── data.ts                    # Application constants
-│
-├── supabase/                      # Supabase configuration
-│   └── migrations/                # Database migrations
-│       └── 001_invoice_schema.sql
-│
-├── next.config.ts                 # Next.js configuration
-├── tailwind.config.ts             # Tailwind CSS config
-├── tsconfig.json                  # TypeScript config
-├── postcss.config.mjs             # PostCSS config
-├── components.json                # shadcn/ui config
-├── eslint.config.mjs              # ESLint config
-└── package.json                   # Project dependencies
-
+```sql
+update public.profiles set role = 'admin' where email = 'you@example.com';
 ```
 
-## 🔐 Authentication
+Then open **Dashboard → Admin**.
 
-The app uses **Supabase Auth** with cookie-based sessions, providing:
+### 3. Supabase Auth URLs
 
-- **Email/Password Authentication** - Secure user registration and login
-- **Session Persistence** - User sessions maintained across page navigations
-- **Protected Routes** - Dashboard and invoice pages require authentication
-- **Password Recovery** - Forgot password functionality for account recovery
-- **Account Management** - Update password and manage account settings
+In **Authentication → URL Configuration** add your site URL and the redirect
+`https://YOUR-DOMAIN/auth/callback` (used by Google/GitHub login, email confirmation and password reset).
 
-### Authentication Flow
+### 4. Payments (optional)
 
-1. User registers via sign-up page
-2. Supabase creates user account with email verification
-3. User logs in with credentials
-4. Session stored securely in HTTP-only cookies
-5. User gains access to protected dashboard and invoice features
+Without Stripe keys the app runs fine: the billing page tells users to email support and an admin
+upgrades them from **Admin → Users & plans** (31‑day manual period).
 
-## 🎨 Design System
+To enable self‑serve billing:
 
-The application uses a **60-30-10 color scheme**:
-- **60% - Light Background** (#ECEFF1) - Primary background
-- **30% - Navy Blue** (#191970) - Headers and primary elements
-- **10% - Amber Accent** (#FFC107) - Highlights and CTAs
+1. Create Pro and Business products in Stripe with monthly and yearly prices.
+2. Set `STRIPE_SECRET_KEY`, the four `STRIPE_PRICE_*` IDs and `SUPABASE_SERVICE_ROLE_KEY`.
+3. Add a webhook to `https://YOUR-DOMAIN/api/billing/webhook` for
+   `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`,
+   and set `STRIPE_WEBHOOK_SECRET`.
+4. Enable the customer portal in Stripe (Settings → Billing → Customer portal).
 
-## 🚀 Development Commands
+Plan prices/limits live in [`src/constant/plans.ts`](src/constant/plans.ts) — keep the Free limits in
+sync with `enforce_plan_limits()` in the SQL migration.
+
+## Project structure
+
+```
+src/
+├── app/                  Next.js routes (App Router)
+│   ├── (marketing)/      Public site: landing + builder, pricing, features, legal pages, contact…
+│   ├── auth/             Login, sign-up, password reset, OAuth/email callback
+│   ├── dashboard/        Overview, invoices, clients, reports, billing, settings, admin/
+│   └── api/              REST API (invoices, clients, profile, account, billing, admin, contact, health)
+├── components/           React components, one folder per feature (invoice/, dashboard/, billing/, ui/…)
+├── constant/             Every named constant: plans, routes, currencies, theme, nav, page content…
+├── hooks/                Client-side React hooks (useInvoiceList, useInvoiceSave…)
+├── lib/
+│   ├── server/           Auth helpers, data loaders, API error handling, Stripe client (server-only)
+│   ├── supabase/         Browser/server/admin clients and the session proxy
+│   ├── invoiceStore.ts   Zustand store for the invoice being edited
+│   ├── invoiceCalculations.ts  Line, discount, tax and total math
+│   ├── mappers.ts        DB row ⇄ app object conversions
+│   └── validation.ts     zod schemas for every API input
+├── tests/                Vitest unit tests for the logic in lib/
+├── types/types.ts        All shared types and component props
+├── utils/                Small UI utilities (toasts)
+└── supabase/migrations/  SQL schema (001InvoiceSchema.sql, 002CompleteSchema.sql)
+proxy.ts                  Session refresh + route protection (/dashboard, admin)
+```
+
+## Code conventions
+
+- **Components:** folders are camelCase; component files are PascalCase (`InvoiceTable.tsx`).
+  Each file has one default-exported component whose props type is `<ComponentName>Props`.
+- **File names** contain no `-` or `_`. The only exceptions are names Next.js requires
+  (`not-found.tsx`) and route folders whose names are public URLs (`privacy-policy`, `sign-up`…).
+- **Types** live in `src/types/types.ts`; **constants** (UPPER_CASE) live in `src/constant/`.
+  Magic numbers and strings belong there too.
+- **API routes** validate input with zod and wrap handlers in `withErrorHandling`, so every error
+  returns `{ error, code }` with a proper HTTP status.
+- **Secrets** come only from environment variables; never commit `.env.local`.
+- **Git:** small conventional commits (`feat:`, `fix:`, `refactor:`, `test:`…) on a feature branch,
+  merged through a reviewed pull request. CI must be green before merging.
+
+## Scripts
 
 ```bash
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Run ESLint
-npm run lint
+npm run dev           # development server
+npm run build         # production build
+npm run lint          # ESLint
+npm run typecheck     # TypeScript, no emit
+npm test              # unit tests (Vitest)
+npm run test:watch    # unit tests in watch mode
+npm run format        # format with Prettier
+npm run format:check  # verify formatting (used in CI)
 ```
 
-## 📝 Environment Variables
+GitHub Actions (`.github/workflows/ci.yml`) runs format check, lint, typecheck, tests and build on
+every pull request and on pushes to `main`.
 
-Create a `.env.local` file with the following variables:
+## Before going live
 
-```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-```
+- Update company name and support/privacy emails in `src/constant/site.ts`.
+- Have the legal pages reviewed for your jurisdiction — they are a solid starting point, not legal advice.
+- Set `NEXT_PUBLIC_SITE_URL` to your production domain.
 
-## 🤝 Contributing
+## License
 
-Contributions are welcome! Please feel free to submit issues and enhancement requests.
-
-## 📄 License
-
-This project is open source and available under the MIT License.
-
-## 📞 Support
-
-For issues, bug reports, or feature requests, please open an issue in the repository.
-
----
-
-<p align="center">
-  Made with ❤️ for invoice generation
-</p>
-
-## Feedback and issues
-
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
-
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+MIT

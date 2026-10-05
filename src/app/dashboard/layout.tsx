@@ -1,34 +1,32 @@
-import { AppSidebar } from "@/src/components/dashboard/app-sidebar";
-import Footer from "@/src/components/footer";
-import { Suspense } from "react";
-import { Loader2 } from "lucide-react";
+import type { Metadata } from "next";
+import DashboardShell from "@/src/components/dashboard/DashboardShell";
+import SuspendedNotice from "@/src/components/dashboard/SuspendedNotice";
+import { countInvoicesThisMonth, getViewer } from "@/src/lib/server/data";
+import { SITE_CONFIG } from "@/src/constant/site";
+import type { LayoutProps } from "@/src/types/types";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const metadata: Metadata = {
+  title: { default: "Dashboard", template: `%s | ${SITE_CONFIG.name}` },
+  robots: { index: false, follow: false },
+};
+
+export default async function DashboardLayout({ children }: LayoutProps) {
+  const viewer = await getViewer();
+  if (viewer.profile.isSuspended) return <SuspendedNotice />;
+
+  const used = await countInvoicesThisMonth(viewer);
   return (
-    <div className="flex min-h-screen flex-col" style={{ background: "#ECEFF1" }}>
-      <div className="flex flex-1">
-        {/* Sidebar handles its own Suspense internally now */}
-        <AppSidebar />
-
-        <main className="flex-1 overflow-auto min-w-0 pt-14 lg:pt-0">
-          <Suspense
-            fallback={
-              <div className="flex items-center justify-center h-full">
-                <Loader2 className="animate-spin text-[#191970]" />
-              </div>
-            }
-          >
-            {children}
-          </Suspense>
-        </main>
-      </div>
-
-      {/* Footer at bottom */}
-      <Footer />
-    </div>
+    <DashboardShell
+      viewer={{
+        email: viewer.user.email ?? "",
+        name: viewer.profile.fullName ?? "",
+        role: viewer.profile.role,
+        planName: viewer.plan.name,
+        isPaid: viewer.plan.id !== "free",
+        usage: { used, limit: viewer.plan.limits.invoicesPerMonth },
+      }}
+    >
+      {children}
+    </DashboardShell>
   );
 }

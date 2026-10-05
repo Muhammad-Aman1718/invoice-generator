@@ -1,161 +1,70 @@
-// // // @/lib/supabase/proxy.ts
-
-// import { createServerClient } from "@supabase/ssr";
-// import { NextResponse, type NextRequest } from "next/server";
-// import { hasEnvVars } from "../utils";
-
-// export async function updateSession(request: NextRequest) {
-//   let supabaseResponse = NextResponse.next({
-//     request,
-//   });
-
-//   if (!hasEnvVars) {
-//     return supabaseResponse;
-//   }
-
-//   const supabase = createServerClient(
-//     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-//     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-//     {
-//       cookies: {
-//         getAll() {
-//           return request.cookies.getAll();
-//         },
-//         setAll(cookiesToSet) {
-//           cookiesToSet.forEach(({ name, value }) =>
-//             request.cookies.set(name, value),
-//           );
-//           supabaseResponse = NextResponse.next({
-//             request,
-//           });
-//           cookiesToSet.forEach(({ name, value, options }) =>
-//             supabaseResponse.cookies.set(name, value, options),
-//           );
-//         },
-//       },
-//     },
-//   );
-
-//   // IMPORTANT: getUser() session ko refresh karta hai.
-//   // Agar session purana ho jaye toh ye naya token mangwa leta hai.
-//   const {
-//     data: { user },
-//   } = await supabase.auth.getUser();
-
-//   // Route Protection Logic
-//   const isAuthPage =
-//     request.nextUrl.pathname.startsWith("/auth") ||
-//     request.nextUrl.pathname.startsWith("/login");
-//   const isHomePage = request.nextUrl.pathname === "/";
-
-//   // Case 1: Agar user nahi hai aur woh protected route (Dashboard) par jane ki koshish kare
-//   if (!user && !isAuthPage && !isHomePage) {
-//     const url = request.nextUrl.clone();
-//     url.pathname = "/auth/login"; // Ensure karein ke path sahi hai
-//     return NextResponse.redirect(url);
-//   }
-
-//   // Case 2: Agar user login hai aur login page par jane ki koshish kare, toh dashboard bhej dein
-//   if (user && isAuthPage) {
-//     console.log("User is already logged in, redirecting to dashboard.", user);
-//     const url = request.nextUrl.clone();
-//     url.pathname = "/dashboard";
-//     return NextResponse.redirect(url);
-//   }
-
-//   return supabaseResponse;
-// }
-
-// @/lib/supabase/proxy.ts
-
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasEnvVars } from "../utils";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { hasEnvVars } from "@/src/lib/utils";
+import { buildNextUrl } from "@/src/lib/redirects";
+import { GUEST_ONLY_ROUTES, PROTECTED_PREFIXES, ROUTES } from "@/src/constant/routes";
 
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request,
-  });
+function matchesPrefix(pathname: string, prefix: string): boolean {
+  return pathname === prefix || pathname.startsWith(`${prefix}/`);
+}
 
-  if (!hasEnvVars) {
-    return supabaseResponse;
-  }
-
-  const supabase = createServerClient(
+function createProxyClient(request: NextRequest, responseRef: { current: NextResponse }) {
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
+        getAll: () => request.cookies.getAll(),
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
-          );
-          supabaseResponse = NextResponse.next({
-            request,
-          });
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          responseRef.current = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
+            responseRef.current.cookies.set(name, value, options),
           );
         },
       },
     },
   );
+}
 
+async function isAdmin(supabase: SupabaseClient, userId: string): Promise<boolean> {
+  const { data } = await supabase.from("profiles").select("role").eq("id", userId).maybeSingle();
+  return data?.role === "admin";
+}
+
+/** Refresh the Supabase session and enforce route access rules. */
+export async function updateSession(request: NextRequest) {
+  const response = { current: NextResponse.next({ request }) };
+  if (!hasEnvVars) return response.current;
+
+  const supabase = createProxyClient(request, response);
+  // getUser() also refreshes an expiring session.
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const url = request.nextUrl.clone();
-  const pathname = url.pathname;
+  const { pathname, searchParams } = request.nextUrl;
 
-  // Parameters check karein
-  const nextParam = url.searchParams.get("next");
-  const actionParam = url.searchParams.get("action");
+  const redirectTo = (path: string) => {
+    const redirect = NextResponse.redirect(new URL(path, request.url));
+    // Keep refreshed auth cookies on the redirect.
+    response.current.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    return redirect;
+  };
 
-  const isAuthPage =
-    pathname.startsWith("/auth") || pathname.startsWith("/login");
-  const isHomePage = pathname === "/";
-
-  // Public footer pages - sab users ko access (logged in ya logout)
-  const publicPages = [
-    "/features",
-    "/pricing",
-    "/templates",
-    "/changelog",
-    "/help-center",
-    "/blog",
-    "/api-docs",
-    "/status",
-    "/privacy-policy",
-    "/terms-of-service",
-    "/gdpr-compliance",
-    "/cookie-policy",
-  ];
-  const isPublicPage = publicPages.some((page) => pathname === page);
-
-  // CASE 1: Logged-in user agar Home Page ya Auth Pages par jaye
-  if (user && (isHomePage || isAuthPage)) {
-    // Priority: Agar 'next' parameter hai (Save Invoice wala case), toh wahan bheinjein
-    if (nextParam) {
-      const redirectUrl = new URL(nextParam, request.url);
-      if (actionParam) redirectUrl.searchParams.set("action", actionParam);
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    // Default: Hamesha dashboard par bheinjein (Home page par nahi jane dena)
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+  if (!user && PROTECTED_PREFIXES.some((prefix) => matchesPrefix(pathname, prefix))) {
+    const next = encodeURIComponent(pathname + request.nextUrl.search);
+    return redirectTo(`${ROUTES.login}?next=${next}`);
   }
+  if (!user) return response.current;
 
-  // CASE 2: Guest user (Logged-out) - public pages ko access de do, lekin dashboard/protected routes par redirect karo
-  if (!user && !isAuthPage && !isHomePage && !isPublicPage) {
-    url.pathname = "/auth/login";
-    // Current path save karein taake login ke baad wapas aa sake
-    url.searchParams.set("next", pathname);
-    return NextResponse.redirect(url);
+  const isHome = pathname === ROUTES.home;
+  // Visitors who explicitly want the free builder (`/?builder`) can still open it.
+  if ((isHome && !searchParams.has("builder")) || GUEST_ONLY_ROUTES.includes(pathname)) {
+    return redirectTo(buildNextUrl(searchParams, request.url));
   }
-
-  return supabaseResponse;
+  if (matchesPrefix(pathname, ROUTES.admin) && !(await isAdmin(supabase, user.id))) {
+    return redirectTo(ROUTES.dashboard);
+  }
+  return response.current;
 }

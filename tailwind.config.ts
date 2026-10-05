@@ -12,6 +12,22 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Brand palette (60 · 30 · 10): mist background, navy, amber accent.
+        mist: { DEFAULT: "#ECEFF1", dark: "#DDE3EA" },
+        navy: {
+          DEFAULT: "#191970",
+          50: "#F0F0F9",
+          100: "#E1E1F2",
+          200: "#C8C8E8",
+          300: "#A3A3D1",
+          400: "#7070B0",
+          500: "#3D3D6B",
+          600: "#2A2A8A",
+          700: "#191970",
+          800: "#12124F",
+          900: "#0B0B33",
+        },
+        gold: { DEFAULT: "#FFC107", dark: "#B8860B", light: "#FFE08A" },
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {
@@ -57,6 +73,11 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        card: "0 2px 12px rgba(25,25,112,0.06)",
+        lift: "0 16px 40px rgba(25,25,112,0.12)",
+        gold: "0 4px 14px rgba(255,193,7,0.35)",
       },
       screens: {
         xs: "400px",

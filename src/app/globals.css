@@ -41,98 +41,160 @@
 
     --radius: 0.5rem;
   }
-  /* .dark {
-    --background: #121212;
-    --foreground: #eceff1;
-
-    --card: #1e1e1e;
-    --card-foreground: #eceff1;
-
-    --popover: #1e1e1e;
-    --popover-foreground: #eceff1;
-
-    --primary: #ffc107;
-    --primary-foreground: #191970;
-
-    --secondary: #2c2c54;
-    --secondary-foreground: #eceff1;
-
-    --muted: #2a2a2a;
-    --muted-foreground: #a1a1aa;
-
-    --accent: #ffc107;
-    --accent-foreground: #191970;
-
-    --destructive: #dc2626;
-    --destructive-foreground: #ffffff;
-
-    --border: #333333;
-    --input: #333333;
-
-    --ring: #ffc107;
-  } */
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
   body {
     @apply bg-background text-foreground;
   }
+  :focus-visible {
+    outline: 2px solid #ffc107;
+    outline-offset: 2px;
+  }
 }
 
-/* Custom Scrollbar Styling */
+/* ─── Reusable component classes (keeps JSX free of repeated inline styles) ─ */
+@layer components {
+  .input {
+    @apply w-full rounded-xl border border-navy/10 bg-white px-3 py-2.5 text-sm font-medium text-navy outline-none transition-all placeholder:text-[#707070] focus:border-gold focus:ring-2 focus:ring-gold/20 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .label {
+    @apply mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-navy;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-black transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-gold text-navy shadow-gold hover:bg-[#ffcd38];
+  }
+  .btn-navy {
+    @apply btn bg-navy text-white hover:bg-navy-600;
+  }
+  .btn-outline {
+    @apply btn border border-navy/15 bg-white text-navy hover:bg-mist;
+  }
+  .btn-ghost {
+    @apply btn text-navy hover:bg-navy/5;
+  }
+  .btn-danger {
+    @apply btn bg-red-500 text-white hover:bg-red-600;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+  .panel {
+    @apply rounded-2xl border border-navy/[0.07] bg-white shadow-card;
+  }
+  .eyebrow {
+    @apply text-[10px] font-black uppercase tracking-widest text-navy-500;
+  }
+  .prose-legal h2 {
+    @apply mb-3 mt-10 scroll-mt-24 text-xl font-black text-navy sm:text-2xl;
+  }
+  .prose-legal h3 {
+    @apply mb-2 mt-6 text-base font-black text-navy;
+  }
+  .prose-legal p,
+  .prose-legal li {
+    @apply text-[15px] leading-7 text-navy-500;
+  }
+  .prose-legal p {
+    @apply mb-4;
+  }
+  .prose-legal ul {
+    @apply mb-4 list-disc space-y-1.5 pl-5 marker:text-gold-dark;
+  }
+  .prose-legal a {
+    @apply font-semibold text-navy underline decoration-gold underline-offset-4;
+  }
+  .prose-legal table {
+    @apply mb-4 w-full text-left text-sm;
+  }
+  .prose-legal th {
+    @apply border-b-2 border-navy/10 py-2 pr-4 text-xs font-black uppercase tracking-wider text-navy;
+  }
+  .prose-legal td {
+    @apply border-b border-navy/5 py-2 pr-4 align-top text-navy-500;
+  }
+}
+
+/* Custom scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px; /* Scrollbar ki motayi */
+  width: 6px;
+  height: 6px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f8fafc; /* Scrollbar ka background path */
-  border-radius: 10px;
+  background: transparent;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* Scrollbar ka color (Gray) */
+  background: rgba(25, 25, 112, 0.15);
   border-radius: 10px;
-  border: 1px solid transparent; /* Thori si space dene ke liye */
+}
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(25, 25, 112, 0.3);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6; /* Hover karne par Blue color */
-}
-
-/* Chrome, Safari, Edge, Opera */
+/* Hide number spinners */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-/* Firefox */
-/* input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
-} */
+  appearance: textfield;
+}
 
-/* Scrollbar ki width */
 textarea::-webkit-scrollbar {
   width: 8px;
 }
-
-/* Background track (Mist Gray shade) */
 textarea::-webkit-scrollbar-track {
   background: none;
   border-radius: 10px;
 }
-
-/* Moving handle (Midnight Blue) */
 textarea::-webkit-scrollbar-thumb {
   background: #191970;
   border-radius: 10px;
-  border: 2px solid #f1f1f1; /* Is se handle ke charon taraf thori space feel hogi */
+  border: 2px solid #f1f1f1;
 }
 
-/* Handle on hover (Thora light blue) */
-textarea::-webkit-scrollbar-thumb:hover {
-  background: #2a2a8a;
+/* Themed native date picker */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  border-radius: 4px;
+  opacity: 0.7;
+  filter: invert(14%) sepia(80%) saturate(800%) hue-rotate(215deg) brightness(90%);
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Print only the invoice sheet, with table headers repeating across pages. */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .invoice-sheet,
+  .invoice-sheet * {
+    visibility: visible !important;
+  }
+  .invoice-sheet {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .invoice-sheet thead {
+    display: table-header-group;
+  }
+  .invoice-sheet .avoid-break {
+    page-break-inside: avoid;
+  }
 }
