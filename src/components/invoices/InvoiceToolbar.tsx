@@ -6,14 +6,14 @@ import type { InvoiceToolbarProps } from "@/src/types/types";
 
 export default function InvoiceToolbar({ listQuery, counts, canExportCsv, onChange }: InvoiceToolbarProps) {
   return (
-    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+    <div className="flex flex-col gap-3 2xl:flex-row 2xl:items-center 2xl:justify-between">
       <StatusFilterTabs
         value={listQuery.filter}
         counts={counts}
         onChange={(filter) => onChange({ filter })}
       />
       <div className="flex flex-col gap-2 xs:flex-row">
-        <div className="flex-1 lg:w-64">
+        <div className="flex-1 2xl:w-64">
           <SearchInput
             id="invoiceSearch"
             label="Search invoices"
