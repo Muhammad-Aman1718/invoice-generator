@@ -174,3 +174,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
+
+/* Print only the invoice sheet, with table headers repeating across pages. */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  .invoice-sheet,
+  .invoice-sheet * {
+    visibility: visible !important;
+  }
+  .invoice-sheet {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+  .invoice-sheet thead {
+    display: table-header-group;
+  }
+  .invoice-sheet .avoid-break {
+    page-break-inside: avoid;
+  }
+}

@@ -2,8 +2,9 @@
 
 import { useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
+import type { ErrorPageProps } from "@/src/types/types";
 
-export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+export default function GlobalError({ error, reset }: ErrorPageProps) {
   useEffect(() => {
     console.error(error);
   }, [error]);

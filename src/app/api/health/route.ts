@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { hasEnvVars } from "@/src/lib/utils";
-import { stripeConfigured } from "@/src/lib/server/stripe";
+import { isStripeConfigured } from "@/src/lib/server/stripe";
 
 // GET /api/health → used by the status page and uptime monitors.
 export async function GET() {
@@ -10,7 +10,7 @@ export async function GET() {
     services: {
       app: "operational",
       database: hasEnvVars ? "configured" : "missing-env",
-      payments: stripeConfigured() ? "configured" : "not-configured",
+      payments: isStripeConfigured() ? "configured" : "not-configured",
     },
   });
 }

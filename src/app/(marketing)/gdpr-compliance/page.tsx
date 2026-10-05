@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LegalPage, type LegalSection } from "@/src/components/marketing/legal-page";
-import { siteConfig } from "@/src/config/site";
+import LegalPage from "@/src/components/marketing/LegalPage";
+import type { LegalSection } from "@/src/types/types";
+import { SITE_CONFIG } from "@/src/constant/site";
 
 export const metadata: Metadata = {
   title: "GDPR Compliance",
-  description: `How ${siteConfig.name} supports GDPR and UK GDPR obligations for you and your customers.`,
+  description: `How ${SITE_CONFIG.name} supports GDPR and UK GDPR obligations for you and your customers.`,
   alternates: { canonical: "/gdpr-compliance" },
 };
 
@@ -15,10 +16,11 @@ const sections: LegalSection[] = [
     title: "Controller and processor roles",
     body: (
       <p>
-        We are the controller for your account data. For your customers’ data on invoices, you are the controller and
-        we are your processor. Our <Link href="/terms-of-service">Terms</Link> and{" "}
-        <Link href="/privacy-policy">Privacy Policy</Link> form our data processing terms; a signed DPA is available on
-        request from <a href={`mailto:${siteConfig.privacyEmail}`}>{siteConfig.privacyEmail}</a>.
+        We are the controller for your account data. For your customers’ data on invoices, you are the
+        controller and we are your processor. Our <Link href="/terms-of-service">Terms</Link> and{" "}
+        <Link href="/privacy-policy">Privacy Policy</Link> form our data processing terms; a signed DPA is
+        available on request from{" "}
+        <a href={`mailto:${SITE_CONFIG.privacyEmail}`}>{SITE_CONFIG.privacyEmail}</a>.
       </p>
     ),
   },
@@ -34,7 +36,8 @@ const sections: LegalSection[] = [
           <strong>Rectification (Art. 16)</strong> — edit profile, clients and invoices at any time.
         </li>
         <li>
-          <strong>Erasure (Art. 17)</strong> — delete individual clients/invoices, or your whole account, instantly.
+          <strong>Erasure (Art. 17)</strong> — delete individual clients/invoices, or your whole account,
+          instantly.
         </li>
         <li>
           <strong>Restriction & objection (Art. 18, 21)</strong> — on request by email.
@@ -47,8 +50,8 @@ const sections: LegalSection[] = [
     title: "Data minimisation",
     body: (
       <p>
-        We collect only what is needed to produce invoices. No advertising trackers, no selling of data, and the free
-        builder works without an account — drafts stay in your browser.
+        We collect only what is needed to produce invoices. No advertising trackers, no selling of data, and
+        the free builder works without an account — drafts stay in your browser.
       </p>
     ),
   },
@@ -109,7 +112,11 @@ export default function GdprPage() {
     <LegalPage
       title="GDPR Compliance"
       current="/gdpr-compliance"
-      intro={<p>{siteConfig.name} is designed so that you can meet your GDPR obligations to your own customers.</p>}
+      intro={
+        <p>
+          {SITE_CONFIG.name} is designed so that you can meet your GDPR obligations to your own customers.
+        </p>
+      }
       sections={sections}
     />
   );

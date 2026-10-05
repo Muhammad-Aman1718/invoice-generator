@@ -1,84 +1,32 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { MailCheck } from "lucide-react";
-import { Metadata } from "next";
-import Header from "@/src/components/header";
-import Footer from "@/src/components/footer";
+import FormContainer from "@/src/components/auth/FormContainer";
+import { ROUTES } from "@/src/constant/routes";
 
 export const metadata: Metadata = {
   title: "Check your email",
   description: "Confirm your email address to finish creating your account.",
-  robots: { index: false, follow: true },
 };
 
-const SignUpSuccess = () => {
+export default function SignUpSuccessPage() {
   return (
-    <main
-      className="flex min-h-svh w-full flex-col"
-      style={{ background: "#ECEFF1" }}
-    >
-      <Header />
-      {/* ── Success Card ── */}
-      <div className="flex flex-1 items-center justify-center p-4 sm:p-8">
-        <div
-          className="w-full max-w-sm rounded-2xl border overflow-hidden"
-          style={{
-            background: "#ffffff",
-            borderColor: "rgba(25,25,112,0.08)",
-            boxShadow: "0 8px 40px rgba(25,25,112,0.1)",
-          }}
-        >
-          {/* Top accent bar */}
-          <div className="h-1 w-full" style={{ background: "#FFC107" }} />
-
-          <div className="p-8 text-center space-y-5">
-            {/* Icon */}
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto"
-              style={{ background: "rgba(255,193,7,0.12)" }}
-            >
-              <MailCheck size={28} style={{ color: "#FFC107" }} />
-            </div>
-
-            {/* Text */}
-            <div className="space-y-2">
-              <h1
-                className="text-xl font-black tracking-tight"
-                style={{ color: "#191970" }}
-              >
-                Check your inbox!
-              </h1>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "rgba(25,25,112,0.55)" }}
-              >
-                We&rsquo;ve sent a verification link to your email address.
-                Click the link to activate your account.
-              </p>
-            </div>
-
-            {/* Divider */}
-            <div
-              className="border-t"
-              style={{ borderColor: "rgba(25,25,112,0.07)" }}
-            />
-
-            {/* Action */}
-            <p className="text-xs" style={{ color: "rgba(25,25,112,0.45)" }}>
-              Already confirmed?{" "}
-              <Link
-                href="/auth/login"
-                className="font-black hover:underline"
-                style={{ color: "#191970" }}
-              >
-                Sign in
-              </Link>
-            </p>
-          </div>
-        </div>
+    <FormContainer>
+      <div className="space-y-5 text-center">
+        <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/15">
+          <MailCheck size={28} className="text-gold-dark" />
+        </span>
+        <h1 className="text-xl font-black text-navy">Check your inbox!</h1>
+        <p className="text-sm leading-relaxed text-navy-500">
+          We&rsquo;ve sent a verification link to your email address. Click it to activate your account.
+        </p>
+        <p className="border-t border-navy/5 pt-5 text-xs text-navy-500">
+          Already confirmed?{" "}
+          <Link href={ROUTES.login} className="font-black text-navy hover:underline">
+            Sign in
+          </Link>
+        </p>
       </div>
-      <Footer />
-    </main>
+    </FormContainer>
   );
-};
-
-export default SignUpSuccess;
+}

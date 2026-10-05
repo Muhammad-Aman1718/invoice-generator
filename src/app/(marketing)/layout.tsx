@@ -1,8 +1,9 @@
-import Header from "@/src/components/header";
-import Footer from "@/src/components/footer";
-import { CookieNotice } from "@/src/components/marketing/cookie-notice";
+import Header from "@/src/components/layout/Header";
+import Footer from "@/src/components/layout/Footer";
+import CookieNotice from "@/src/components/marketing/CookieNotice";
+import type { LayoutProps } from "@/src/types/types";
 
-export default function MarketingLayout({ children }: { children: React.ReactNode }) {
+export default function MarketingLayout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-[100dvh] flex-col bg-mist">
       <a

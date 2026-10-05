@@ -1,41 +1,20 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ShieldAlert } from "lucide-react";
-import { DashboardShell } from "@/src/components/dashboard/app-sidebar";
+import DashboardShell from "@/src/components/dashboard/DashboardShell";
+import SuspendedNotice from "@/src/components/dashboard/SuspendedNotice";
 import { countInvoicesThisMonth, getViewer } from "@/src/lib/server/data";
-import { siteConfig } from "@/src/config/site";
+import { SITE_CONFIG } from "@/src/constant/site";
+import type { LayoutProps } from "@/src/types/types";
 
 export const metadata: Metadata = {
-  title: { default: "Dashboard", template: `%s | ${siteConfig.name}` },
+  title: { default: "Dashboard", template: `%s | ${SITE_CONFIG.name}` },
   robots: { index: false, follow: false },
 };
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: LayoutProps) {
   const viewer = await getViewer();
-
-  if (viewer.profile.isSuspended) {
-    return (
-      <main className="flex min-h-[100dvh] items-center justify-center bg-mist p-4">
-        <div className="panel max-w-md p-8 text-center">
-          <ShieldAlert className="mx-auto mb-4 text-red-500" size={36} />
-          <h1 className="mb-2 text-xl font-black text-navy">Account suspended</h1>
-          <p className="mb-6 text-sm text-navy-500">
-            Your account has been suspended. If you think this is a mistake, contact{" "}
-            <a className="font-bold underline" href={`mailto:${siteConfig.supportEmail}`}>
-              {siteConfig.supportEmail}
-            </a>
-            .
-          </p>
-          <Link href="/" className="btn-outline">
-            Back to home
-          </Link>
-        </div>
-      </main>
-    );
-  }
+  if (viewer.profile.isSuspended) return <SuspendedNotice />;
 
   const used = await countInvoicesThisMonth(viewer);
-
   return (
     <DashboardShell
       viewer={{

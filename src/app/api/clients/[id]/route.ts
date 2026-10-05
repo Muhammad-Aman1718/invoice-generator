@@ -1,37 +1,32 @@
 import { NextResponse } from "next/server";
-import { rowToClient } from "@/src/lib/mappers";
-import { ApiError, handle, readJson, requireUser } from "@/src/lib/server/auth";
-import { clientSchema, firstIssue } from "@/src/lib/validation";
-
-type Ctx = { params: Promise<{ id: string }> };
+import { clientToRow, rowToClient } from "@/src/lib/mappers";
+import { throwNotFound, withErrorHandling } from "@/src/lib/server/apiError";
+import { requireUser } from "@/src/lib/server/auth";
+import { getRouteId, parseRequestBody } from "@/src/lib/server/parseRequest";
+import { clientSchema } from "@/src/lib/validation";
+import { ENTITY_NAMES } from "@/src/constant/http";
+import type { RouteContext } from "@/src/types/types";
 
 // PATCH /api/clients/:id
-export const PATCH = handle(async (request: Request, ctx: Ctx) => {
-  const { id } = await ctx.params;
+export const PATCH = withErrorHandling(async (request: Request, context: RouteContext) => {
+  const id = await getRouteId(context, ENTITY_NAMES.client);
   const { supabase, user } = await requireUser();
-  const parsed = clientSchema.partial().safeParse(await readJson(request));
-  if (!parsed.success) throw new ApiError(400, firstIssue(parsed.error));
-  const { taxId, ...rest } = parsed.data;
-
-  const update: Record<string, unknown> = { ...rest };
-  if (taxId !== undefined) update.tax_id = taxId;
-  if (rest.email !== undefined) update.email = rest.email || null;
-
+  const input = await parseRequestBody(request, clientSchema.partial());
   const { data, error } = await supabase
     .from("clients")
-    .update(update)
+    .update(clientToRow(input))
     .eq("id", id)
     .eq("user_id", user.id)
     .select("*")
     .maybeSingle();
   if (error) throw new Error(error.message);
-  if (!data) throw new ApiError(404, "Client not found.");
+  if (!data) throwNotFound(ENTITY_NAMES.client);
   return NextResponse.json({ client: rowToClient(data) });
 });
 
-// DELETE /api/clients/:id  (invoices keep their copied client details)
-export const DELETE = handle(async (_request: Request, ctx: Ctx) => {
-  const { id } = await ctx.params;
+// DELETE /api/clients/:id — invoices keep their copied client details.
+export const DELETE = withErrorHandling(async (_request: Request, context: RouteContext) => {
+  const id = await getRouteId(context, ENTITY_NAMES.client);
   const { supabase, user } = await requireUser();
   const { data, error } = await supabase
     .from("clients")
@@ -40,6 +35,6 @@ export const DELETE = handle(async (_request: Request, ctx: Ctx) => {
     .eq("user_id", user.id)
     .select("id");
   if (error) throw new Error(error.message);
-  if (!data?.length) throw new ApiError(404, "Client not found.");
+  if (!data?.length) throwNotFound(ENTITY_NAMES.client);
   return NextResponse.json({ ok: true });
 });

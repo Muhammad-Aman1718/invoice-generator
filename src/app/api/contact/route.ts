@@ -1,34 +1,35 @@
 import { NextResponse } from "next/server";
-import { siteConfig } from "@/src/config/site";
-import { ApiError, handle, readJson } from "@/src/lib/server/auth";
-import { contactSchema, firstIssue } from "@/src/lib/validation";
+import { withErrorHandling } from "@/src/lib/server/apiError";
+import { parseRequestBody } from "@/src/lib/server/parseRequest";
+import { contactSchema } from "@/src/lib/validation";
+import { SITE_CONFIG } from "@/src/constant/site";
+import type { ContactMessage } from "@/src/types/types";
 
-// POST /api/contact — forwards to CONTACT_WEBHOOK_URL (Slack/Discord/Zapier/etc.)
-// when set; otherwise returns a mailto link the browser opens instead.
-export const POST = handle(async (request: Request) => {
-  const parsed = contactSchema.safeParse(await readJson(request));
-  if (!parsed.success) throw new ApiError(400, firstIssue(parsed.error));
-  const { name, email, subject, message } = parsed.data;
+async function forwardToWebhook(webhookUrl: string, message: ContactMessage) {
+  const response = await fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      text: `New contact message from ${message.name} <${message.email}>\nSubject: ${message.subject}\n\n${message.message}`,
+      ...message,
+    }),
+  });
+  if (!response.ok) throw new Error(`Contact webhook failed (${response.status})`);
+}
 
-  const webhook = process.env.CONTACT_WEBHOOK_URL;
-  if (webhook) {
-    const res = await fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        text: `New contact message from ${name} <${email}>\nSubject: ${subject}\n\n${message}`,
-        name,
-        email,
-        subject,
-        message,
-      }),
-    });
-    if (!res.ok) throw new Error(`Contact webhook failed (${res.status})`);
-    return NextResponse.json({ ok: true });
-  }
+function buildMailtoLink(message: ContactMessage): string {
+  const subject = encodeURIComponent(message.subject);
+  const body = encodeURIComponent(`${message.message}\n\n— ${message.name} (${message.email})`);
+  return `mailto:${SITE_CONFIG.supportEmail}?subject=${subject}&body=${body}`;
+}
 
-  const mailto = `mailto:${siteConfig.supportEmail}?subject=${encodeURIComponent(
-    subject,
-  )}&body=${encodeURIComponent(`${message}\n\n— ${name} (${email})`)}`;
-  return NextResponse.json({ ok: true, mailto });
+// POST /api/contact — forwards to CONTACT_WEBHOOK_URL (Slack/Discord/Zapier) when set,
+// otherwise returns a mailto link that the browser opens instead.
+export const POST = withErrorHandling(async (request: Request) => {
+  const message = await parseRequestBody(request, contactSchema);
+  const webhookUrl = process.env.CONTACT_WEBHOOK_URL;
+  if (!webhookUrl) return NextResponse.json({ ok: true, mailto: buildMailtoLink(message) });
+
+  await forwardToWebhook(webhookUrl, message);
+  return NextResponse.json({ ok: true });
 });

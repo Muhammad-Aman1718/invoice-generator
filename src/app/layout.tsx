@@ -2,17 +2,17 @@ import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { siteConfig } from "@/src/config/site";
-import { PLANS } from "@/src/config/plans";
+import { SITE_CONFIG } from "@/src/constant/site";
+import { PLANS } from "@/src/constant/plans";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: `${siteConfig.name} — Professional PDF Invoice Maker`,
-    template: `%s | ${siteConfig.name}`,
+    default: `${SITE_CONFIG.name} — Professional PDF Invoice Maker`,
+    template: `%s | ${SITE_CONFIG.name}`,
   },
-  description: siteConfig.description,
-  applicationName: siteConfig.name,
+  description: SITE_CONFIG.description,
+  applicationName: SITE_CONFIG.name,
   keywords: [
     "invoice generator",
     "PDF invoice maker",
@@ -23,21 +23,21 @@ export const metadata: Metadata = {
     "freelancer invoice",
     "small business invoicing",
   ],
-  authors: [{ name: `${siteConfig.name} Team` }],
-  creator: siteConfig.name,
+  authors: [{ name: `${SITE_CONFIG.name} Team` }],
+  creator: SITE_CONFIG.name,
   formatDetection: { email: false, address: false, telephone: false },
   openGraph: {
-    title: `${siteConfig.name} — Professional PDF Invoice Maker`,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
+    title: `${SITE_CONFIG.name} — Professional PDF Invoice Maker`,
+    description: SITE_CONFIG.description,
+    url: SITE_CONFIG.url,
+    siteName: SITE_CONFIG.name,
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — Professional PDF Invoice Maker`,
-    description: siteConfig.description,
+    title: `${SITE_CONFIG.name} — Professional PDF Invoice Maker`,
+    description: SITE_CONFIG.description,
   },
   robots: {
     index: true,
@@ -60,9 +60,9 @@ const geistSans = Geist({ variable: "--font-geist-sans", display: "swap", subset
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: siteConfig.name,
-  description: siteConfig.description,
-  url: siteConfig.url,
+  name: SITE_CONFIG.name,
+  description: SITE_CONFIG.description,
+  url: SITE_CONFIG.url,
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web Browser",
   offers: Object.values(PLANS).map((p) => ({

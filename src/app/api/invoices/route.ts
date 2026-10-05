@@ -1,29 +1,42 @@
 import { NextResponse } from "next/server";
-import { INVOICE_SUMMARY_COLUMNS, invoiceToRow, rowToInvoiceSummary } from "@/src/lib/mappers";
-import { ApiError, check, handle, readJson, requireUser } from "@/src/lib/server/auth";
-import { firstIssue, invoiceSchema } from "@/src/lib/validation";
-import { INVOICE_STATUSES } from "@/src/types/invoice-types";
+import { invoiceToRow, rowToInvoiceSummary } from "@/src/lib/mappers";
+import { INVOICE_STATUSES, INVOICE_SUMMARY_COLUMNS } from "@/src/constant/invoice";
+import { unwrapResult, withErrorHandling } from "@/src/lib/server/apiError";
+import { requireUser } from "@/src/lib/server/auth";
+import { parseRequestBody } from "@/src/lib/server/parseRequest";
+import { invoiceSchema } from "@/src/lib/validation";
+import { DEFAULT_API_PAGE_SIZE, MAX_API_PAGE_SIZE } from "@/src/constant/app";
+import { HTTP_STATUS } from "@/src/constant/http";
+import type { InvoiceStatus } from "@/src/types/types";
+
+function getPaging(params: URLSearchParams) {
+  const limit = Math.min(Number(params.get("limit")) || DEFAULT_API_PAGE_SIZE, MAX_API_PAGE_SIZE);
+  const offset = Math.max(Number(params.get("offset")) || 0, 0);
+  return { from: offset, to: offset + limit - 1 };
+}
+
+/** Escape LIKE wildcards so user input is matched literally. */
+function toSearchPattern(query: string): string {
+  return `%${query.replace(/[%_]/g, "")}%`;
+}
 
 // GET /api/invoices?status=paid&q=acme&limit=50&offset=0
-export const GET = handle(async (request: Request) => {
+export const GET = withErrorHandling(async (request: Request) => {
   const { supabase, user } = await requireUser();
   const params = new URL(request.url).searchParams;
-  const limit = Math.min(Number(params.get("limit")) || 200, 500);
-  const offset = Math.max(Number(params.get("offset")) || 0, 0);
+  const { from, to } = getPaging(params);
 
   let query = supabase
     .from("invoices")
     .select(INVOICE_SUMMARY_COLUMNS, { count: "exact" })
     .eq("user_id", user.id)
     .order("created_at", { ascending: false })
-    .range(offset, offset + limit - 1);
+    .range(from, to);
 
-  const status = params.get("status");
-  if (status && (INVOICE_STATUSES as readonly string[]).includes(status)) {
-    query = query.eq("status", status);
-  }
-  const q = params.get("q")?.trim();
-  if (q) query = query.ilike("client_name", `%${q.replace(/[%_]/g, "")}%`);
+  const status = params.get("status") as InvoiceStatus | null;
+  if (status && INVOICE_STATUSES.includes(status)) query = query.eq("status", status);
+  const search = params.get("q")?.trim();
+  if (search) query = query.ilike("client_name", toSearchPattern(search));
 
   const { data, error, count } = await query;
   if (error) throw new Error(error.message);
@@ -31,17 +44,15 @@ export const GET = handle(async (request: Request) => {
 });
 
 // POST /api/invoices
-export const POST = handle(async (request: Request) => {
+export const POST = withErrorHandling(async (request: Request) => {
   const { supabase, user } = await requireUser();
-  const parsed = invoiceSchema.safeParse(await readJson(request));
-  if (!parsed.success) throw new ApiError(400, firstIssue(parsed.error));
-
-  const data = check(
+  const input = await parseRequestBody(request, invoiceSchema);
+  const invoice = unwrapResult(
     await supabase
       .from("invoices")
-      .insert({ ...invoiceToRow(parsed.data), user_id: user.id })
+      .insert({ ...invoiceToRow(input), user_id: user.id })
       .select("id")
       .single(),
   );
-  return NextResponse.json({ invoice: data }, { status: 201 });
+  return NextResponse.json({ invoice }, { status: HTTP_STATUS.created });
 });

@@ -1,50 +1,68 @@
 import { NextResponse } from "next/server";
-import { stripePriceEnvKey } from "@/src/config/plans";
-import { siteConfig } from "@/src/config/site";
-import { ApiError, handle, readJson, requireUser } from "@/src/lib/server/auth";
-import { stripeConfigured, stripeRequest } from "@/src/lib/server/stripe";
-import { checkoutSchema, firstIssue } from "@/src/lib/validation";
+import { ApiError, withErrorHandling } from "@/src/lib/server/apiError";
+import { requireUser } from "@/src/lib/server/auth";
+import { parseRequestBody } from "@/src/lib/server/parseRequest";
+import { callStripe, isStripeConfigured } from "@/src/lib/server/stripe";
+import { getStripePriceEnvKey } from "@/src/lib/plans";
+import { checkoutSchema } from "@/src/lib/validation";
+import { SITE_CONFIG } from "@/src/constant/site";
+import { API_ERROR_CODES, HTTP_STATUS } from "@/src/constant/http";
+import { ROUTES } from "@/src/constant/routes";
+import type { CheckoutInput, StripeParams } from "@/src/types/types";
+
+function buildCheckoutParams(input: CheckoutInput): StripeParams {
+  const billingUrl = `${input.origin}${ROUTES.billing}`;
+  const metadata = { user_id: input.userId, plan: input.plan, interval: input.interval };
+  const params: StripeParams = {
+    mode: "subscription",
+    "line_items[0][price]": input.price,
+    "line_items[0][quantity]": 1,
+    success_url: `${billingUrl}?checkout=success`,
+    cancel_url: `${billingUrl}?checkout=cancelled`,
+    client_reference_id: input.userId,
+    customer: input.customerId ?? undefined,
+    customer_email: input.customerId ? undefined : input.email,
+    allow_promotion_codes: true,
+  };
+  for (const [key, value] of Object.entries(metadata)) {
+    params[`metadata[${key}]`] = value;
+    params[`subscription_data[metadata][${key}]`] = value;
+  }
+  return params;
+}
 
 // POST /api/billing/checkout { plan: "pro" | "business", interval: "month" | "year" }
-export const POST = handle(async (request: Request) => {
+export const POST = withErrorHandling(async (request: Request) => {
   const { supabase, user } = await requireUser();
-  const parsed = checkoutSchema.safeParse(await readJson(request));
-  if (!parsed.success) throw new ApiError(400, firstIssue(parsed.error));
-  const { plan, interval } = parsed.data;
+  const { plan, interval } = await parseRequestBody(request, checkoutSchema);
 
-  const price = process.env[stripePriceEnvKey(plan, interval)];
-  if (!stripeConfigured() || !price) {
+  const price = process.env[getStripePriceEnvKey(plan, interval)];
+  if (!isStripeConfigured() || !price) {
     throw new ApiError(
-      501,
-      `Online payments aren't enabled yet. Email ${siteConfig.supportEmail} and we'll upgrade your account manually.`,
-      "PAYMENTS_DISABLED",
+      HTTP_STATUS.notImplemented,
+      `Online payments aren't enabled yet. Email ${SITE_CONFIG.supportEmail} and we'll upgrade your account manually.`,
+      API_ERROR_CODES.paymentsDisabled,
     );
   }
 
-  const { data: sub } = await supabase
+  const { data: subscription } = await supabase
     .from("subscriptions")
     .select("provider_customer_id")
     .eq("user_id", user.id)
     .maybeSingle();
 
-  const origin = new URL(request.url).origin;
-  const session = await stripeRequest<{ url: string }>("POST", "/checkout/sessions", {
-    mode: "subscription",
-    "line_items[0][price]": price,
-    "line_items[0][quantity]": 1,
-    success_url: `${origin}/dashboard/billing?checkout=success`,
-    cancel_url: `${origin}/dashboard/billing?checkout=cancelled`,
-    client_reference_id: user.id,
-    customer: sub?.provider_customer_id ?? undefined,
-    customer_email: sub?.provider_customer_id ? undefined : user.email,
-    allow_promotion_codes: true,
-    "metadata[user_id]": user.id,
-    "metadata[plan]": plan,
-    "metadata[interval]": interval,
-    "subscription_data[metadata][user_id]": user.id,
-    "subscription_data[metadata][plan]": plan,
-    "subscription_data[metadata][interval]": interval,
+  const session = await callStripe<{ url: string }>({
+    method: "POST",
+    path: "/checkout/sessions",
+    params: buildCheckoutParams({
+      userId: user.id,
+      email: user.email,
+      customerId: subscription?.provider_customer_id,
+      plan,
+      interval,
+      price,
+      origin: new URL(request.url).origin,
+    }),
   });
-
   return NextResponse.json({ url: session.url });
 });

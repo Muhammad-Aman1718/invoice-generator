@@ -1,10 +1,11 @@
 import { Suspense } from "react";
-import { InvoiceEditor } from "@/src/components/invoice/invoice-editor";
+import InvoiceEditor from "@/src/components/invoice/editor/InvoiceEditor";
 import { getViewer, listClients } from "@/src/lib/server/data";
+import type { EditInvoicePageProps } from "@/src/types/types";
 
 export const metadata = { title: "Edit invoice" };
 
-export default async function EditInvoicePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditInvoicePage({ params }: EditInvoicePageProps) {
   const { id } = await params;
   const viewer = await getViewer();
   const clients = await listClients(viewer);

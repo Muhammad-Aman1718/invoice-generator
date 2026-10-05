@@ -1,11 +1,30 @@
 import { NextResponse } from "next/server";
-import { ApiError, check, handle, requireUser } from "@/src/lib/server/auth";
+import { throwNotFound, unwrapResult, withErrorHandling } from "@/src/lib/server/apiError";
+import { requireUser } from "@/src/lib/server/auth";
+import { getRouteId } from "@/src/lib/server/parseRequest";
+import { getDaysBetween, getUtcIsoDate } from "@/src/lib/dateUtils";
+import { ENTITY_NAMES, HTTP_STATUS } from "@/src/constant/http";
+import type { DbRow, RouteContext } from "@/src/types/types";
 
-type Ctx = { params: Promise<{ id: string }> };
+/** Copy of an invoice row as a new pending invoice dated today, keeping its payment terms. */
+function buildDuplicateRow(source: DbRow, invoiceNumber: number): DbRow {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id, created_at, updated_at, paid_at, ...rest } = source;
+  const termDays =
+    source.issue_date && source.due_date ? getDaysBetween(source.issue_date, source.due_date) : 0;
+  return {
+    ...rest,
+    invoice_number: invoiceNumber,
+    issue_date: getUtcIsoDate(),
+    due_date: getUtcIsoDate(termDays),
+    status: "pending",
+    paid_at: null,
+  };
+}
 
-// POST /api/invoices/:id/duplicate → copy as a new pending invoice dated today.
-export const POST = handle(async (_request: Request, ctx: Ctx) => {
-  const { id } = await ctx.params;
+// POST /api/invoices/:id/duplicate
+export const POST = withErrorHandling(async (_request: Request, context: RouteContext) => {
+  const id = await getRouteId(context, ENTITY_NAMES.invoice);
   const { supabase, user } = await requireUser();
 
   const { data: source, error } = await supabase
@@ -15,41 +34,17 @@ export const POST = handle(async (_request: Request, ctx: Ctx) => {
     .eq("user_id", user.id)
     .maybeSingle();
   if (error) throw new Error(error.message);
-  if (!source) throw new ApiError(404, "Invoice not found.");
+  if (!source) throwNotFound(ENTITY_NAMES.invoice);
 
-  const next = check(
+  const nextNumber = unwrapResult(
     await supabase.rpc("get_next_invoice_number", { target_user_id: user.id }),
   ) as number;
-
-  const today = new Date().toISOString().slice(0, 10);
-  const termDays =
-    source.issue_date && source.due_date
-      ? Math.max(
-          0,
-          Math.round(
-            (new Date(source.due_date).getTime() - new Date(source.issue_date).getTime()) /
-              86_400_000,
-          ),
-        )
-      : 0;
-  const due = new Date(Date.now() + termDays * 86_400_000).toISOString().slice(0, 10);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id: _id, created_at, updated_at, paid_at, ...rest } = source;
-  const copy = check(
+  const copy = unwrapResult(
     await supabase
       .from("invoices")
-      .insert({
-        ...rest,
-        user_id: user.id,
-        invoice_number: next || 1,
-        issue_date: today,
-        due_date: due,
-        status: "pending",
-        paid_at: null,
-      })
+      .insert({ ...buildDuplicateRow(source, nextNumber || 1), user_id: user.id })
       .select("id")
       .single(),
   );
-  return NextResponse.json({ invoice: copy }, { status: 201 });
+  return NextResponse.json({ invoice: copy }, { status: HTTP_STATUS.created });
 });

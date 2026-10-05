@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { LegalPage, type LegalSection } from "@/src/components/marketing/legal-page";
-import { siteConfig } from "@/src/config/site";
+import LegalPage from "@/src/components/marketing/LegalPage";
+import type { LegalSection } from "@/src/types/types";
+import { SITE_CONFIG } from "@/src/constant/site";
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
-  description: `The cookies and browser storage ${siteConfig.name} uses, and how to control them.`,
+  description: `The cookies and browser storage ${SITE_CONFIG.name} uses, and how to control them.`,
   alternates: { canonical: "/cookie-policy" },
 };
 
@@ -15,9 +16,9 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          {siteConfig.name} uses only <strong>strictly necessary</strong> cookies and browser storage. We do not use
-          advertising, analytics or cross-site tracking cookies, so no consent banner is required — we show a short
-          notice instead.
+          {SITE_CONFIG.name} uses only <strong>strictly necessary</strong> cookies and browser storage. We do
+          not use advertising, analytics or cross-site tracking cookies, so no consent banner is required — we
+          show a short notice instead.
         </p>
         <table>
           <thead>
@@ -57,8 +58,8 @@ const sections: LegalSection[] = [
     title: "Third-party cookies",
     body: (
       <p>
-        If you sign in with Google or GitHub, or pay through Stripe Checkout, those services set their own cookies on
-        their own domains under their privacy policies. We do not control or read them.
+        If you sign in with Google or GitHub, or pay through Stripe Checkout, those services set their own
+        cookies on their own domains under their privacy policies. We do not control or read them.
       </p>
     ),
   },
@@ -67,15 +68,17 @@ const sections: LegalSection[] = [
     title: "Controlling cookies",
     body: (
       <p>
-        You can delete or block cookies in your browser settings. Blocking the authentication cookie will prevent you
-        from signing in; clearing local storage removes unsaved invoice drafts.
+        You can delete or block cookies in your browser settings. Blocking the authentication cookie will
+        prevent you from signing in; clearing local storage removes unsaved invoice drafts.
       </p>
     ),
   },
   {
     id: "updates",
     title: "Updates",
-    body: <p>If we ever add non-essential cookies, we will update this page and ask for your consent first.</p>,
+    body: (
+      <p>If we ever add non-essential cookies, we will update this page and ask for your consent first.</p>
+    ),
   },
 ];
 
@@ -84,7 +87,9 @@ export default function CookiePolicyPage() {
     <LegalPage
       title="Cookie Policy"
       current="/cookie-policy"
-      intro={<p>Short version: only the cookies needed to keep you signed in, and nothing that tracks you.</p>}
+      intro={
+        <p>Short version: only the cookies needed to keep you signed in, and nothing that tracks you.</p>
+      }
       sections={sections}
     />
   );

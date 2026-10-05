@@ -1,82 +1,70 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasEnvVars } from "../utils";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { hasEnvVars } from "@/src/lib/utils";
+import { buildNextUrl } from "@/src/lib/redirects";
+import { GUEST_ONLY_ROUTES, PROTECTED_PREFIXES, ROUTES } from "@/src/constant/routes";
 
-// Only these areas need a signed-in user; every other page is public.
-const PROTECTED_PREFIXES = ["/dashboard"];
-const ADMIN_PREFIX = "/dashboard/admin";
-// Signed-in users skip these and land in the dashboard instead.
-const GUEST_ONLY = ["/auth/login", "/auth/sign-up"];
-
-function isSafeRedirect(path: string | null): path is string {
-  return !!path && path.startsWith("/") && !path.startsWith("//");
+function matchesPrefix(pathname: string, prefix: string): boolean {
+  return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }
 
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
-
-  if (!hasEnvVars) return supabaseResponse;
-
-  const supabase = createServerClient(
+function createProxyClient(request: NextRequest, responseRef: { current: NextResponse }) {
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
+        getAll: () => request.cookies.getAll(),
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          supabaseResponse = NextResponse.next({ request });
+          responseRef.current = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
+            responseRef.current.cookies.set(name, value, options),
           );
         },
       },
     },
   );
+}
 
+async function isAdmin(supabase: SupabaseClient, userId: string): Promise<boolean> {
+  const { data } = await supabase.from("profiles").select("role").eq("id", userId).maybeSingle();
+  return data?.role === "admin";
+}
+
+/** Refresh the Supabase session and enforce route access rules. */
+export async function updateSession(request: NextRequest) {
+  const response = { current: NextResponse.next({ request }) };
+  if (!hasEnvVars) return response.current;
+
+  const supabase = createProxyClient(request, response);
   // getUser() also refreshes an expiring session.
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const { pathname, searchParams } = request.nextUrl;
 
-  const url = request.nextUrl.clone();
-  const { pathname } = url;
-
-  const redirect = (path: string) => {
-    const target = new URL(path, request.url);
-    const response = NextResponse.redirect(target);
+  const redirectTo = (path: string) => {
+    const redirect = NextResponse.redirect(new URL(path, request.url));
     // Keep refreshed auth cookies on the redirect.
-    supabaseResponse.cookies.getAll().forEach((c) => response.cookies.set(c));
-    return response;
+    response.current.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    return redirect;
   };
 
-  const isProtected = PROTECTED_PREFIXES.some(
-    (p) => pathname === p || pathname.startsWith(`${p}/`),
-  );
-
-  if (!user && isProtected) {
-    const login = new URL("/auth/login", request.url);
-    login.searchParams.set("next", pathname + url.search);
-    return redirect(login.pathname + login.search);
+  if (!user && PROTECTED_PREFIXES.some((prefix) => matchesPrefix(pathname, prefix))) {
+    const next = encodeURIComponent(pathname + request.nextUrl.search);
+    return redirectTo(`${ROUTES.login}?next=${next}`);
   }
+  if (!user) return response.current;
 
-  if (user && (pathname === "/" || GUEST_ONLY.includes(pathname))) {
-    const next = url.searchParams.get("next");
-    // Visitors who explicitly want the free builder can still open it.
-    if (pathname === "/" && url.searchParams.has("builder")) return supabaseResponse;
-    return redirect(isSafeRedirect(next) ? next : "/dashboard");
+  const isHome = pathname === ROUTES.home;
+  // Visitors who explicitly want the free builder (`/?builder`) can still open it.
+  if ((isHome && !searchParams.has("builder")) || GUEST_ONLY_ROUTES.includes(pathname)) {
+    return redirectTo(buildNextUrl(searchParams, request.url));
   }
-
-  if (user && (pathname === ADMIN_PREFIX || pathname.startsWith(`${ADMIN_PREFIX}/`))) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .maybeSingle();
-    if (profile?.role !== "admin") return redirect("/dashboard");
+  if (matchesPrefix(pathname, ROUTES.admin) && !(await isAdmin(supabase, user.id))) {
+    return redirectTo(ROUTES.dashboard);
   }
-
-  return supabaseResponse;
+  return response.current;
 }

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { InvoiceEditor } from "@/src/components/invoice/invoice-editor";
+import InvoiceEditor from "@/src/components/invoice/editor/InvoiceEditor";
 import { getViewer, listClients } from "@/src/lib/server/data";
 
 export const metadata = { title: "New invoice" };

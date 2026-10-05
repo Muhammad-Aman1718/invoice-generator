@@ -1,72 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import { useInvoiceStore } from "@/src/lib/invoice-store";
+import { useInvoiceStore } from "@/src/lib/invoiceStore";
 import { supabase } from "@/src/lib/supabase/client";
-import { saveInvoiceToDb } from "@/src/lib/supabase/invoices-client";
-import { Tab } from "@/src/types/invoice-types";
+import { saveInvoice } from "@/src/lib/supabase/invoicesClient";
+import { getErrorMessage } from "@/src/lib/utils";
 import { showToast } from "@/src/utils/showToast";
+import { ROUTES } from "@/src/constant/routes";
 
-const useInvoiceLanding = () => {
+/** Guests are sent to sign-up; the draft stays in localStorage and reappears after sign-in. */
+function redirectGuestToSignUp() {
+  showToast.info("Create a free account", "Sign in to save this invoice — your draft is kept.");
+  const params = new URLSearchParams({ next: ROUTES.newInvoice, action: "save_pending" });
+  window.location.href = `${ROUTES.signUp}?${params}`;
+}
+
+export default function useInvoiceLanding() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [mobileTab, setMobileTab] = useState<Tab>("edit");
-  const store = useInvoiceStore();
-
-  const handleDownload = async () => {
-    setIsDownloading(true);
-    try {
-      const { buildInvoiceData, generateInvoicePDF } = await import("@/src/lib/pdf-generator");
-      await generateInvoicePDF(buildInvoiceData(useInvoiceStore.getState()), { branding: true });
-      showToast.success("Downloaded", "Your invoice PDF is ready.");
-    } catch (error) {
-      console.error("PDF download error:", error);
-      showToast.error("Download error", "Could not generate the PDF. Please try again.");
-    } finally {
-      setIsDownloading(false);
-    }
-  };
 
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) {
-        // The draft is already persisted in localStorage; it reappears after sign-in.
-        showToast.info("Create a free account", "Sign in to save this invoice — your draft is kept.");
-        const params = new URLSearchParams({ next: "/dashboard/invoices/new", action: "save_pending" });
-        window.location.href = `/auth/sign-up?${params}`;
-        return;
-      }
-
-      const state = useInvoiceStore.getState();
-      const result = await saveInvoiceToDb({ ...state, id: undefined });
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) return redirectGuestToSignUp();
+      const invoice = useInvoiceStore.getState();
+      const saved = await saveInvoice({ ...invoice, id: undefined });
       showToast.success("Invoice saved", "Find it in your dashboard.");
-      state.resetInvoice();
-      window.location.href = `/dashboard/invoices/${result.id}`;
+      invoice.resetInvoice();
+      window.location.href = `${ROUTES.invoices}/${saved.id}`;
     } catch (error) {
-      showToast.error("Save failed", error instanceof Error ? error.message : "Please try again.");
+      showToast.error("Save failed", getErrorMessage(error, "Please try again."));
     } finally {
       setIsSaving(false);
     }
   };
 
-  return {
-    isPreviewOpen,
-    setIsPreviewOpen,
-    handleDownload,
-    handleSave,
-    isSaving,
-    isDownloading,
-    mobileTab,
-    setMobileTab,
-    grandTotal: store.totalAmount,
-    store,
-  };
-};
-
-export default useInvoiceLanding;
+  return { isPreviewOpen, setIsPreviewOpen, isSaving, handleSave };
+}
