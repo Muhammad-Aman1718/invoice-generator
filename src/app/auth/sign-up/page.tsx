@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
-import SignUpForm from "@/src/components/auth/SignUpForm";
+import SignUpForm from "@/src/components/new/auth/SignUpForm";
 import Header from "@/src/components/header";
 import Footer from "@/src/components/footer";
-import Loader from "@/src/components/new/auth/Loader";
+import Loader from "@/src/components/new/Loader";
 
 export const metadata: Metadata = {
   title: "Sign Up | Invoice Gen",

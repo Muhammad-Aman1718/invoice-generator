@@ -12,15 +12,12 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   onClick,
   title,
 }) => {
-  const baseClass =
-    "w-full h-12 rounded-xl text-sm font-black transition-all bg-primary text-white hover:bg-[#FFC107] hover:text-[#191970] disabled:opacity-50 shadow-lg shadow-blue-900/10";
-
   return (
     <button
       type="submit"
       disabled={isLoading}
-      className={baseClass}
       onClick={onClick}
+      className="w-full h-12 rounded-xl text-sm font-semibold transition-all bg-primary text-white hover:bg-[#FFC107] hover:text-[#191970] disabled:opacity-50 shadow-lg shadow-blue-900/10"
     >
       {title}
     </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Loader from "../Loader";
 import AuthInput from "./AuthInput";
 import AuthHeader from "./AuthHeader";
 import AuthButton from "./AuthButton";
@@ -52,7 +53,7 @@ const LoginForm = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <AuthInput
-          forgotLink="/auth/forgot-password"
+          forgotLink="/auth/forget-password"
           isPassword
           label="Password"
           id="password"

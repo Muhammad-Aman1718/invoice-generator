@@ -1,3 +1,5 @@
+import { Tab } from "../types/invoice-types";
+
 export const CURRENCIES = [
   // Top Global
   { code: "USD", symbol: "$", label: "US Dollar" },
@@ -74,3 +76,20 @@ export const STATIC_PAGES = [
   "/dashboard/invoices/new",
   "/dashboard/invoices/edit",
 ];
+
+export const PUBLIC_PREFIXES = [
+  "/features",
+  "/pricing",
+  "/templates",
+  "/blog",
+  "/help-center",
+  "/api-docs",
+  "/status",
+  "/privacy-policy",
+  "/terms-of-service",
+  "/gdpr-compliance",
+  "/cookie-policy",
+  "/changelog",
+];
+
+export const BUTTONS_TABS = ["edit", "preview"] as Tab[];

@@ -1,11 +1,10 @@
-import type { Metadata } from "next";
+import "./globals.css";
+
+import { Metadata } from "next";
+import { Toaster } from "sonner";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
-import "./globals.css";
-import { Toaster } from "sonner";
-// global navigation components
-// import Header from "@/src/components/header";
-// import Footer from "@/src/components/footer";
+
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: {
     default: "Invoice Gen - Professional PDF Invoice Maker",
-    template: "%s | Invoice Gen"
+    template: "%s | Invoice Gen",
   },
   description:
     "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use. Generate tax-compliant invoices instantly.",
@@ -28,7 +27,7 @@ export const metadata: Metadata = {
     "Europe Invoices",
     "Free Invoice Software",
     "Business Invoicing",
-    "Professional Invoices"
+    "Professional Invoices",
   ],
   authors: [{ name: "Invoice Gen Team" }],
   creator: "Invoice Gen",
@@ -58,7 +57,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Invoice Gen - Professional PDF Invoice Maker",
-    description: "Create VAT and tax compliant invoices. Export to PDF instantly.",
+    description:
+      "Create VAT and tax compliant invoices. Export to PDF instantly.",
     images: [`${defaultUrl}/og-image.png`],
   },
   robots: {
@@ -91,28 +91,29 @@ export default function RootLayout({
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Invoice Gen",
-    "description": "Professional PDF invoice generator with VAT and GST support for USA and Europe businesses.",
-    "url": defaultUrl,
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web Browser",
-    "offers": {
+    name: "Invoice Gen",
+    description:
+      "Professional PDF invoice generator with VAT and GST support for USA and Europe businesses.",
+    url: defaultUrl,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web Browser",
+    offers: {
       "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
+      price: "0",
+      priceCurrency: "USD",
     },
-    "creator": {
+    creator: {
       "@type": "Organization",
-      "name": "Invoice Gen Team"
+      name: "Invoice Gen Team",
     },
-    "featureList": [
+    featureList: [
       "PDF Invoice Generation",
       "VAT/GST Compliance",
       "Multi-currency Support",
       "Professional Templates",
       "Real-time Preview",
-      "Secure Authentication"
-    ]
+      "Secure Authentication",
+    ],
   };
 
   return (

@@ -25,23 +25,18 @@ const useSignUpForm = () => {
     const supabase = createClient();
     setIsLoading(true);
     try {
-      const ss = searchParams.get("next");
-      console.log("  ss ", ss);
       // const nextPath = searchParams.get("next") || "/dashboard";
       const nextPath = "/auth/login";
-      console.log(" Next path      ", nextPath);
       const action = searchParams.get("action");
       const params = new URLSearchParams();
       params.set("next", nextPath);
       if (action) params.set("action", action);
       const callbackUrl = `${window.location.origin}/auth/callback?${params.toString()}`;
-      console.log(" callbackUrl   ", callbackUrl);
       const { error, data } = await supabase.auth.signUp({
         email,
         password,
         options: { emailRedirectTo: callbackUrl },
       });
-      console.log(data);
 
       if (error) throw error;
 

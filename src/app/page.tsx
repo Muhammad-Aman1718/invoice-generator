@@ -1,6 +1,6 @@
 import { Zap, Globe, Shield } from "lucide-react";
 import { Suspense } from "react";
-import { InvoiceLanding } from "@/src/components/invoice/invoice-landing";
+import InvoiceLanding from "@/src/components/invoice/InvoiceLanding";
 // import { AdSlot } from "@/components/ads/ad-slot";
 
 import { Metadata } from "next";
@@ -32,38 +32,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+const Home = () => {
+  const CHIPS = [
+    { icon: <Globe size={12} />, text: "Multi-currency" },
+    { icon: <Shield size={12} />, text: "VAT Compliant" },
+    { icon: <Zap size={12} />, text: "Instant PDF" },
+  ];
+
   return (
     <main className="min-h-screen" style={{ backgroundColor: "#ECEFF1" }}>
       <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-        {/* Ad Slot */}
-        {/* <div className="mb-8">
-          <AdSlot variant="header" />
-        </div> */}
-
         {/* ══ HERO SECTION ═══════════════════════════════════════════════ */}
         <section className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5 border"
-            style={{
-              background: "rgba(255,193,7,0.1)",
-              borderColor: "rgba(255,193,7,0.3)",
-            }}
-          >
-            <span
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: "#FFC107" }}
-            />
-            <span
-              className="text-xs font-black uppercase tracking-widest"
-              style={{ color: "#191970" }}
-            >
-              Free · No sign-up required
-            </span>
-          </div>
-
           <h1
             className="text-3xl sm:text-5xl font-black mb-4 leading-tight"
             style={{ color: "#191970" }}
@@ -90,11 +71,7 @@ export default function Home() {
 
           {/* Feature Pills */}
           <div className="flex flex-wrap justify-center gap-2 mt-6">
-            {[
-              { icon: <Globe size={12} />, text: "Multi-currency" },
-              { icon: <Shield size={12} />, text: "VAT Compliant" },
-              { icon: <Zap size={12} />, text: "Instant PDF" },
-            ].map((f) => (
+            {CHIPS.map((f) => (
               <div
                 key={f.text}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border"
@@ -145,4 +122,6 @@ export default function Home() {
       <Footer />
     </main>
   );
-}
+};
+
+export default Home;

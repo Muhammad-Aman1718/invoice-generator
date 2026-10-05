@@ -2,7 +2,7 @@
 
 import { Suspense } from "react";
 import { InvoiceForm } from "@/src/components/invoice/invoice-form";
-import { InvoicePreview } from "@/src/components/invoice/invoice-preview";
+import { InvoicePreview } from "@/src/components/invoice/InvoicePreview";
 import {
   Download,
   Eye,

@@ -1,6 +1,6 @@
 import Footer from "@/src/components/footer";
 import Header from "@/src/components/header";
-import { UpdatePasswordForm } from "@/src/components/update-password-form";
+import UpdatePasswordForm from "@/src/components/new/auth/UpdatePasswordForm";
 
 import { Metadata } from "next";
 
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
 
 const UpdatePassword = () => {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <div className="flex min-h-svh w-full flex-col">
       <Header />
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-3xl mx-auto flex flex-1 items-center justify-center p-4 sm:p-6 md:p-8">
         <UpdatePasswordForm />
       </div>
       <Footer />

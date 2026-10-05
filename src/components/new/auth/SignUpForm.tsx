@@ -8,7 +8,7 @@ import AuthDivider from "@/src/components/new/auth/AuthDivider";
 import AuthRedirect from "@/src/components/new/auth/AuthRedirect";
 import FormContainer from "@/src/components/new/auth/FormContainer";
 import SocialOAuthButton from "@/src/components/new/auth/SocialOAuthButton";
-import Loader from "../new/auth/Loader";
+import Loader from "../Loader";
 
 const SignUpForm: React.FC = () => {
   const {
