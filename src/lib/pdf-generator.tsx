@@ -1,5 +1,3 @@
-// npm install @react-pdf/renderer
-
 import { InvoiceData } from "@/src/types/invoice-types";
 import {
   Document,
@@ -10,33 +8,10 @@ import {
   StyleSheet,
   pdf,
 } from "@react-pdf/renderer";
-import { format } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import { CURRENCIES } from "./invoice-utils";
+import { calculateTotals, getTotalsBreakdown } from "./invoice-store";
 
-import { Font } from "@react-pdf/renderer";
-
-// Roboto font register kar rahe hain kyunki ye symbols ko behtar handle karta hai
-Font.register({
-  family: "Roboto",
-  fonts: [
-    {
-      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-light-webfont.ttf",
-      fontWeight: 300,
-    },
-    {
-      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf",
-      fontWeight: 400,
-    },
-    {
-      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf",
-      fontWeight: 500,
-    },
-    {
-      src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf",
-      fontWeight: 700,
-    },
-  ],
-});
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  Colors
@@ -273,6 +248,17 @@ const s = StyleSheet.create({
     backgroundColor: C.white,
   },
   footerText: { fontSize: 7, color: C.muted3, fontFamily: "Courier" },
+  paidStamp: {
+    marginTop: 6,
+    fontFamily: "Times-Bold",
+    fontSize: 11,
+    letterSpacing: 2,
+    color: C.green,
+    borderWidth: 1.5,
+    borderColor: C.green,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+  },
   footerRight: { flexDirection: "row", alignItems: "center", gap: 4 },
   footerDot: { width: 4, height: 4, borderRadius: 2, backgroundColor: C.amber },
 });
@@ -282,13 +268,13 @@ const s = StyleSheet.create({
 // ─────────────────────────────────────────────────────────────────────────────
 
 
-function InvoicePDF({ d }: { d: InvoiceData }) {
+function InvoicePDF({ d, branding }: { d: InvoiceData; branding: boolean }) {
   const getSafeSymbol = () => {
-    const supportedSymbols = ["$", "€", "£", "¥"]; // Times-Roman inko support karta hai
-    if (supportedSymbols.includes(d?.currencySymbol!)) {
+    // The built-in PDF fonts only include these symbols; others fall back to the ISO code.
+    const supportedSymbols = ["$", "€", "£", "¥"];
+    if (d.currencySymbol && supportedSymbols.includes(d.currencySymbol)) {
       return d.currencySymbol;
     }
-    // Agar koi aur currency hai (AED, PKR, etc.), toh uska Code dikhao (e.g., "AED")
     return d.currency;
   };
 
@@ -305,19 +291,13 @@ function InvoicePDF({ d }: { d: InvoiceData }) {
   };
 
   const fmtDate = (v: string) => {
-    try {
-      if (!v) return "—";
-      return format(new Date(v), "MMM d, yyyy");
-    } catch {
-      return v;
-    }
+    if (!v) return "—";
+    const parsed = parseISO(v);
+    return isValid(parsed) ? format(parsed, "MMM d, yyyy") : v;
   };
 
-  // Logic to calculate actual discount amount for the display
-  // Kyunki interface mein overallDiscount sirf percentage hai
-  const calculatedDiscountAmt = (d.subtotal * d.overallDiscount) / 100;
-  const calculatedTaxAmt =
-    (d.subtotal - calculatedDiscountAmt) * (d.taxRate / 100);
+  const { discountAmount: calculatedDiscountAmt, taxAmount: calculatedTaxAmt } =
+    getTotalsBreakdown(d);
 
   return (
     <Document>
@@ -325,6 +305,7 @@ function InvoicePDF({ d }: { d: InvoiceData }) {
         {/* Header - Fixed */}
         <View style={s.header} fixed>
           <View style={s.headerLeft}>
+            {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf Image has no alt */}
             {d.logoDataUrl && <Image src={d.logoDataUrl} style={s.logo} />}
             <View>
               <Text style={s.bizName}>{d.businessName || "Your Business"}</Text>
@@ -337,6 +318,7 @@ function InvoicePDF({ d }: { d: InvoiceData }) {
             <Text style={s.invoiceNum}>#{d.invoiceNumber}</Text>
             <Text style={s.metaText}>Issued: {fmtDate(d.issueDate)}</Text>
             <Text style={s.metaText}>Due: {fmtDate(d.dueDate)}</Text>
+            {d.status === "paid" && <Text style={s.paidStamp}>PAID</Text>}
           </View>
         </View>
 
@@ -438,6 +420,7 @@ function InvoicePDF({ d }: { d: InvoiceData }) {
         {/* Signature */}
         {d.stampUrl && (
           <View style={s.stampWrap} wrap={false}>
+            {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf Image has no alt */}
             <Image src={d.stampUrl} style={s.stamp} />
             <View style={s.stampLine} />
             <Text style={s.stampLabel}>Authorized Signature</Text>
@@ -446,11 +429,18 @@ function InvoicePDF({ d }: { d: InvoiceData }) {
 
         <View style={s.footer} fixed>
           <Text style={s.footerText}>
-            {d.businessName} · {d.currency}
+            {branding
+              ? "Made with InvoiceGen"
+              : [d.businessName, d.currency].filter(Boolean).join(" · ")}
           </Text>
           <View style={s.footerRight}>
             <View style={s.footerDot} />
-            <Text style={s.footerText}>Page Invoice #{d.invoiceNumber}</Text>
+            <Text
+              style={s.footerText}
+              render={({ pageNumber, totalPages }) =>
+                `Invoice #${d.invoiceNumber} · Page ${pageNumber}/${totalPages}`
+              }
+            />
           </View>
         </View>
       </Page>
@@ -459,66 +449,55 @@ function InvoicePDF({ d }: { d: InvoiceData }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  generateInvoicePDF  — call with buildInvoiceData(store, ...) result
+//  generateInvoicePDF — renders and downloads the invoice.
+//  `branding` adds a small "Made with InvoiceGen" footer (Free plan / guests).
 // ─────────────────────────────────────────────────────────────────────────────
-export async function generateInvoicePDF(data: InvoiceData): Promise<void> {
-  const blob = await pdf(<InvoicePDF d={data} />).toBlob();
+export async function generateInvoicePDF(
+  data: InvoiceData,
+  options: { branding?: boolean } = {},
+): Promise<void> {
+  const blob = await pdf(<InvoicePDF d={data} branding={options.branding ?? true} />).toBlob();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `invoice-${data.invoiceNumber || Date.now()}.pdf`;
+  const client = data.clientName ? `-${data.clientName.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}` : "";
+  a.download = `invoice-${data.invoiceNumber || Date.now()}${client}.pdf`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-//  buildInvoiceData  — convert store → InvoiceData
-//
-//  Usage in your hook:
-//    const data = buildInvoiceData(store, subtotal, discountAmt, taxAmt, currencySymbol)
-//    await generateInvoicePDF(data)
-// ─────────────────────────────────────────────────────────────────────────────
-export function buildInvoiceData(
-  store: any,
-  subtotal: number,
-  discountAmount: number, // Ye calculation bahar se aa rahi hai
-  taxAmount: number, // Ye calculation bahar se aa rahi hai
-  // currencyCode: any       // Interface ke mutabiq CurrencyCode
-): InvoiceData {
-  const currencyData = CURRENCIES[store.currency] || {
-    symbol: store.currency,
-    locale: "en-US",
+/** Normalise any invoice-like object (store state or API data) for the PDF. */
+export function buildInvoiceData(source: Partial<InvoiceData>): InvoiceData {
+  const totals = calculateTotals(source);
+  const currencyData = CURRENCIES[source.currency ?? "USD"] || {
+    symbol: source.currency ?? "",
   };
-
-  // Agar symbol galti se koi character ban raha hai toh usay normalize karein
-  let cleanSymbol = currencyData.symbol;
-  if (cleanSymbol.length > 3) cleanSymbol = store.currency;
+  const symbol = currencyData.symbol.length > 3 ? source.currency : currencyData.symbol;
 
   return {
-    userId: store.userId,
-    logoDataUrl: store.logoDataUrl ?? null,
-    stampUrl: store.stampUrl ?? null,
-    // Ensure invoiceNumber is a number as per interface
-    invoiceNumber: parseInt(store.invoiceNumber) || 0,
-    currency: store.currency, // e.g., "USD"
-    businessName: store.businessName ?? "",
-    bussinessInfo: store.bussinessInfo ?? "",
-    issueDate: store.issueDate ?? "",
-    dueDate: store.dueDate ?? "",
-    poNumber: store.poNumber ?? "",
-    clientName: store.clientName ?? "",
-    clientAddress: store.clientAddress ?? "",
-    shipTo: store.shipTo ?? "",
-    lineItems: store.lineItems ?? [],
-    notes: store.notes ?? "",
-    terms: store.terms ?? "",
-    subtotal: subtotal,
-    overallDiscount: store.overallDiscount ?? 0,
-    taxRate: store.taxRate ?? 0,
-    totalAmount: store.totalAmount ?? 0,
-    status: store.status ?? "draft",
-    currencySymbol: cleanSymbol,
+    logoDataUrl: source.logoDataUrl ?? null,
+    stampUrl: source.stampUrl ?? null,
+    invoiceNumber: Number(source.invoiceNumber) || 0,
+    currency: source.currency ?? "USD",
+    businessName: source.businessName ?? "",
+    bussinessInfo: source.bussinessInfo ?? "",
+    issueDate: source.issueDate ?? "",
+    dueDate: source.dueDate ?? "",
+    poNumber: source.poNumber ?? "",
+    clientName: source.clientName ?? "",
+    clientAddress: source.clientAddress ?? "",
+    shipTo: source.shipTo ?? "",
+    lineItems: totals.lineItems,
+    notes: source.notes ?? "",
+    terms: source.terms ?? "",
+    subtotal: totals.subtotal,
+    overallDiscount: Number(source.overallDiscount) || 0,
+    taxRate: Number(source.taxRate) || 0,
+    totalAmount: totals.totalAmount,
+    status: source.status ?? "pending",
+    currencySymbol: symbol,
   };
 }
+

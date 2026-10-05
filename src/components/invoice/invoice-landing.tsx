@@ -5,6 +5,7 @@ import { InvoicePreview } from "@/src/components/invoice/invoice-preview";
 import { Download, Eye, Save, X, FileText, Loader2, Edit3 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
 import useInvoiceLanding from "@/src/hooks/useInvoiceLanding";
+import { formatCurrency } from "@/src/lib/invoice-utils";
 
 type Tab = "edit" | "preview";
 
@@ -141,8 +142,6 @@ export function InvoiceLanding() {
         className={cn("sm:hidden", mobileTab === "edit" ? "block" : "hidden")}
       >
         <div className="">
-          {" "}
-          {/* 300px par padding minimal honi chahiye */}
           <InvoiceForm />
         </div>
       </div>
@@ -154,15 +153,7 @@ export function InvoiceLanding() {
           mobileTab === "preview" ? "block" : "hidden",
         )}
       >
-        <div
-          className="rounded-xl overflow-hidden bg-white shadow-sm border border-black/5 origin-top"
-          style={{
-            /* 300px par preview ko thoda chota dikhana zaroori hai */
-            transform: "scale(0.92)",
-            width: "108.7%",
-            marginLeft: "-4.35%",
-          }}
-        >
+        <div className="custom-scrollbar relative overflow-x-auto rounded-xl border border-black/5 bg-white shadow-sm">
           <InvoicePreview id="invoice-preview-landing" />
         </div>
 
@@ -180,20 +171,12 @@ export function InvoiceLanding() {
         </button>
       </div>
 
-      {/* Desktop: form + hidden off-screen preview for PDF */}
+      {/* Desktop: form (preview opens in a modal) */}
       <div className="hidden sm:block">
         <InvoiceForm />
 
-        {/* PDF Generation ke liye ye hidden rehta hai */}
-        <div
-          className="fixed -left-[9999px] -top-[9999px] w-[794px] opacity-0 pointer-events-none"
-          aria-hidden
-        >
-          <InvoicePreview id="invoice-preview-landing" />
-        </div>
       </div>
 
-      {/* ══ DESKTOP PREVIEW MODAL ═══════════════════════════════════════ */}
       {/* ══ DESKTOP/TABLET PREVIEW MODAL ═══════════════════════════════════════ */}
       {isPreviewOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4">
@@ -235,7 +218,7 @@ export function InvoiceLanding() {
                   Total
                 </span>
                 <span className="text-base font-black text-[#191970]">
-                  {store.currency} {grandTotal.toLocaleString()}
+                  {formatCurrency(grandTotal, store.currency)}
                 </span>
               </div>
 

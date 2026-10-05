@@ -5,26 +5,9 @@ import Header from "@/src/components/header";
 import Footer from "@/src/components/footer";
 
 export const metadata: Metadata = {
-  title: "Sign Up Success | Invoice Gen",
-  description:
-    "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use.",
-  keywords: [
-    "Invoice Generator",
-    "PDF Invoice Maker",
-    "VAT Compliant",
-    "Tax Compliant",
-    "USA",
-    "Europe",
-  ],
-  openGraph: {
-    title: "Invoice SaaS | Professional PDF Invoice Maker",
-    description:
-      "Create VAT and tax compliant invoices. Export to PDF instantly.",
-    url: "https://invoice-gen.vercel.app/auth/sign-up-success",
-    siteName: "Invoice SaaS",
-    locale: "en_US",
-    type: "website",
-  },
+  title: "Check your email",
+  description: "Confirm your email address to finish creating your account.",
+  robots: { index: false, follow: true },
 };
 
 const SignUpSuccess = () => {

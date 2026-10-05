@@ -1,5 +1,6 @@
--- Invoice SaaS Schema
--- Run in Supabase SQL Editor
+-- LEGACY (v1) schema — kept for history only.
+-- Run 002_complete_schema.sql instead: it supersedes this file and is safe on
+-- databases where this file was already applied.
 
 -- Enable UUID extension if not exists
 create extension if not exists "uuid-ossp";

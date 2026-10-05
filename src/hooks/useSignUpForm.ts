@@ -1,14 +1,15 @@
+"use client";
 import { createClient } from "@/src/lib/supabase/client";
 import { showToast } from "@/src/utils/showToast";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import { buildCallbackUrl, safeNextPath } from "./useLogin";
 
 const useSignUpForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [showPass, setShowPass] = useState(false);
-  const [showRepeat, setShowRepeat] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -17,80 +18,64 @@ const useSignUpForm = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== repeatPassword) {
-      setError("Passwords do not match");
-      showToast.warning("Check Passwords", "Passwords must be identical.");
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters");
+      showToast.warning("Password too short", "Use at least 8 characters.");
       return;
     }
-    const supabase = createClient();
+    if (password !== repeatPassword) {
+      setError("Passwords do not match");
+      showToast.warning("Check passwords", "Passwords must be identical.");
+      return;
+    }
+    if (!acceptedTerms) {
+      setError("Please accept the Terms and Privacy Policy");
+      showToast.warning("One more step", "Please accept the Terms of Service and Privacy Policy.");
+      return;
+    }
+
     setIsLoading(true);
+    setError(null);
     try {
-      const ss = searchParams.get("next");
-      console.log("  ss ", ss);
-      // const nextPath = searchParams.get("next") || "/dashboard";
-      const nextPath = "/auth/login";
-      console.log(" Next path      ", nextPath);
-      const action = searchParams.get("action");
-      const params = new URLSearchParams();
-      params.set("next", nextPath);
-      if (action) params.set("action", action);
-      const callbackUrl = `${window.location.origin}/auth/callback?${params.toString()}`;
-      console.log(" callbackUrl   ", callbackUrl);
-      const { error, data } = await supabase.auth.signUp({
+      const { error, data } = await createClient().auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: callbackUrl },
+        options: { emailRedirectTo: buildCallbackUrl(searchParams) },
       });
-      console.log(data);
-
       if (error) throw error;
 
-      if (
-        data.user &&
-        Array.isArray(data.user.identities) &&
-        data.user.identities.length === 0
-      ) {
-        showToast.info(
-          "Account already exists",
-          "Please sign in with your existing account.",
-        );
-
-        router.push("/auth/login");
+      // Supabase returns a user with no identities when the email is already registered.
+      if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+        showToast.info("Account already exists", "Please sign in with your existing account.");
+        router.push(`/auth/login${queryString ? `?${queryString}` : ""}`);
         return;
       }
 
       if (data.user && !data.session) {
-        showToast.success(
-          "Check your inbox!",
-          "We've sent a verification link.",
-        );
+        showToast.success("Check your inbox!", "We've sent you a verification link.");
         router.push("/auth/sign-up-success");
         return;
       }
-      showToast.success("Account created successfully!");
+
+      showToast.success("Account created!");
+      router.replace(safeNextPath(searchParams.get("next")));
       router.refresh();
-      router.push(nextPath);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "An error occurred";
       setError(msg);
-      showToast.error("Sign Up Error", msg);
+      showToast.error("Sign-up error", msg);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleOAuth = async (provider: "google" | "github") => {
-    const supabase = createClient();
-    await supabase.auth.signInWithOAuth({
+    const { error } = await createClient().auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: buildCallbackUrl(searchParams) },
     });
+    if (error) showToast.error("Sign-up failed", error.message);
   };
-
-  const passwordsMatch =
-    repeatPassword.length > 0 && password === repeatPassword;
-  const passwordsMismatch =
-    repeatPassword.length > 0 && password !== repeatPassword;
 
   return {
     email,
@@ -99,18 +84,14 @@ const useSignUpForm = () => {
     setPassword,
     repeatPassword,
     setRepeatPassword,
-    showPass,
-    setShowPass,
-    showRepeat,
-    setShowRepeat,
+    acceptedTerms,
+    setAcceptedTerms,
     error,
-    setError,
     isLoading,
-    setIsLoading,
     handleSignUp,
     handleOAuth,
-    passwordsMatch,
-    passwordsMismatch,
+    passwordsMatch: repeatPassword.length > 0 && password === repeatPassword,
+    passwordsMismatch: repeatPassword.length > 0 && password !== repeatPassword,
     queryString,
   };
 };

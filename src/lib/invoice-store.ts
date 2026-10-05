@@ -2,79 +2,65 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type {
-  InvoiceData,
-  LineItem,
-  InvoiceStore,
-} from "../types/invoice-types";
+import type { InvoiceData, LineItem, InvoiceStore } from "../types/invoice-types";
 
-const STORAGE_KEY = "invoice-generator-data";
+export const STORAGE_KEY = "invoice-generator-data";
 
-// Helper function to calculate amounts
-// Helper function to calculate amounts based on your logic
-const calculateTotals = (state: Partial<InvoiceStore>) => {
-  const lineItems = state.lineItems || [];
+const round2 = (n: number) => Math.round(n * 100) / 100;
 
-  // 1. Calculate each item's amount (Item Level Discount)
-  const updatedItems = lineItems.map((item) => {
+/** Recompute line amounts, subtotal and total (discount first, then tax). */
+export const calculateTotals = (state: Partial<InvoiceData>) => {
+  const lineItems = (state.lineItems || []).map((item) => {
     const qty = Number(item.quantity) || 0;
     const rate = Number(item.rate) || 0;
     const discPercent = Number(item.discount) || 0;
-
-    // Formula: (Qty * Rate) - Discount %
-    const amount = qty * rate * (1 - discPercent / 100);
-    return { ...item, amount };
+    return { ...item, amount: round2(qty * rate * (1 - discPercent / 100)) };
   });
 
-  // 2. Subtotal (Sum of all discounted line items)
-  const subtotal = updatedItems.reduce((sum, item) => sum + item.amount, 0);
+  const subtotal = round2(lineItems.reduce((sum, item) => sum + item.amount, 0));
+  const discountAmount = subtotal * ((Number(state.overallDiscount) || 0) / 100);
+  const taxable = subtotal - discountAmount;
+  const taxAmount = taxable * ((Number(state.taxRate) || 0) / 100);
 
-  // 3. Overall Discount Calculation (Amount to subtract)
-  const overallDiscountRate = Number(state.overallDiscount) || 0;
-  const overallDiscountAmount = subtotal * (overallDiscountRate / 100);
-
-  // Amount after overall discount
-  const amountAfterOverallDiscount = subtotal - overallDiscountAmount;
-
-  // 4. Tax Calculation (GST/Sales Tax on the discounted subtotal)
-  const taxRate = Number(state.taxRate) || 0;
-  const taxAmount = amountAfterOverallDiscount * (taxRate / 100);
-
-  // 5. Final Grand Total
-  const totalAmount = amountAfterOverallDiscount + taxAmount;
-
-  return {
-    lineItems: updatedItems,
-    subtotal,
-    // Hum sirf totals return kar rahe hain, UI inko store se direct read karega
-    totalAmount,
-    // Note: Aap store interface mein taxAmount save kar sakte hain display ke liye
-  };
+  return { lineItems, subtotal, totalAmount: round2(taxable + taxAmount) };
 };
-const createLineItem = (): LineItem => {
 
-  const id = typeof window !== "undefined" && window.crypto?.randomUUID 
-    ? window.crypto.randomUUID() 
-    : Math.random().toString(36).substring(2, 11); // Fallback agar crypto na chale
+export function getTotalsBreakdown(state: Pick<InvoiceData, "subtotal" | "overallDiscount" | "taxRate">) {
+  const discountAmount = round2(state.subtotal * ((state.overallDiscount || 0) / 100));
+  const taxable = state.subtotal - discountAmount;
+  const taxAmount = round2(taxable * ((state.taxRate || 0) / 100));
+  return { discountAmount, taxAmount };
+}
 
-  return {
-    id: id,
-    description: "",
-    quantity: 1,
-    rate: 0,
-    discount: 0,
-    amount: 0,
-  };
-};
-const defaultInvoiceData: InvoiceData = {
-  id: undefined, // ID generate karne ka logic aapke DB mein hoga
+export const createLineItem = (): LineItem => ({
+  id:
+    typeof window !== "undefined" && window.crypto?.randomUUID
+      ? window.crypto.randomUUID()
+      : Math.random().toString(36).substring(2, 11),
+  description: "",
+  quantity: 1,
+  rate: 0,
+  discount: 0,
+  amount: 0,
+});
+
+export function localISODate(offsetDays = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  const tz = d.getTimezoneOffset() * 60000;
+  return new Date(d.getTime() - tz).toISOString().split("T")[0];
+}
+
+const defaultInvoiceData = (): InvoiceData => ({
+  id: undefined,
+  clientId: null,
   logoDataUrl: null,
   invoiceNumber: 1,
   currency: "USD",
   businessName: "",
   bussinessInfo: "",
-  issueDate: new Date().toISOString().split("T")[0],
-  dueDate: new Date().toISOString().split("T")[0],
+  issueDate: localISODate(),
+  dueDate: localISODate(14),
   poNumber: "",
   clientName: "",
   clientAddress: "",
@@ -88,22 +74,27 @@ const defaultInvoiceData: InvoiceData = {
   taxRate: 0,
   totalAmount: 0,
   status: "pending",
-};
+});
+
+/** True when the user hasn't typed anything worth keeping yet. */
+export function isPristine(s: InvoiceData) {
+  return (
+    !s.clientName &&
+    !s.clientAddress &&
+    !s.notes &&
+    s.lineItems.every((i) => !i.description && !Number(i.rate))
+  );
+}
 
 export const useInvoiceStore = create<InvoiceStore>()(
   persist(
     (set) => ({
-      ...defaultInvoiceData,
+      ...defaultInvoiceData(),
 
       setField: (field, value) =>
         set((state) => {
           const newState = { ...state, [field]: value };
-          // Agar tax ya discount change ho toh recalculate karein
-          if (
-            field === "overallDiscount" ||
-            field === "taxRate" ||
-            field === "currency"
-          ) {
+          if (field === "overallDiscount" || field === "taxRate" || field === "lineItems") {
             return { ...newState, ...calculateTotals(newState) };
           }
           return newState;
@@ -114,10 +105,7 @@ export const useInvoiceStore = create<InvoiceStore>()(
 
       addLineItem: () =>
         set((state) => {
-          const newState = {
-            ...state,
-            lineItems: [...state.lineItems, createLineItem()],
-          };
+          const newState = { ...state, lineItems: [...state.lineItems, createLineItem()] };
           return { ...newState, ...calculateTotals(newState) };
         }),
 
@@ -132,34 +120,39 @@ export const useInvoiceStore = create<InvoiceStore>()(
 
       updateLineItem: (id, field, value) =>
         set((state) => {
-          const updatedLineItems = state.lineItems.map((item) =>
+          const lineItems = state.lineItems.map((item) =>
             item.id === id ? { ...item, [field]: value } : item,
           );
-          const newState = { ...state, lineItems: updatedLineItems };
+          const newState = { ...state, lineItems };
           return { ...newState, ...calculateTotals(newState) };
         }),
 
       incrementInvoiceNumber: () =>
         set((state) => ({ invoiceNumber: state.invoiceNumber + 1 })),
 
-      resetInvoice: () => {
-        set(defaultInvoiceData);
-        localStorage.removeItem("invoice-generator-data");
-      },
+      resetInvoice: () => set(defaultInvoiceData()),
 
       loadInvoice: (data) =>
-        set((state) => {
-          const newState = { ...state, ...data };
+        set(() => {
+          const newState = { ...defaultInvoiceData(), ...data };
+          if (!newState.lineItems?.length) newState.lineItems = [createLineItem()];
+          newState.lineItems = newState.lineItems.map((i) => ({
+            ...i,
+            id: i.id || createLineItem().id,
+          }));
           return { ...newState, ...calculateTotals(newState) };
         }),
     }),
     {
       name: STORAGE_KEY,
+      // Only the draft content is persisted; `id` is never persisted so a
+      // reload can't silently turn "new invoice" into "edit existing".
       partialize: (state) => ({
         logoDataUrl: state.logoDataUrl,
         businessName: state.businessName,
         bussinessInfo: state.bussinessInfo,
         currency: state.currency,
+        clientId: state.clientId,
         clientName: state.clientName,
         stampUrl: state.stampUrl,
         clientAddress: state.clientAddress,
@@ -175,6 +168,7 @@ export const useInvoiceStore = create<InvoiceStore>()(
         issueDate: state.issueDate,
         dueDate: state.dueDate,
         poNumber: state.poNumber,
+        status: state.status,
       }),
     },
   ),

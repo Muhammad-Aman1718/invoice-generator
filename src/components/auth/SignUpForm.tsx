@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import useSignUpForm from "@/src/hooks/useSignUpForm";
 import AuthInput from "@/src/components/new/auth/AuthInput";
 import AuthButton from "@/src/components/new/auth/AuthButton";
@@ -23,6 +24,8 @@ const SignUpForm: React.FC = () => {
     handleOAuth,
     passwordsMatch,
     passwordsMismatch,
+    acceptedTerms,
+    setAcceptedTerms,
     queryString,
   } = useSignUpForm();
 
@@ -49,7 +52,6 @@ const SignUpForm: React.FC = () => {
       <AuthDivider text="OR EMAIL" />
 
       <form onSubmit={handleSignUp} className="space-y-4">
-        {/* Email Field with standard required flags */}
         <AuthInput
           label="Email"
           id="email"
@@ -60,12 +62,13 @@ const SignUpForm: React.FC = () => {
           required
         />
 
-        {/* Primary Password Input validation tracker hook layer */}
         <AuthInput
           isPassword
           label="Password"
           id="password"
-          placeholder="••••••••"
+          placeholder="At least 8 characters"
+          autoComplete="new-password"
+          minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           hasError={passwordsMismatch}
@@ -85,7 +88,29 @@ const SignUpForm: React.FC = () => {
           required
         />
 
+        <label className="flex items-start gap-2.5 text-xs leading-relaxed text-navy-500">
+          <input
+            type="checkbox"
+            className="mt-0.5 h-4 w-4 flex-shrink-0 accent-[#191970]"
+            checked={acceptedTerms}
+            onChange={(e) => setAcceptedTerms(e.target.checked)}
+            required
+          />
+          <span>
+            I agree to the{" "}
+            <Link href="/terms-of-service" target="_blank" className="font-bold text-navy underline">
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link href="/privacy-policy" target="_blank" className="font-bold text-navy underline">
+              Privacy Policy
+            </Link>
+            .
+          </span>
+        </label>
+
         <AuthButton
+          isLoading={isLoading}
           title={
             isLoading ? (
               <Loader className="w-6 h-6 border-2 border-white " />

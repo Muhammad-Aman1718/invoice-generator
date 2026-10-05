@@ -10,7 +10,14 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  { ignores: [".next/**", "node_modules/**", "next-env.d.ts"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      // Logos/signatures are user-supplied data URLs; next/image adds nothing there.
+      "@next/next/no-img-element": "off",
+    },
+  },
 ];
 
 export default eslintConfig;

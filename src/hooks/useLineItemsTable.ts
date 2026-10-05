@@ -1,52 +1,21 @@
 import { useInvoiceStore } from "@/src/lib/invoice-store";
-import { calculateLineItemAmount } from "@/src/lib/invoice-utils";
-import React from "react";
 
+// Line amounts are recomputed by the store on every update.
 const useLineItemsTable = () => {
-  const { lineItems, addLineItem, removeLineItem, updateLineItem } =
-    useInvoiceStore();
+  const { lineItems, addLineItem, removeLineItem, updateLineItem } = useInvoiceStore();
 
-  const handleQtyChange = (id: string, v: string) => {
-    const q = parseFloat(v) || 0;
-    const item = lineItems.find((i) => i.id === id);
-    updateLineItem(id, "quantity", q);
-    if (item) {
-      const base = calculateLineItemAmount(q, item.rate);
-      const disc = item.discount || 0;
-      updateLineItem(id, "amount", base - (base * disc) / 100);
-    }
-  };
+  const handleQtyChange = (id: string, v: string) =>
+    updateLineItem(id, "quantity", Math.max(0, parseFloat(v) || 0));
 
-  const handleRateChange = (id: string, v: string) => {
-    const r = parseFloat(v) || 0;
-    const item = lineItems.find((i) => i.id === id);
-    updateLineItem(id, "rate", r);
-    if (item) {
-      const base = calculateLineItemAmount(item.quantity, r);
-      const disc = item.discount || 0;
-      updateLineItem(id, "amount", base - (base * disc) / 100);
-    }
-  };
+  const handleRateChange = (id: string, v: string) =>
+    updateLineItem(id, "rate", Math.max(0, parseFloat(v) || 0));
 
-  const handleDiscountChange = (id: string, v: string) => {
-    const d = Math.min(100, Math.max(0, parseFloat(v) || 0));
-    const item = lineItems.find((i) => i.id === id);
-    updateLineItem(id, "discount", d);
-    if (item) {
-      const base = calculateLineItemAmount(item.quantity, item.rate);
-      updateLineItem(id, "amount", base - (base * d) / 100);
-    }
-  };
+  const handleDiscountChange = (id: string, v: string) =>
+    updateLineItem(id, "discount", Math.min(100, Math.max(0, parseFloat(v) || 0)));
 
   const fmt = (n: number) =>
-    (n || 0).toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    (n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const canRemove = lineItems.length > 1;
-
-  // Base input style
   const inp =
     "w-full bg-white border border-transparent rounded-lg px-2.5 py-2 text-sm " +
     "text-[#191970] font-medium placeholder:text-[#191970]/25 outline-none transition-all " +
@@ -55,16 +24,14 @@ const useLineItemsTable = () => {
   return {
     lineItems,
     handleQtyChange,
-    canRemove,
+    handleRateChange,
+    handleDiscountChange,
+    canRemove: lineItems.length > 1,
     inp,
     addLineItem,
     removeLineItem,
     updateLineItem,
     fmt,
-    calculateLineItemAmount,
-    handleRateChange,
-    handleDiscountChange,
-    
   };
 };
 

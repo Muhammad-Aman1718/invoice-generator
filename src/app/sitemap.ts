@@ -1,63 +1,30 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+import { siteConfig } from "@/src/config/site";
+
+const PAGES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [
+  { path: "", priority: 1, changeFrequency: "weekly" },
+  { path: "/features", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/pricing", priority: 0.9, changeFrequency: "monthly" },
+  { path: "/templates", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/blog", priority: 0.6, changeFrequency: "weekly" },
+  { path: "/help-center", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/changelog", priority: 0.4, changeFrequency: "monthly" },
+  { path: "/api-docs", priority: 0.4, changeFrequency: "monthly" },
+  { path: "/contact", priority: 0.5, changeFrequency: "yearly" },
+  { path: "/status", priority: 0.3, changeFrequency: "daily" },
+  { path: "/privacy-policy", priority: 0.3, changeFrequency: "yearly" },
+  { path: "/terms-of-service", priority: 0.3, changeFrequency: "yearly" },
+  { path: "/refund-policy", priority: 0.3, changeFrequency: "yearly" },
+  { path: "/cookie-policy", priority: 0.2, changeFrequency: "yearly" },
+  { path: "/gdpr-compliance", priority: 0.2, changeFrequency: "yearly" },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://invoice-generator1718.vercel.app";
-
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/features`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/pricing`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/templates`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/help-center`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/api-docs`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/privacy-policy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/terms-of-service`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    // Baqi policy pages bhi isi tarah add kar sakte hain...
-  ];
+  const lastModified = new Date();
+  return PAGES.map((p) => ({
+    url: `${siteConfig.url}${p.path}`,
+    lastModified,
+    changeFrequency: p.changeFrequency,
+    priority: p.priority,
+  }));
 }

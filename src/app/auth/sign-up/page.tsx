@@ -6,26 +6,9 @@ import Footer from "@/src/components/footer";
 import Loader from "@/src/components/new/auth/Loader";
 
 export const metadata: Metadata = {
-  title: "Sign Up | Invoice Gen",
-  description:
-    "Create professional invoices for USA and Europe. PDF Invoice Maker with VAT, GST support. Free to use.",
-  keywords: [
-    "Invoice Generator",
-    "PDF Invoice Maker",
-    "VAT Compliant",
-    "Tax Compliant",
-    "USA",
-    "Europe",
-  ],
-  openGraph: {
-    title: "Invoice SaaS | Professional PDF Invoice Maker",
-    description:
-      "Create VAT and tax compliant invoices. Export to PDF instantly.",
-    url: "https://invoice-gen.vercel.app/auth/sign-up",
-    siteName: "Invoice SaaS",
-    locale: "en_US",
-    type: "website",
-  },
+  title: "Create your free account",
+  description: "Create a free InvoiceGen account to save invoices, clients and track payments.",
+  robots: { index: false, follow: true },
 };
 
 const SignUp: React.FC = () => {
