@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import PageHero from "@/src/components/marketing/PageHero";
-import { cn, hasEnvVars } from "@/src/lib/utils";
+import { cn } from "@/src/lib/utils";
 import { isStripeConfigured } from "@/src/lib/server/stripe";
-import { HEALTH_CHECK_TIMEOUT_MS } from "@/src/constant/app";
+import { getHealthReport } from "@/src/lib/server/healthCheck";
+import { SERVICE_HEALTH_NOTES } from "@/src/constant/health";
 import { SITE_CONFIG } from "@/src/constant/site";
 import type { ServiceStatus } from "@/src/types/types";
 
@@ -15,31 +16,13 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-async function isDatabaseReachable(): Promise<boolean> {
-  if (!hasEnvVars) return false;
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/health`, {
-      headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY! },
-      cache: "no-store",
-      signal: AbortSignal.timeout(HEALTH_CHECK_TIMEOUT_MS),
-    });
-    return response.ok;
-  } catch (error) {
-    console.warn("[status] database health check failed:", error);
-    return false;
-  }
-}
-
 async function getServiceStatuses(): Promise<ServiceStatus[]> {
-  const databaseOk = await isDatabaseReachable();
+  const { auth, database } = await getHealthReport();
   return [
     { name: "Web app & invoice builder", ok: true, note: "Operational" },
     { name: "PDF generation", ok: true, note: "Runs in your browser" },
-    {
-      name: "Accounts & database",
-      ok: databaseOk,
-      note: databaseOk ? "Operational" : "Degraded — sign-in and saving may fail",
-    },
+    { name: "Sign-in & accounts", ok: auth === "operational", note: SERVICE_HEALTH_NOTES[auth] },
+    { name: "Database", ok: database.status === "operational", note: SERVICE_HEALTH_NOTES[database.status] },
     {
       name: "Payments",
       ok: true,

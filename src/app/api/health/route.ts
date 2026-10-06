@@ -1,16 +1,28 @@
 import { NextResponse } from "next/server";
-import { hasEnvVars } from "@/src/lib/utils";
 import { isStripeConfigured } from "@/src/lib/server/stripe";
+import { getHealthReport } from "@/src/lib/server/healthCheck";
+import { getHealthHint } from "@/src/lib/healthHints";
+import { HTTP_STATUS } from "@/src/constant/http";
 
-// GET /api/health → used by the status page and uptime monitors.
+export const dynamic = "force-dynamic";
+
+// GET /api/health → used by the status page, uptime monitors and setup troubleshooting.
 export async function GET() {
-  return NextResponse.json({
-    ok: true,
-    time: new Date().toISOString(),
-    services: {
-      app: "operational",
-      database: hasEnvVars ? "configured" : "missing-env",
-      payments: isStripeConfigured() ? "configured" : "not-configured",
+  const report = await getHealthReport();
+  const ok = report.auth === "operational" && report.database.status === "operational";
+  return NextResponse.json(
+    {
+      ok,
+      time: new Date().toISOString(),
+      services: {
+        app: "operational",
+        auth: report.auth,
+        database: report.database.status,
+        payments: isStripeConfigured() ? "configured" : "not-configured",
+      },
+      missingTables: report.database.missingTables,
+      hint: getHealthHint(report),
     },
-  });
+    { status: ok ? HTTP_STATUS.ok : HTTP_STATUS.serviceUnavailable },
+  );
 }
