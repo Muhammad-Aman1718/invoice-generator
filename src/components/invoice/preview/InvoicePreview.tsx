@@ -15,8 +15,13 @@ import { cn } from "@/src/lib/utils";
 import type { InvoicePreviewProps } from "@/src/types/types";
 
 /** A4-proportioned HTML version of the invoice; mirrors the PDF layout. */
-export default function InvoicePreview({ id = "invoicePreview", className }: InvoicePreviewProps) {
-  const invoice = useInvoiceStore();
+export default function InvoicePreview({
+  id = "invoicePreview",
+  className,
+  invoice: sample,
+}: InvoicePreviewProps) {
+  const draft = useInvoiceStore();
+  const invoice = sample ?? draft;
   const formatMoney = (amount: number) => formatCurrency(amount, invoice.currency);
 
   return (

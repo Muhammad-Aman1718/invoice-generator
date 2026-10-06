@@ -22,7 +22,7 @@ async function forwardToWebhook(webhookUrl: string, message: ContactMessage) {
 
 function buildMailtoLink(message: ContactMessage): string {
   const subject = encodeURIComponent(message.subject);
-  const body = encodeURIComponent(`${message.message}\n\n— ${message.name} (${message.email})`);
+  const body = encodeURIComponent(`${message.message}\n\n- ${message.name} (${message.email})`);
   return `mailto:${SITE_CONFIG.supportEmail}?subject=${subject}&body=${body}`;
 }
 

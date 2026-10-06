@@ -1,25 +1,31 @@
+import Reveal from "@/src/components/ui/Reveal";
 import { HOW_IT_WORKS_STEPS } from "@/src/constant/marketing";
+import { CARD_STAGGER_MS } from "@/src/constant/theme";
 
 export default function HowItWorks() {
   return (
-    <section className="bg-white py-16" aria-labelledby="howTitle">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h2 id="howTitle" className="mb-10 text-center text-2xl font-bold text-navy sm:text-3xl">
-          Invoicing in three steps
-        </h2>
-        <ol className="grid gap-6 md:grid-cols-3">
+    <section className="bg-white py-20" aria-labelledby="howTitle">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.8fr_1fr] lg:gap-16 lg:px-8">
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <h2 id="howTitle" className="mb-4 text-3xl font-bold text-navy sm:text-4xl">
+            How it works
+          </h2>
+          <p className="max-w-[40ch] text-base leading-relaxed text-navy-500">
+            From a blank page to a paid invoice without leaving your browser.
+          </p>
+        </div>
+        <ol className="divide-y divide-navy/[0.08]">
           {HOW_IT_WORKS_STEPS.map(({ icon: Icon, title, body }, index) => (
-            <li key={title} className="rounded-2xl border border-navy/[0.07] bg-mist/60 p-6">
-              <div className="mb-4 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy">
-                  <Icon size={18} className="text-gold" />
+            <li key={title}>
+              <Reveal className="flex gap-5 py-7 first:pt-0" delayMs={index * CARD_STAGGER_MS}>
+                <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-navy text-gold">
+                  <Icon size={20} aria-hidden="true" />
                 </span>
-                <span className="text-xs font-bold uppercase tracking-widest text-navy-400">
-                  Step {index + 1}
-                </span>
-              </div>
-              <h3 className="mb-1 text-lg font-bold text-navy">{title}</h3>
-              <p className="text-sm text-navy-500">{body}</p>
+                <div>
+                  <h3 className="mb-1 text-xl font-bold text-navy">{title}</h3>
+                  <p className="text-base leading-relaxed text-navy-500">{body}</p>
+                </div>
+              </Reveal>
             </li>
           ))}
         </ol>

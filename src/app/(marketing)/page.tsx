@@ -18,9 +18,15 @@ export default function HomePage() {
       <HomeHero />
       <section
         id="builder"
-        className="mx-auto max-w-7xl scroll-mt-20 px-4 pb-16 sm:px-6 lg:px-8"
-        aria-label="Invoice builder"
+        className="mx-auto max-w-7xl scroll-mt-20 px-4 pb-20 sm:px-6 lg:px-8"
+        aria-labelledby="builderTitle"
       >
+        <div className="mb-6">
+          <h2 id="builderTitle" className="mb-2 text-3xl font-bold text-navy sm:text-4xl">
+            Try the builder
+          </h2>
+          <p className="text-navy-500">Your draft is saved in this browser until you download or save it.</p>
+        </div>
         <Suspense
           fallback={
             <div className="panel py-24">

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Geist, Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { SITE_CONFIG } from "@/src/constant/site";
@@ -11,7 +11,7 @@ import JsonLd from "@/src/components/seo/JsonLd";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
-    default: `${SITE_CONFIG.name} — ${SEO_DEFAULT_TITLE}`,
+    default: `${SEO_DEFAULT_TITLE} | ${SITE_CONFIG.name}`,
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
@@ -27,12 +27,12 @@ export const metadata: Metadata = {
     siteName: SITE_CONFIG.name,
     locale: SEO_LOCALE,
     url: "/",
-    title: `${SITE_CONFIG.name} — ${SEO_DEFAULT_TITLE}`,
+    title: `${SEO_DEFAULT_TITLE} | ${SITE_CONFIG.name}`,
     description: SITE_CONFIG.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_CONFIG.name} — ${SEO_DEFAULT_TITLE}`,
+    title: `${SEO_DEFAULT_TITLE} | ${SITE_CONFIG.name}`,
     description: SITE_CONFIG.description,
   },
   robots: {
@@ -54,8 +54,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// Inter keeps body text and numbers easy to read; Plus Jakarta Sans gives headings character.
-const bodyFont = Inter({ variable: "--font-sans", display: "swap", subsets: ["latin"] });
+// Geist for body text and figures; Plus Jakarta Sans gives headings character.
+const bodyFont = Geist({ variable: "--font-sans", display: "swap", subsets: ["latin"] });
 const displayFont = Plus_Jakarta_Sans({
   variable: "--font-display",
   display: "swap",

@@ -33,7 +33,7 @@ export function formatCompactNumber(value: number): string {
 
 /** "2026-10-05" (or an ISO timestamp) → "Oct 5, 2026"; "—" when empty. */
 export function formatShortDate(value?: string | null): string {
-  if (!value) return "—";
+  if (!value) return "-";
   const date = new Date(`${value.slice(0, 10)}T00:00:00`);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -45,7 +45,7 @@ export function formatLongDate(value: string): string {
 
 /** "2026-10-05" → "Oct 5, 2026" (or "—" when empty). */
 export function formatInvoiceDate(value: string): string {
-  if (!value) return "—";
+  if (!value) return "-";
   const parsed = parseISO(value);
   return isValid(parsed) ? format(parsed, "MMM d, yyyy") : value;
 }

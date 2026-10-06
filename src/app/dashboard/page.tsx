@@ -50,7 +50,7 @@ export default async function DashboardPage() {
         <section className="panel p-5 sm:p-6 lg:col-span-2" aria-labelledby="revenueTitle">
           <div className="mb-1 flex items-center justify-between">
             <h2 id="revenueTitle" className="text-base font-bold text-navy">
-              Revenue — last 6 months
+              Revenue, last 6 months
             </h2>
             <span className="text-xs font-bold text-navy-500">{stats.currency}</span>
           </div>

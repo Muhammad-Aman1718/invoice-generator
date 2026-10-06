@@ -10,7 +10,7 @@ import { ROUTES } from "@/src/constant/routes";
 
 /** Guests are sent to sign-up; the draft stays in localStorage and reappears after sign-in. */
 function redirectGuestToSignUp() {
-  showToast.info("Create a free account", "Sign in to save this invoice — your draft is kept.");
+  showToast.info("Create a free account", "Sign in to save this invoice. Your draft is kept.");
   const params = new URLSearchParams({ next: ROUTES.newInvoice, action: "save_pending" });
   window.location.href = `${ROUTES.signUp}?${params}`;
 }

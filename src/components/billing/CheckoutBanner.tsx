@@ -6,7 +6,7 @@ export default function CheckoutBanner({ checkout, isPastDue, planName }: Checko
     return (
       <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
         <CheckCircle2 size={18} className="mt-0.5 flex-shrink-0" />
-        Payment received — thank you! Your plan updates as soon as our payment provider confirms it (usually
+        Payment received, thank you! Your plan updates as soon as our payment provider confirms it (usually
         within a few seconds). Refresh this page if it hasn&apos;t changed yet.
       </div>
     );
