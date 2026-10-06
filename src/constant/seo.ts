@@ -52,6 +52,15 @@ export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
     priority: 1,
     changeFrequency: "weekly",
   },
+  about: {
+    path: "/about",
+    title: "About Us",
+    description:
+      "InvoiceGen helps freelancers and small businesses send professional invoices and get paid " +
+      "on time. Learn who we are and what we care about.",
+    priority: 0.5,
+    changeFrequency: "yearly",
+  },
   features: {
     path: "/features",
     title: "Features — Invoicing Made Simple",

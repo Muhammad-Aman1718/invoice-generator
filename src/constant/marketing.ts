@@ -1,5 +1,9 @@
 import {
   BarChart3,
+  Eye,
+  Feather,
+  HandCoins,
+  ShieldCheck,
   Download,
   FileSpreadsheet,
   Globe,
@@ -13,7 +17,7 @@ import {
   Users,
   Zap,
 } from "lucide-react";
-import type { FeatureItem, TemplateUse } from "@/src/types/types";
+import type { AboutValue, FeatureItem, TemplateUse } from "@/src/types/types";
 
 export const FEATURES: FeatureItem[] = [
   {
@@ -117,3 +121,37 @@ export const TEMPLATE_MOCKUP_TOTAL = "£4,536.00";
 
 /** Plan features shown per card in the home-page pricing teaser. */
 export const TEASER_FEATURE_COUNT = 3;
+
+export const ABOUT_MISSION =
+  "Invoicing should take a minute, not an afternoon. We build simple tools that help freelancers and " +
+  "small businesses look professional, stay tax-ready and get paid on time.";
+
+export const ABOUT_STORY = [
+  "InvoiceGen started as a free, no-sign-up invoice builder for people who just needed a clean PDF fast.",
+  "As more freelancers and studios used it every month, we added what they asked for: saved clients, " +
+    "payment tracking, revenue reports and plans that grow with the business.",
+  "The builder is still free and still works without an account. That promise is not going away.",
+];
+
+export const ABOUT_VALUES: AboutValue[] = [
+  {
+    icon: Feather,
+    title: "Simple by default",
+    body: "Every screen should be obvious the first time you see it. If a feature needs a manual, we redesign it.",
+  },
+  {
+    icon: HandCoins,
+    title: "Honest pricing",
+    body: "A real free plan, clear limits, no hidden fees, and a 14-day money-back guarantee on paid plans.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Your data is yours",
+    body: "We never sell data, we keep only what we need, and you can export or delete everything at any time.",
+  },
+  {
+    icon: Eye,
+    title: "Built in the open",
+    body: "Our code is on GitHub and our changelog lists every improvement, so you always know what changed.",
+  },
+];

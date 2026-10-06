@@ -48,6 +48,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
+        refreshable
         icon={BarChart3}
         title="Reports"
         description={`${REPORT_RANGES[range].label} · amounts in ${stats.currency}`}
@@ -55,7 +56,7 @@ export default async function ReportsPage({ searchParams }: ReportsPageProps) {
       <ReportRangeTabs current={range} />
       <ReportKpis items={buildReportKpis(stats, countBillable(invoices, stats.currency))} />
       <section className="panel p-5 sm:p-6" aria-labelledby="trendTitle">
-        <h2 id="trendTitle" className="mb-1 text-base font-black text-navy">
+        <h2 id="trendTitle" className="mb-1 text-base font-bold text-navy">
           12-month trend
         </h2>
         <p className="mb-5 text-xs text-navy-500">Invoiced vs. paid by month of issue.</p>

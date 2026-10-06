@@ -33,7 +33,7 @@ export default function PricingPage() {
         </p>
       </section>
       <section className="mx-auto max-w-3xl px-4 pb-20 sm:px-6" aria-labelledby="faqTitle">
-        <h2 id="faqTitle" className="mb-6 text-center text-2xl font-black text-navy">
+        <h2 id="faqTitle" className="mb-6 text-center text-2xl font-bold text-navy">
           Frequently asked questions
         </h2>
         <FaqList items={PRICING_FAQS} />

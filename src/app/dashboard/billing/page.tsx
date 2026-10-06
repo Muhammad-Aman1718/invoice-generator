@@ -6,6 +6,7 @@ import CheckoutBanner from "@/src/components/billing/CheckoutBanner";
 import CurrentPlanCard from "@/src/components/billing/CurrentPlanCard";
 import UsageCard from "@/src/components/billing/UsageCard";
 import ManualUpgradeNotice from "@/src/components/billing/ManualUpgradeNotice";
+import SupportCard from "@/src/components/billing/SupportCard";
 import { countInvoicesThisMonth, getViewer, listClients } from "@/src/lib/server/data";
 import { isStripeConfigured } from "@/src/lib/server/stripe";
 import type { BillingPageProps } from "@/src/types/types";
@@ -21,6 +22,7 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
+        refreshable
         icon={CreditCard}
         title="Billing & Plan"
         description="Your subscription, usage and upgrades."
@@ -34,8 +36,9 @@ export default async function BillingPage({ searchParams }: BillingPageProps) {
         <CurrentPlanCard plan={plan} subscription={subscription} />
         <UsageCard plan={plan} invoicesUsed={invoicesUsed} clientsUsed={clients.length} />
       </div>
+      <SupportCard plan={plan} />
       <section aria-labelledby="plansTitle" className="pt-4">
-        <h2 id="plansTitle" className="mb-2 text-center text-xl font-black text-navy">
+        <h2 id="plansTitle" className="mb-2 text-center text-xl font-bold text-navy">
           {plan.id === "free" ? "Upgrade your plan" : "All plans"}
         </h2>
         <p className="mb-6 text-center text-sm text-navy-500">

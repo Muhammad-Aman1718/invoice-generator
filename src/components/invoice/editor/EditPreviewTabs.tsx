@@ -13,7 +13,7 @@ export default function EditPreviewTabs({ tab, onChange, className }: EditPrevie
           aria-selected={tab === value}
           onClick={() => onChange(value)}
           className={cn(
-            "flex flex-1 items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-black capitalize transition",
+            "flex flex-1 items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-bold capitalize transition",
             tab === value ? "bg-navy text-white" : "text-navy-500",
           )}
         >

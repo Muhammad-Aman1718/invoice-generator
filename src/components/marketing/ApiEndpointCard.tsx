@@ -6,7 +6,7 @@ export default function ApiEndpointCard({ endpoint }: ApiEndpointCardProps) {
     <li className="panel p-5">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <span
-          className={`rounded-md px-2 py-0.5 font-mono text-[11px] font-black ${METHOD_BADGE_STYLES[endpoint.method]}`}
+          className={`rounded-md px-2 py-0.5 font-mono text-[11px] font-bold ${METHOD_BADGE_STYLES[endpoint.method]}`}
         >
           {endpoint.method}
         </span>

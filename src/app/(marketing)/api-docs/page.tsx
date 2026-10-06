@@ -18,7 +18,7 @@ export default function ApiDocsPage() {
       />
       <div className="mx-auto max-w-4xl space-y-10 px-4 pb-20 sm:px-6">
         <section className="panel p-6 text-sm leading-relaxed text-navy-500">
-          <h2 className="mb-2 text-lg font-black text-navy">Conventions</h2>
+          <h2 className="mb-2 text-lg font-bold text-navy">Conventions</h2>
           <ul className="list-disc space-y-1.5 pl-5 marker:text-gold-dark">
             <li>
               All bodies are JSON. Dates use <code>YYYY-MM-DD</code>; percentages are 0–100.
@@ -32,7 +32,7 @@ export default function ApiDocsPage() {
         </section>
         {API_ENDPOINT_GROUPS.map((group, index) => (
           <section key={group.title} aria-labelledby={`apiGroup${index}`}>
-            <h2 id={`apiGroup${index}`} className="mb-4 text-xl font-black text-navy">
+            <h2 id={`apiGroup${index}`} className="mb-4 text-xl font-bold text-navy">
               {group.title}
             </h2>
             <ul className="space-y-3">

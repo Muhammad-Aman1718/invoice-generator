@@ -20,7 +20,7 @@ export default function HelpCenterPage() {
       <div className="mx-auto max-w-3xl space-y-10 px-4 pb-20 sm:px-6">
         {HELP_CENTER_GROUPS.map((group, index) => (
           <section key={group.title} aria-labelledby={`helpGroup${index}`}>
-            <h2 id={`helpGroup${index}`} className="mb-4 text-xl font-black text-navy">
+            <h2 id={`helpGroup${index}`} className="mb-4 text-xl font-bold text-navy">
               {group.title}
             </h2>
             <FaqList items={group.items} />

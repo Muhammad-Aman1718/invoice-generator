@@ -10,12 +10,12 @@ export default function RecentInvoices({ invoices }: RecentInvoicesProps) {
   return (
     <section className="panel overflow-hidden" aria-labelledby="recentTitle">
       <div className="flex items-center justify-between border-b border-navy/5 px-5 py-4 sm:px-6">
-        <h2 id="recentTitle" className="text-base font-black text-navy">
+        <h2 id="recentTitle" className="text-base font-bold text-navy">
           Recent invoices
         </h2>
         <Link
           href={ROUTES.invoices}
-          className="flex items-center gap-1 text-xs font-black text-navy hover:underline"
+          className="flex items-center gap-1 text-xs font-bold text-navy hover:underline"
         >
           View all <ArrowRight size={13} />
         </Link>
@@ -36,7 +36,7 @@ export default function RecentInvoices({ invoices }: RecentInvoicesProps) {
                 href={`${ROUTES.invoices}/${invoice.id}`}
                 className="flex items-center gap-3 px-5 py-3.5 transition hover:bg-gold/[0.04] sm:px-6"
               >
-                <span className="w-14 flex-shrink-0 text-sm font-black text-navy">
+                <span className="w-14 flex-shrink-0 text-sm font-bold text-navy">
                   #{invoice.invoiceNumber}
                 </span>
                 <span className="min-w-0 flex-1">
@@ -49,7 +49,7 @@ export default function RecentInvoices({ invoices }: RecentInvoicesProps) {
                   status={getDisplayStatus(invoice.status, invoice.dueDate)}
                   className="hidden xs:inline-flex"
                 />
-                <span className="w-28 text-right text-sm font-black tabular-nums text-navy">
+                <span className="w-28 text-right text-sm font-bold tabular-nums text-navy">
                   {formatCurrency(invoice.totalAmount, invoice.currency)}
                 </span>
               </Link>

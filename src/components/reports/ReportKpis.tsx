@@ -6,7 +6,7 @@ export default function ReportKpis({ items }: ReportKpisProps) {
       {items.map((kpi) => (
         <div key={kpi.label} className="panel p-5">
           <p className="eyebrow mb-2">{kpi.label}</p>
-          <p className="truncate text-xl font-black tabular-nums text-navy sm:text-2xl">{kpi.value}</p>
+          <p className="truncate text-xl font-bold tabular-nums text-navy sm:text-2xl">{kpi.value}</p>
         </div>
       ))}
     </div>

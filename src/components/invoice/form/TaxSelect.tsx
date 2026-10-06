@@ -23,7 +23,7 @@ export default function TaxSelect({ taxLabel, onSelect }: TaxSelectProps) {
       >
         <span>{taxLabel}</span>
         {taxLabel !== NO_TAX_LABEL && (
-          <span className="rounded-lg bg-gold/15 px-1.5 py-0.5 font-mono text-xs font-bold text-navy">
+          <span className="rounded-lg bg-gold/15 px-1.5 py-0.5 tabular-nums text-xs font-bold text-navy">
             {taxRate}%
           </span>
         )}

@@ -13,7 +13,7 @@ export default function InvoiceCardList({ invoices, actions }: InvoiceCardListPr
         <li key={invoice.id} className="panel p-4">
           <div className="mb-3 flex items-start justify-between gap-2">
             <Link href={`${ROUTES.invoices}/${invoice.id}`} className="min-w-0">
-              <p className="font-black text-navy">#{invoice.invoiceNumber}</p>
+              <p className="font-bold text-navy">#{invoice.invoiceNumber}</p>
               <p className="truncate text-xs font-medium text-navy-500">
                 {invoice.clientName || "Unnamed client"}
               </p>
@@ -32,7 +32,7 @@ export default function InvoiceCardList({ invoices, actions }: InvoiceCardListPr
             >
               Due {formatShortDate(invoice.dueDate)}
             </span>
-            <span className="rounded-xl bg-gold/[0.12] px-2.5 py-1 text-sm font-black tabular-nums text-navy">
+            <span className="rounded-xl bg-gold/[0.12] px-2.5 py-1 text-sm font-bold tabular-nums text-navy">
               {formatCurrency(invoice.totalAmount, invoice.currency)}
             </span>
           </div>

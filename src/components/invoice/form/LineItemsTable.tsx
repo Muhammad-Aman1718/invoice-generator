@@ -18,7 +18,7 @@ export default function LineItemsTable({ currencySymbol }: LineItemsTableProps) 
       <div className="flex items-center justify-between bg-navy px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2">
           <div className="h-4 w-1 rounded-full bg-gold" />
-          <h2 id="itemsHeading" className="text-[10px] font-black uppercase tracking-widest text-navy-200">
+          <h2 id="itemsHeading" className="text-[10px] font-bold uppercase tracking-widest text-navy-200">
             Line Items
           </h2>
         </div>
@@ -37,7 +37,7 @@ export default function LineItemsTable({ currencySymbol }: LineItemsTableProps) 
                 <th
                   key={column.label}
                   scope="col"
-                  className={`py-3 text-[10px] font-black uppercase tracking-widest text-navy-500 ${column.className}`}
+                  className={`py-3 text-[10px] font-bold uppercase tracking-widest text-navy-500 ${column.className}`}
                 >
                   {column.label}
                 </th>
@@ -64,7 +64,7 @@ export default function LineItemsTable({ currencySymbol }: LineItemsTableProps) 
                 <button
                   type="button"
                   onClick={addLineItem}
-                  className="flex items-center gap-1.5 rounded-xl bg-gold/15 px-4 py-2.5 text-xs font-black text-navy shadow-sm transition hover:bg-gold/25"
+                  className="flex items-center gap-1.5 rounded-xl bg-gold/15 px-4 py-2.5 text-xs font-bold text-navy shadow-sm transition hover:bg-gold/25"
                 >
                   <Plus size={14} strokeWidth={3} className="text-gold-dark" />
                   Add New Item

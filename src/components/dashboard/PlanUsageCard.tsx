@@ -12,11 +12,11 @@ export default function PlanUsageCard({ viewer }: PlanUsageCardProps) {
   return (
     <div className="rounded-xl bg-white/[0.06] p-3">
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-xs font-black text-white">{viewer.planName} plan</span>
+        <span className="text-xs font-bold text-white">{viewer.planName} plan</span>
         {!viewer.isPaid && (
           <Link
             href={ROUTES.billing}
-            className="flex items-center gap-1 text-[11px] font-black text-gold hover:underline"
+            className="flex items-center gap-1 text-[11px] font-bold text-gold hover:underline"
           >
             <Sparkles size={11} /> Upgrade
           </Link>

@@ -11,6 +11,7 @@ export default async function AdminUsersPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
+        refreshable
         icon={UserCog}
         title="Users & plans"
         description="Change plans and roles, or suspend access."

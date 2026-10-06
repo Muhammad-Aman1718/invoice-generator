@@ -8,7 +8,7 @@ export default function LegalPage({ title, intro, sections, current }: LegalPage
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
       <header className="mb-10 max-w-3xl">
         <p className="eyebrow mb-3">Legal</p>
-        <h1 className="mb-3 text-3xl font-black text-navy sm:text-5xl">{title}</h1>
+        <h1 className="mb-3 text-3xl font-bold text-navy sm:text-5xl">{title}</h1>
         <p className="text-sm font-semibold text-navy-500">Last updated: {SITE_CONFIG.legalUpdated}</p>
       </header>
       <div className="grid gap-10 lg:grid-cols-[240px_1fr]">

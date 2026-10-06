@@ -66,6 +66,12 @@ export const LINE_ITEM_COLUMNS = [
 ];
 
 /** Column headers of the read-only invoice preview. */
+/** Statuses for which a payment reminder makes sense. */
+export const REMINDER_STATUSES: InvoiceStatus[] = ["pending", "overdue"];
+
+/** A4 width at 96 dpi; the HTML preview is laid out at this width and scaled to fit. */
+export const INVOICE_SHEET_WIDTH = 794;
+
 export const PREVIEW_COLUMNS = [
   { label: "Description", className: "w-[40%] text-left" },
   { label: "Qty", className: "w-[8%] text-center" },

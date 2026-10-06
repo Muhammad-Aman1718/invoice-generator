@@ -18,7 +18,7 @@ export default function ForgotPasswordForm() {
       <FormContainer>
         <div className="space-y-4 text-center">
           <CheckCircle2 size={40} className="mx-auto text-gold-dark" />
-          <h1 className="text-xl font-black text-navy">Check your inbox</h1>
+          <h1 className="text-xl font-bold text-navy">Check your inbox</h1>
           <p className="text-sm leading-relaxed text-navy-500">
             Reset instructions were sent to <strong className="text-navy">{email}</strong>. Check your spam
             folder if you don&apos;t see it.

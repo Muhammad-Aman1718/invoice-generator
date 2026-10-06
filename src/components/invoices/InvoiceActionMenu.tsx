@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Copy, Download, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { QUICK_STATUS_ACTIONS, STATUS_META } from "@/src/constant/invoice";
+import { BellRing, Copy, Download, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { QUICK_STATUS_ACTIONS, REMINDER_STATUSES, STATUS_META } from "@/src/constant/invoice";
 import { ROUTES } from "@/src/constant/routes";
 import { MENU_ITEM_CLASS, MENU_LABEL_CLASS } from "@/src/constant/theme";
 import type { InvoiceActionMenuProps } from "@/src/types/types";
@@ -39,6 +39,14 @@ export default function InvoiceActionMenu({ invoice, actions }: InvoiceActionMen
           <DropdownMenu.Item className={MENU_ITEM_CLASS} onSelect={() => actions.onDuplicate(invoice)}>
             <Copy size={13} /> Duplicate
           </DropdownMenu.Item>
+          {REMINDER_STATUSES.includes(invoice.shownStatus) && (
+            <DropdownMenu.Item className={MENU_ITEM_CLASS} onSelect={() => actions.onCopyReminder(invoice)}>
+              <BellRing size={13} /> Copy payment reminder
+              <span className="ml-auto rounded-full bg-gold/15 px-1.5 py-px text-[10px] font-semibold text-navy">
+                {actions.canCopyReminder ? "Beta" : "Business"}
+              </span>
+            </DropdownMenu.Item>
+          )}
           <DropdownMenu.Separator className="my-1 h-px bg-navy/5" />
           <DropdownMenu.Label className={MENU_LABEL_CLASS}>Set status</DropdownMenu.Label>
           {QUICK_STATUS_ACTIONS.map(({ status, icon: Icon, tone }) => (

@@ -49,14 +49,14 @@ export default function CurrencySelect() {
               }}
               className={cn(
                 "flex w-full items-center justify-between border-b border-black/5 px-4 py-2.5 text-left text-xs text-navy transition last:border-none hover:bg-gray-100",
-                currency.code === currencyCode && "bg-gold/10 font-black",
+                currency.code === currencyCode && "bg-gold/10 font-bold",
               )}
             >
               <span className="min-w-0">
                 <span className="block truncate">{currency.label}</span>
-                <span className="block text-[9px] uppercase text-[#555]">{currency.code}</span>
+                <span className="block text-[10px] uppercase text-[#555]">{currency.code}</span>
               </span>
-              <span className="ml-2 rounded-md bg-navy/5 px-1.5 py-0.5 font-mono text-[10px]">
+              <span className="ml-2 rounded-md bg-navy/5 px-1.5 py-0.5 tabular-nums text-[10px]">
                 {currency.symbol}
               </span>
             </button>

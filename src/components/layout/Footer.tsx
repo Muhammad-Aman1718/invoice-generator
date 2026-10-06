@@ -19,7 +19,7 @@ export default function Footer() {
           </div>
           {FOOTER_NAV.map((column) => (
             <div key={column.title}>
-              <h3 className="mb-5 text-[11px] font-black uppercase tracking-[0.15em] text-gold">
+              <h3 className="mb-5 text-[11px] font-bold uppercase tracking-[0.15em] text-gold">
                 {column.title}
               </h3>
               <ul className="space-y-3">

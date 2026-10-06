@@ -26,7 +26,7 @@ export default function LandingPreviewModal({
       <div className="absolute inset-0 bg-navy/70 backdrop-blur-md" onClick={onClose} aria-hidden="true" />
       <div className="relative flex h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-mist shadow-2xl">
         <div className="flex flex-shrink-0 items-center justify-between bg-navy px-4 py-3 sm:px-6">
-          <h3 className="flex items-center gap-3 text-sm font-black text-white">
+          <h3 className="flex items-center gap-3 text-sm font-bold text-white">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/20">
               <Eye size={16} className="text-gold" />
             </span>
@@ -41,14 +41,14 @@ export default function LandingPreviewModal({
           </button>
         </div>
         <div className="flex-1 overflow-y-auto p-3 sm:p-8">
-          <div className="mx-auto max-w-[794px] overflow-hidden rounded-sm border border-black/5 shadow-xl">
+          <div className="mx-auto max-w-[794px] overflow-hidden rounded-2xl bg-white shadow-lift">
             <InvoicePreview id="invoicePreviewModal" />
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 border-t border-black/5 bg-white p-4 min-[480px]:flex-row">
           <div className="flex w-full items-center gap-3 rounded-2xl border border-black/5 bg-mist px-4 py-2 min-[480px]:w-auto">
-            <span className="text-[10px] font-black uppercase text-navy/40">Total</span>
-            <span className="text-base font-black text-navy">{formatCurrency(totalAmount, currency)}</span>
+            <span className="text-[10px] font-bold uppercase text-navy/40">Total</span>
+            <span className="text-base font-bold text-navy">{formatCurrency(totalAmount, currency)}</span>
           </div>
           <div className="flex w-full items-center gap-2 min-[480px]:w-auto">
             <button onClick={onClose} className="btn-outline flex-1 min-[480px]:flex-none">

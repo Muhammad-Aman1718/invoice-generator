@@ -4,7 +4,13 @@ import CsvExportButton from "./CsvExportButton";
 import SearchInput from "@/src/components/ui/SearchInput";
 import type { InvoiceToolbarProps } from "@/src/types/types";
 
-export default function InvoiceToolbar({ listQuery, counts, canExportCsv, onChange }: InvoiceToolbarProps) {
+export default function InvoiceToolbar({
+  listQuery,
+  counts,
+  canExportCsv,
+  hideCsvExport,
+  onChange,
+}: InvoiceToolbarProps) {
   return (
     <div className="flex flex-col gap-3 2xl:flex-row 2xl:items-center 2xl:justify-between">
       <StatusFilterTabs
@@ -23,7 +29,7 @@ export default function InvoiceToolbar({ listQuery, counts, canExportCsv, onChan
           />
         </div>
         <SortSelect value={listQuery.sort} onChange={(sort) => onChange({ sort })} />
-        <CsvExportButton enabled={canExportCsv} />
+        {!hideCsvExport && <CsvExportButton enabled={canExportCsv} />}
       </div>
     </div>
   );

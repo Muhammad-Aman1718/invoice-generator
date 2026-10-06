@@ -17,7 +17,7 @@ export default function PercentInput({ id, label, value, onChange }: PercentInpu
           min={0}
           max={MAX_PERCENT}
           step={0.01}
-          className="w-14 bg-transparent text-right font-mono text-sm font-bold text-navy outline-none"
+          className="w-14 bg-transparent text-right tabular-nums text-sm font-bold text-navy outline-none"
           value={value || ""}
           placeholder="0"
           onChange={(event) => onChange(clampPercent(parseFloat(event.target.value)))}

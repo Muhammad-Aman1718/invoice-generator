@@ -14,9 +14,20 @@ import { INVOICE_PAGE_SIZE } from "@/src/constant/app";
 import { ROUTES } from "@/src/constant/routes";
 import type { InvoiceListProps } from "@/src/types/types";
 
-export default function InvoiceList({ invoices, canExportCsv, pdfBranding }: InvoiceListProps) {
+export default function InvoiceList({
+  invoices,
+  canExportCsv,
+  hideCsvExport,
+  pdfBranding,
+  earlyAccess,
+  senderName,
+}: InvoiceListProps) {
   const list = useInvoiceList(invoices);
-  const { actions, pendingDelete, isDeleting, confirmDelete, cancelDelete } = useInvoiceActions(pdfBranding);
+  const { actions, pendingDelete, isDeleting, confirmDelete, cancelDelete } = useInvoiceActions({
+    pdfBranding,
+    earlyAccess,
+    senderName,
+  });
 
   if (invoices.length === 0) {
     return (
@@ -39,6 +50,7 @@ export default function InvoiceList({ invoices, canExportCsv, pdfBranding }: Inv
         listQuery={list.listQuery}
         counts={list.counts}
         canExportCsv={canExportCsv}
+        hideCsvExport={hideCsvExport}
         onChange={list.updateQuery}
       />
       {list.filtered.length === 0 ? (

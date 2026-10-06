@@ -6,29 +6,28 @@ import type { PdfTotalsProps } from "@/src/types/types";
 export default function PdfTotals({ invoice, formatMoney }: PdfTotalsProps) {
   const { discountAmount, taxAmount } = getTotalsBreakdown(invoice);
   return (
-    <View style={s.totalsWrap} wrap={false}>
-      <View style={s.totalsInner}>
-        <View style={s.totalsRow}>
-          <Text style={s.totalsLabel}>Subtotal</Text>
-          <Text style={s.totalsValue}>{formatMoney(invoice.subtotal)}</Text>
-        </View>
-        {invoice.overallDiscount > 0 && (
-          <View style={s.totalsRow}>
-            <Text style={s.discLabel}>Discount ({invoice.overallDiscount}%)</Text>
-            <Text style={s.discValue}>− {formatMoney(discountAmount)}</Text>
-          </View>
-        )}
-        {invoice.taxRate > 0 && (
-          <View style={s.totalsRow}>
-            <Text style={s.totalsLabel}>Tax ({invoice.taxRate}%)</Text>
-            <Text style={s.totalsValue}>{formatMoney(taxAmount)}</Text>
-          </View>
-        )}
-        <View style={s.grandRow}>
-          <Text style={s.grandLabel}>TOTAL DUE</Text>
-          <Text style={s.grandValue}>{formatMoney(invoice.totalAmount)}</Text>
-        </View>
+    <View style={s.totalsCol}>
+      <View style={s.totalsRow}>
+        <Text style={s.totalsLabel}>Subtotal</Text>
+        <Text style={s.totalsValue}>{formatMoney(invoice.subtotal)}</Text>
       </View>
+      {invoice.overallDiscount > 0 && (
+        <View style={s.totalsRow}>
+          <Text style={s.discText}>Discount ({invoice.overallDiscount}%)</Text>
+          <Text style={s.discText}>− {formatMoney(discountAmount)}</Text>
+        </View>
+      )}
+      {invoice.taxRate > 0 && (
+        <View style={s.totalsRow}>
+          <Text style={s.totalsLabel}>Tax ({invoice.taxRate}%)</Text>
+          <Text style={s.totalsValue}>{formatMoney(taxAmount)}</Text>
+        </View>
+      )}
+      <View style={s.grandRow}>
+        <Text style={s.grandLabel}>Total due</Text>
+        <Text style={s.grandValue}>{formatMoney(invoice.totalAmount)}</Text>
+      </View>
+      <Text style={s.currNote}>All amounts in {invoice.currency}</Text>
     </View>
   );
 }

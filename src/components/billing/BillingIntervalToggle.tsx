@@ -18,7 +18,7 @@ export default function BillingIntervalToggle({ value, onChange }: BillingInterv
             aria-checked={active}
             onClick={() => onChange(interval.value)}
             className={cn(
-              "rounded-xl px-4 py-2 text-sm font-black transition",
+              "rounded-xl px-4 py-2 text-sm font-bold transition",
               active ? "bg-navy text-white" : "text-navy-500 hover:text-navy",
             )}
           >

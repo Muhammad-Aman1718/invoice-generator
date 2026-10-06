@@ -6,7 +6,7 @@ export default function StatusBreakdown({ counts, total }: StatusBreakdownProps)
   const safeTotal = total || 1;
   return (
     <section className="panel p-5 sm:p-6" aria-labelledby="statusTitle">
-      <h2 id="statusTitle" className="mb-4 text-base font-black text-navy">
+      <h2 id="statusTitle" className="mb-4 text-base font-bold text-navy">
         Invoices by status
       </h2>
       <ul className="space-y-3">

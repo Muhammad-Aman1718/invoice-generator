@@ -32,7 +32,7 @@ export default function InvoiceLanding() {
       </div>
       {mobileTab === "preview" && (
         <div className="pb-6 sm:hidden">
-          <div className="custom-scrollbar relative overflow-x-auto rounded-xl border border-black/5 bg-white shadow-sm">
+          <div className="relative overflow-hidden rounded-2xl bg-white shadow-card">
             <InvoicePreview id="invoicePreviewMobile" />
           </div>
           <button onClick={download} className="btn-primary mt-3 w-full">

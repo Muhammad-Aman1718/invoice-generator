@@ -7,13 +7,17 @@ import type { ClientCardProps } from "@/src/types/types";
 
 export default function ClientCard({ client, onEdit, onDelete }: ClientCardProps) {
   return (
-    <li className="panel flex flex-col p-5">
+    <li className="panel flex flex-col p-5 transition-shadow hover:shadow-lift">
       <div className="mb-3 flex items-start gap-3">
-        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-navy text-sm font-black uppercase text-gold">
+        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-navy text-sm font-bold uppercase text-gold">
           {client.name.slice(0, INITIALS_LENGTH)}
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-black text-navy">{client.name}</h3>
+          <h3 className="truncate font-bold text-navy">
+            <Link href={`${ROUTES.clients}/${client.id}`} className="hover:underline hover:decoration-gold">
+              {client.name}
+            </Link>
+          </h3>
           <p className="text-xs text-navy-500">
             {client.invoiceCount} invoice{client.invoiceCount === 1 ? "" : "s"}
             {client.invoiceCount > 0 && ` · ${formatCurrency(client.total, client.currency)}`}

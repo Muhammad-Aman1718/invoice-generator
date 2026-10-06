@@ -18,7 +18,7 @@ export default function CurrentPlanCard({ plan, subscription }: CurrentPlanCardP
       <p className="eyebrow mb-2">Current plan</p>
       <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-black text-navy">{plan.name}</h2>
+          <h2 className="text-3xl font-bold text-navy">{plan.name}</h2>
           <p className="text-sm text-navy-500">{priceText}</p>
         </div>
         {subscription.hasBillingPortal && <ManageBillingButton />}

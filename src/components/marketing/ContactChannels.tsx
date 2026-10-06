@@ -9,7 +9,7 @@ export default function ContactChannels() {
             <Icon size={18} className="text-gold" />
           </span>
           <div>
-            <p className="font-black text-navy">{title}</p>
+            <p className="font-bold text-navy">{title}</p>
             {href ? (
               <a
                 href={href}
