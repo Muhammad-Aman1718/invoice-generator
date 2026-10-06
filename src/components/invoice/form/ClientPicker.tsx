@@ -27,7 +27,7 @@ export default function ClientPicker({ clients }: ClientPickerProps) {
         value={clientId ?? ""}
         onChange={(event) => selectClient(event.target.value)}
       >
-        <option value="">— Choose a saved client —</option>
+        <option value="">Saved clients…</option>
         {clients.map((client) => (
           <option key={client.id} value={client.id}>
             {client.name}

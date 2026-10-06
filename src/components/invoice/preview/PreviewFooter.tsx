@@ -1,20 +1,13 @@
 import type { PreviewFooterProps } from "@/src/types/types";
 
 export default function PreviewFooter({ invoice }: PreviewFooterProps) {
-  const details = [
-    invoice.businessName,
-    invoice.currency,
-    invoice.overallDiscount > 0 && `${invoice.overallDiscount}% Discount`,
-  ]
-    .filter(Boolean)
-    .join(" · ");
   return (
-    <div className="flex items-center justify-between border-t border-navy/10 px-9 py-2 font-mono text-[8px] text-navy/30">
-      <p>{details}</p>
+    <footer className="mt-8 flex items-center justify-between gap-4 border-t border-navy/[0.08] px-10 py-4 text-[10px] text-navy/45">
+      <p className="font-semibold text-navy/60">Thank you for your business!</p>
       <p className="flex items-center gap-1.5">
-        <span className="inline-block h-[5px] w-[5px] rounded-full bg-gold" />
-        Invoice #{invoice.invoiceNumber}
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-gold" aria-hidden="true" />
+        Invoice #{invoice.invoiceNumber} · {invoice.currency}
       </p>
-    </div>
+    </footer>
   );
 }

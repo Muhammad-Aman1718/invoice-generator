@@ -1,7 +1,8 @@
-import { Document, Page } from "@react-pdf/renderer";
+import { Document, Page, View } from "@react-pdf/renderer";
 import { pdfStyles as s } from "@/src/lib/pdfStyles";
 import { createPdfMoneyFormatter } from "@/src/lib/pdfFormat";
 import PdfHeader from "./PdfHeader";
+import PdfMeta from "./PdfMeta";
 import PdfParties from "./PdfParties";
 import PdfLineItems from "./PdfLineItems";
 import PdfTotals from "./PdfTotals";
@@ -14,11 +15,18 @@ export default function InvoicePdfDocument({ invoice, branding }: InvoicePdfDocu
   return (
     <Document>
       <Page size="A4" style={s.page}>
+        <View style={s.accentBar} fixed>
+          <View style={s.accentNavy} />
+          <View style={s.accentGold} />
+        </View>
         <PdfHeader invoice={invoice} />
+        <PdfMeta invoice={invoice} formatMoney={formatMoney} />
         <PdfParties invoice={invoice} />
         <PdfLineItems invoice={invoice} formatMoney={formatMoney} />
-        <PdfTotals invoice={invoice} formatMoney={formatMoney} />
-        <PdfNotes invoice={invoice} />
+        <View style={s.bottomRow} wrap={false}>
+          <PdfNotes invoice={invoice} />
+          <PdfTotals invoice={invoice} formatMoney={formatMoney} />
+        </View>
         <PdfFooter invoice={invoice} branding={branding} />
       </Page>
     </Document>
