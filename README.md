@@ -95,7 +95,7 @@ src/
 ├── types/types.ts        All shared types and component props
 ├── utils/                Small UI utilities (toasts)
 └── supabase/migrations/  SQL schema (001InvoiceSchema.sql, 002CompleteSchema.sql)
-proxy.ts                  Session refresh + route protection (/dashboard, admin)
+src/proxy.ts              Session refresh + route protection (/dashboard, admin)
 ```
 
 ## Code conventions
