@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import Link from "next/link";
 import LegalPage from "@/src/components/marketing/LegalPage";
 import type { LegalSection } from "@/src/types/types";
 import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "GDPR Compliance",
-  description: `How ${SITE_CONFIG.name} supports GDPR and UK GDPR obligations for you and your customers.`,
-  alternates: { canonical: "/gdpr-compliance" },
-};
+export const metadata: Metadata = buildPageMetadata("gdprCompliance");
 
 const sections: LegalSection[] = [
   {
@@ -109,15 +107,18 @@ const sections: LegalSection[] = [
 
 export default function GdprPage() {
   return (
-    <LegalPage
-      title="GDPR Compliance"
-      current="/gdpr-compliance"
-      intro={
-        <p>
-          {SITE_CONFIG.name} is designed so that you can meet your GDPR obligations to your own customers.
-        </p>
-      }
-      sections={sections}
-    />
+    <>
+      <PageJsonLd page="gdprCompliance" />
+      <LegalPage
+        title="GDPR Compliance"
+        current="/gdpr-compliance"
+        intro={
+          <p>
+            {SITE_CONFIG.name} is designed so that you can meet your GDPR obligations to your own customers.
+          </p>
+        }
+        sections={sections}
+      />
+    </>
   );
 }

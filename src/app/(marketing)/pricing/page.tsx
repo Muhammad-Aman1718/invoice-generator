@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import Link from "next/link";
 import PageHero from "@/src/components/marketing/PageHero";
 import FaqList from "@/src/components/marketing/FaqList";
 import PlanGrid from "@/src/components/billing/PlanGrid";
 import { PRICING_FAQS } from "@/src/constant/faq";
-import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Pricing",
-  description: `Simple pricing for ${SITE_CONFIG.name}. Start free, upgrade to Pro or Business when you need unlimited invoices.`,
-  alternates: { canonical: "/pricing" },
-};
+export const metadata: Metadata = buildPageMetadata("pricing");
 
 export default function PricingPage() {
   return (
     <>
+      <PageJsonLd page="pricing" faqs={PRICING_FAQS} />
       <PageHero
         eyebrow="Pricing"
         title="Simple, honest pricing"

@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import PageHero from "@/src/components/marketing/PageHero";
 import ApiEndpointCard from "@/src/components/marketing/ApiEndpointCard";
 import { API_ENDPOINT_GROUPS } from "@/src/constant/apiDocs";
-import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "API Reference",
-  description: `REST API reference for ${SITE_CONFIG.name}: invoices, clients, profile, billing and account endpoints.`,
-  alternates: { canonical: "/api-docs" },
-};
+export const metadata: Metadata = buildPageMetadata("apiDocs");
 
 export default function ApiDocsPage() {
   return (
     <>
+      <PageJsonLd page="apiDocs" />
       <PageHero
         eyebrow="Developers"
         title="API reference"

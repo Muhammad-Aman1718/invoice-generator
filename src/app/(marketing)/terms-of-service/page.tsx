@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import Link from "next/link";
 import LegalPage from "@/src/components/marketing/LegalPage";
 import type { LegalSection } from "@/src/types/types";
 import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Terms of Service",
-  description: `The terms that govern your use of ${SITE_CONFIG.name}, including subscriptions and acceptable use.`,
-  alternates: { canonical: "/terms-of-service" },
-};
+export const metadata: Metadata = buildPageMetadata("termsOfService");
 
 const sections: LegalSection[] = [
   {
@@ -175,16 +173,19 @@ const sections: LegalSection[] = [
 
 export default function TermsPage() {
   return (
-    <LegalPage
-      title="Terms of Service"
-      current="/terms-of-service"
-      intro={
-        <p>
-          Please read these Terms carefully. They explain your rights and obligations when using{" "}
-          {SITE_CONFIG.name}.
-        </p>
-      }
-      sections={sections}
-    />
+    <>
+      <PageJsonLd page="termsOfService" />
+      <LegalPage
+        title="Terms of Service"
+        current="/terms-of-service"
+        intro={
+          <p>
+            Please read these Terms carefully. They explain your rights and obligations when using{" "}
+            {SITE_CONFIG.name}.
+          </p>
+        }
+        sections={sections}
+      />
+    </>
   );
 }

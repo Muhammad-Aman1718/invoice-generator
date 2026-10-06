@@ -128,6 +128,31 @@ npm run format:check  # verify formatting (used in CI)
 GitHub Actions (`.github/workflows/ci.yml`) runs format check, lint, typecheck, tests and build on
 every pull request and on pushes to `main`.
 
+## Updating SEO
+
+All search settings live in [`src/constant/seo.ts`](src/constant/seo.ts):
+
+- **`PAGE_SEO`** — title, description, keywords and sitemap priority for every public page.
+  Keep titles under ~50 characters and descriptions between 120 and 160 (a unit test enforces it).
+- **`SEO_KEYWORDS`**, **`SEO_DEFAULT_TITLE`**, **`SEO_TAGLINE`** — site-wide keywords and the text on
+  the link-preview image.
+- **`SEO_SAME_AS`** — add your real social profile URLs.
+- **`SEO_LAST_UPDATED`** — bump it when page content changes (used as `lastmod` in the sitemap).
+
+What the site generates from it:
+
+| URL                                    | Purpose                                                                     |
+| -------------------------------------- | --------------------------------------------------------------------------- |
+| `/sitemap.xml`, `/robots.txt`          | Crawling (dashboard, auth and API are excluded)                             |
+| `/opengraph-image`, `/twitter-image`   | 1200×630 preview for WhatsApp, Facebook, X, LinkedIn, Slack                 |
+| `/apple-icon`, `/manifest.webmanifest` | Home-screen icon and installable web-app manifest                           |
+| JSON-LD in every page                  | Organization, WebSite, WebApplication, breadcrumbs, and FAQ on Pricing/Help |
+
+After deploying: add the site to [Google Search Console](https://search.google.com/search-console) and
+[Bing Webmaster Tools](https://www.bing.com/webmasters), set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` /
+`NEXT_PUBLIC_BING_SITE_VERIFICATION`, redeploy, then submit `https://YOUR-DOMAIN/sitemap.xml`.
+Check structured data with the [Rich Results Test](https://search.google.com/test/rich-results).
+
 ## Before going live
 
 - Update company name and support/privacy emails in `src/constant/site.ts`.

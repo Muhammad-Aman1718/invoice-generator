@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import Link from "next/link";
 import PageHero from "@/src/components/marketing/PageHero";
 import FaqList from "@/src/components/marketing/FaqList";
 import { HELP_CENTER_GROUPS } from "@/src/constant/faq";
-import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Help Center",
-  description: `Answers to common questions about creating invoices, plans, billing and your data in ${SITE_CONFIG.name}.`,
-  alternates: { canonical: "/help-center" },
-};
+export const metadata: Metadata = buildPageMetadata("helpCenter");
 
 export default function HelpCenterPage() {
   return (
     <>
+      <PageJsonLd page="helpCenter" faqs={HELP_CENTER_GROUPS.flatMap((group) => group.items)} />
       <PageHero
         eyebrow="Help Center"
         title="How can we help?"

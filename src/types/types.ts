@@ -417,10 +417,43 @@ export interface BlogPost {
   body: string[];
 }
 
-export interface SitemapPage {
+export type SeoPageKey =
+  | "home"
+  | "features"
+  | "pricing"
+  | "templates"
+  | "blog"
+  | "helpCenter"
+  | "changelog"
+  | "apiDocs"
+  | "contact"
+  | "status"
+  | "privacyPolicy"
+  | "termsOfService"
+  | "refundPolicy"
+  | "cookiePolicy"
+  | "gdprCompliance";
+
+export interface PageSeo {
   path: string;
+  title: string;
+  description: string;
+  keywords?: string[];
+  /** Sitemap priority, 0–1. */
   priority: number;
   changeFrequency: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
+}
+
+/** A schema.org JSON-LD object. */
+export type JsonLdData = Record<string, unknown>;
+
+export interface JsonLdProps {
+  data: JsonLdData;
+}
+
+export interface PageJsonLdProps {
+  page: SeoPageKey;
+  faqs?: FaqItem[];
 }
 
 export interface ContactChannel {
