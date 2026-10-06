@@ -4,7 +4,7 @@ export default function SettingsSection({ id, title, description, children }: Se
   return (
     <section id={id} className="panel scroll-mt-20 p-5 sm:p-6" aria-labelledby={`${id}Title`}>
       <div className="mb-5">
-        <h2 id={`${id}Title`} className="text-base font-black text-navy">
+        <h2 id={`${id}Title`} className="text-base font-bold text-navy">
           {title}
         </h2>
         <p className="text-sm text-navy-500">{description}</p>

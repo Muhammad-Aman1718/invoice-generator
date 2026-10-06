@@ -11,6 +11,19 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-sans)", "ui-sans-serif", "sans-serif"],
+      },
+      keyframes: {
+        "fade-up": {
+          from: { opacity: "0", transform: "translateY(8px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "fade-up": "fade-up 0.4s ease-out both",
+      },
       colors: {
         // Brand palette (60 · 30 · 10): mist background, navy, amber accent.
         mist: { DEFAULT: "#ECEFF1", dark: "#DDE3EA" },

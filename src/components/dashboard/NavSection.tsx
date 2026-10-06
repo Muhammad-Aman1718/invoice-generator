@@ -6,7 +6,7 @@ import type { NavSectionProps } from "@/src/types/types";
 export default function NavSection({ title, items, pathname }: NavSectionProps) {
   return (
     <div>
-      <p className="mb-2 px-3 text-[10px] font-black uppercase tracking-widest text-white/40">{title}</p>
+      <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-white/40">{title}</p>
       <ul className="space-y-0.5">
         {items.map((item) => {
           const active = isNavItemActive(pathname, item);

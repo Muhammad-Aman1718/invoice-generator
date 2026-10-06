@@ -54,7 +54,7 @@ export default function Modal({
         <div className="h-1 w-full bg-gold" />
         <div className="flex items-start justify-between gap-4 px-5 pb-2 pt-5 sm:px-6">
           <div>
-            <h2 id="modal-title" className="text-lg font-black text-navy">
+            <h2 id="modal-title" className="text-lg font-bold text-navy">
               {title}
             </h2>
             {description && <p className="mt-1 text-sm text-navy-500">{description}</p>}

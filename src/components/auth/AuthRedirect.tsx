@@ -6,7 +6,7 @@ export default function AuthRedirect({ text, linkText, href }: AuthRedirectProps
     <footer className="border-t border-slate-100 pt-5 text-center text-xs">
       <p className="font-medium text-navy/70">
         {text}{" "}
-        <Link href={href} className="font-black text-navy hover:underline">
+        <Link href={href} className="font-bold text-navy hover:underline">
           {linkText}
         </Link>
       </p>

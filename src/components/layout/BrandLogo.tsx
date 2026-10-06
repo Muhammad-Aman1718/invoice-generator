@@ -15,7 +15,7 @@ export default function BrandLogo({ href = "/", size = "md" }: BrandLogoProps) {
       >
         <FileText size={isSmall ? 13 : 15} className="text-navy" aria-hidden="true" />
       </span>
-      <span className={cn("font-black tracking-tight text-white", isSmall ? "text-base" : "text-lg")}>
+      <span className={cn("font-bold tracking-tight text-white", isSmall ? "text-base" : "text-lg")}>
         Invoice<span className="text-gold">Gen</span>
       </span>
     </Link>

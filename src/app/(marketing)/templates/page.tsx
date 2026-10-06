@@ -21,7 +21,7 @@ export default function TemplatesPage() {
       <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-20 sm:px-6 lg:grid-cols-2 lg:px-8">
         <TemplateMockup />
         <div>
-          <h2 className="mb-4 text-2xl font-black text-navy">Works for every kind of invoice</h2>
+          <h2 className="mb-4 text-2xl font-bold text-navy">Works for every kind of invoice</h2>
           <ul className="mb-8 space-y-4">
             {TEMPLATE_USES.map((use) => (
               <li key={use.title} className="flex gap-3">

@@ -19,14 +19,14 @@ export default function PlanCard({ plan, interval, action }: PlanCardProps) {
       )}
     >
       {plan.highlighted && (
-        <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold px-3 py-1 text-[11px] font-black uppercase tracking-wider text-navy">
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-navy">
           Most popular
         </span>
       )}
-      <h3 className="text-xl font-black text-navy">{plan.name}</h3>
+      <h3 className="text-xl font-bold text-navy">{plan.name}</h3>
       <p className="mb-5 text-sm text-navy-500">{plan.tagline}</p>
       <p className="mb-1 flex items-baseline gap-1">
-        <span className="text-4xl font-black text-navy">${price}</span>
+        <span className="text-4xl font-bold text-navy">${price}</span>
         <span className="text-sm font-semibold text-navy-500">/{interval === "month" ? "mo" : "yr"}</span>
       </p>
       <p className="mb-6 h-4 text-xs text-navy-500">{getPriceNote(price, interval)}</p>

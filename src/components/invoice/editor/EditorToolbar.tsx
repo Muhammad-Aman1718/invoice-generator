@@ -20,7 +20,7 @@ export default function EditorToolbar(props: EditorToolbarProps) {
             <ArrowLeft size={16} />
           </Link>
           <div className="min-w-0">
-            <h1 className="truncate text-sm font-black text-navy sm:text-base">{title}</h1>
+            <h1 className="truncate text-sm font-bold text-navy sm:text-base">{title}</h1>
             <p className="hidden text-[11px] font-medium text-navy-500 xs:block">{subtitle}</p>
           </div>
         </div>

@@ -21,7 +21,7 @@ export default function ChangelogPage() {
           <li key={release.version} className="panel relative overflow-hidden p-6 sm:p-8">
             <div className="absolute bottom-0 left-0 top-0 w-1 bg-gold" />
             <div className="mb-4 flex flex-wrap items-baseline gap-3">
-              <h2 className="text-2xl font-black text-navy">{release.version}</h2>
+              <h2 className="text-2xl font-bold text-navy">{release.version}</h2>
               <span className="text-sm font-semibold text-navy-500">{release.date}</span>
             </div>
             <ul className="space-y-2">

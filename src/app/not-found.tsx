@@ -8,7 +8,7 @@ export default function NotFound() {
         <FileQuestion size={28} className="text-gold" />
       </span>
       <p className="eyebrow mb-2">Error 404</p>
-      <h1 className="mb-2 text-2xl font-black text-navy sm:text-3xl">Page not found</h1>
+      <h1 className="mb-2 text-2xl font-bold text-navy sm:text-3xl">Page not found</h1>
       <p className="mb-6 max-w-sm text-sm text-navy-500">
         The page you&apos;re looking for doesn&apos;t exist or has moved.
       </p>

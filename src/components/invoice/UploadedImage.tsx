@@ -16,7 +16,7 @@ export default function UploadedImage({ src, onReplace, onRemove }: UploadedImag
       <button
         type="button"
         onClick={onReplace}
-        className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-navy/75 py-1 text-[9px] font-black uppercase tracking-widest text-gold opacity-0 backdrop-blur-sm transition group-hover:opacity-100 focus:opacity-100"
+        className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-navy/75 py-1 text-[10px] font-bold uppercase tracking-widest text-gold opacity-0 backdrop-blur-sm transition group-hover:opacity-100 focus:opacity-100"
       >
         <Upload size={8} /> Replace
       </button>

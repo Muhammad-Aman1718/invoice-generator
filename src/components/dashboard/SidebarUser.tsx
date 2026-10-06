@@ -4,7 +4,7 @@ import type { SidebarUserProps } from "@/src/types/types";
 export default function SidebarUser({ viewer, onLogout }: SidebarUserProps) {
   return (
     <div className="flex items-center gap-2.5 px-1">
-      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gold/20 text-xs font-black uppercase text-gold">
+      <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gold/20 text-xs font-bold uppercase text-gold">
         {(viewer.name || viewer.email).slice(0, 1)}
       </span>
       <div className="min-w-0 flex-1">

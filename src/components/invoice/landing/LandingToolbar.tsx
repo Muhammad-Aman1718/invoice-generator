@@ -15,8 +15,8 @@ export default function LandingToolbar({
           <FileText size={14} className="text-gold" />
         </span>
         <div className="min-w-0 max-xs:hidden">
-          <h2 className="truncate text-[13px] font-black leading-tight text-white">Builder</h2>
-          <p className="truncate text-[9px] text-white/70">Fill · Preview · Export</p>
+          <h2 className="truncate text-[13px] font-bold leading-tight text-white">Builder</h2>
+          <p className="truncate text-[10px] text-white/70">Fill · Preview · Export</p>
         </div>
       </div>
       <div className="flex items-center gap-1.5">

@@ -4,7 +4,7 @@ export default function TryBuilderCta() {
   return (
     <section className="mx-auto max-w-4xl px-4 pb-20 text-center sm:px-6">
       <div className="rounded-3xl bg-navy p-8 sm:p-12">
-        <h2 className="mb-3 text-2xl font-black text-white sm:text-3xl">Try it now — no sign-up needed</h2>
+        <h2 className="mb-3 text-2xl font-bold text-white sm:text-3xl">Try it now — no sign-up needed</h2>
         <p className="mb-6 text-navy-200">
           Build an invoice in the browser and download the PDF in under a minute.
         </p>

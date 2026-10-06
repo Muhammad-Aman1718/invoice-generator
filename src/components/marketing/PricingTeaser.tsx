@@ -8,7 +8,7 @@ export default function PricingTeaser() {
   return (
     <section className="bg-navy py-16" aria-labelledby="pricingTitle">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <h2 id="pricingTitle" className="mb-2 text-center text-2xl font-black text-white sm:text-3xl">
+        <h2 id="pricingTitle" className="mb-2 text-center text-2xl font-bold text-white sm:text-3xl">
           Start free, grow when you&apos;re ready
         </h2>
         <p className="mb-10 text-center text-navy-200">No credit card needed. Cancel paid plans anytime.</p>
@@ -24,8 +24,8 @@ export default function PricingTeaser() {
                   light ? "border-2 border-gold bg-white" : "border border-white/10 bg-white/[0.06]",
                 )}
               >
-                <p className={cn("font-black", light ? "text-navy" : "text-white")}>{plan.name}</p>
-                <p className={cn("mb-4 text-3xl font-black", light ? "text-navy" : "text-gold")}>
+                <p className={cn("font-bold", light ? "text-navy" : "text-white")}>{plan.name}</p>
+                <p className={cn("mb-4 text-3xl font-bold", light ? "text-navy" : "text-gold")}>
                   ${plan.price.month}
                   <span className="text-sm font-semibold opacity-70">/mo</span>
                 </p>

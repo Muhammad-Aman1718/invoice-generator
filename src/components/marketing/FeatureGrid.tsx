@@ -8,7 +8,7 @@ export default function FeatureGrid({ items }: FeatureGridProps) {
           <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-navy">
             <Icon size={20} className="text-gold" aria-hidden="true" />
           </span>
-          <h2 className="mb-1.5 text-lg font-black text-navy">{title}</h2>
+          <h2 className="mb-1.5 text-lg font-bold text-navy">{title}</h2>
           <p className="text-sm leading-relaxed text-navy-500">{body}</p>
         </li>
       ))}

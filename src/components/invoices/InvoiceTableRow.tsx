@@ -11,7 +11,7 @@ export default function InvoiceTableRow({ invoice, actions }: InvoiceTableRowPro
   return (
     <tr className="transition hover:bg-gold/[0.04]">
       <td className="px-5 py-3.5">
-        <Link href={`${ROUTES.invoices}/${invoice.id}`} className="font-black text-navy hover:underline">
+        <Link href={`${ROUTES.invoices}/${invoice.id}`} className="font-bold text-navy hover:underline">
           #{invoice.invoiceNumber}
         </Link>
       </td>
@@ -22,7 +22,7 @@ export default function InvoiceTableRow({ invoice, actions }: InvoiceTableRowPro
       <td className={cn("px-4 py-3.5 text-xs", isOverdue ? "font-bold text-red-600" : "text-navy-500")}>
         {formatShortDate(invoice.dueDate)}
       </td>
-      <td className="px-4 py-3.5 text-right font-black tabular-nums text-navy">
+      <td className="px-4 py-3.5 text-right font-bold tabular-nums text-navy">
         {formatCurrency(invoice.totalAmount, invoice.currency)}
       </td>
       <td className="px-4 py-3.5 text-center">

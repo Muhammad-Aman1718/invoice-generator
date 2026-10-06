@@ -11,7 +11,7 @@ export default function LegalNav({ sections, current }: LegalNavProps) {
           {sections.map((section, index) => (
             <li key={section.id}>
               <a href={`#${section.id}`} className="flex gap-2 text-navy-500 transition hover:text-navy">
-                <span className="w-5 flex-shrink-0 text-xs font-black text-gold-dark">{index + 1}.</span>
+                <span className="w-5 flex-shrink-0 text-xs font-bold text-gold-dark">{index + 1}.</span>
                 {section.title}
               </a>
             </li>

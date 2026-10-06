@@ -19,7 +19,7 @@ export default function InvoiceNumberInput() {
         type="text"
         inputMode="numeric"
         placeholder="#"
-        className="w-12 border-none bg-transparent text-sm font-black text-white outline-none placeholder:text-white/40 sm:w-24 sm:text-base"
+        className="w-12 border-none bg-transparent text-sm font-bold text-white outline-none placeholder:text-white/40 sm:w-24 sm:text-base"
         value={invoiceNumber === 0 ? "" : invoiceNumber}
         onChange={(event) => {
           const value = event.target.value;

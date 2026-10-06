@@ -5,7 +5,7 @@ export default function RevenueTable({ data, currency }: RevenueTableProps) {
   return (
     <table className="w-full text-sm">
       <thead>
-        <tr className="border-b border-navy/10 text-left text-[10px] font-black uppercase tracking-widest text-navy-500">
+        <tr className="border-b border-navy/10 text-left text-[10px] font-bold uppercase tracking-widest text-navy-500">
           <th className="py-2">Month</th>
           <th className="py-2 text-right">Invoiced</th>
           <th className="py-2 text-right">Paid</th>

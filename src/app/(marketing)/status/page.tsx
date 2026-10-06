@@ -39,7 +39,7 @@ export default async function StatusPage() {
       <div className="mx-auto max-w-3xl space-y-6 px-4 pb-20 sm:px-6">
         <div
           className={cn(
-            "flex items-center gap-3 rounded-2xl p-5 font-black",
+            "flex items-center gap-3 rounded-2xl p-5 font-bold",
             allOk ? "bg-emerald-600 text-white" : "bg-amber-500 text-navy",
           )}
         >

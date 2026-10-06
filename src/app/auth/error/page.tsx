@@ -17,7 +17,7 @@ export default async function AuthErrorPage({ searchParams }: AuthErrorPageProps
         <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50">
           <AlertTriangle size={24} className="text-red-500" />
         </span>
-        <h1 className="text-xl font-black text-navy">Something went wrong</h1>
+        <h1 className="text-xl font-bold text-navy">Something went wrong</h1>
         <p className="rounded-xl bg-mist p-4 text-sm text-navy-500">
           {message ?? "An unspecified error occurred. Please try again or contact support."}
         </p>

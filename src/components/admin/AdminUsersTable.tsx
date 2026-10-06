@@ -46,7 +46,7 @@ export default function AdminUsersTable({ users, currentUserId }: AdminUsersTabl
         <div className="custom-scrollbar relative overflow-x-auto">
           <table className="w-full min-w-[760px] text-sm">
             <thead>
-              <tr className="border-b border-navy/[0.06] bg-navy/[0.02] text-[10px] font-black uppercase tracking-widest text-navy-500">
+              <tr className="border-b border-navy/[0.06] bg-navy/[0.02] text-[10px] font-bold uppercase tracking-widest text-navy-500">
                 <th className="px-5 py-3 text-left">User</th>
                 <th className="px-4 py-3 text-left">Joined</th>
                 <th className="px-4 py-3 text-right">Invoices</th>

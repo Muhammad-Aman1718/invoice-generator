@@ -42,8 +42,8 @@ export default function InvoiceTotals() {
       )}
       <div className="border-t-2 border-navy pt-3" />
       <div className="flex items-center justify-between">
-        <span className="text-base font-black text-navy">Total</span>
-        <span className="rounded-xl border border-gold/30 bg-gold/20 px-4 py-1.5 font-mono text-base font-black text-navy">
+        <span className="text-base font-bold text-navy">Total</span>
+        <span className="rounded-xl border border-gold/30 bg-gold/20 px-4 py-1.5 tabular-nums text-base font-bold text-navy">
           {money(store.totalAmount)}
         </span>
       </div>

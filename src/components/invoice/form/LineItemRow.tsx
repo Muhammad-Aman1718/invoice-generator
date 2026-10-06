@@ -77,7 +77,7 @@ export default function LineItemRow({ item, index, currencySymbol, canRemove }: 
         </div>
       </td>
       <td className="px-3 py-2.5 text-right sm:px-4">
-        <div className="rounded-xl border border-gold/20 bg-gold/10 px-2.5 py-2 text-right text-sm font-black tabular-nums text-navy">
+        <div className="rounded-xl border border-gold/20 bg-gold/10 px-2.5 py-2 text-right text-sm font-bold tabular-nums text-navy">
           {currencySymbol}
           {formatAmount(item.amount)}
         </div>

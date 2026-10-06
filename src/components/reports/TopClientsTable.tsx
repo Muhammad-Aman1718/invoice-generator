@@ -4,7 +4,7 @@ import type { TopClientsTableProps } from "@/src/types/types";
 export default function TopClientsTable({ clients, currency }: TopClientsTableProps) {
   return (
     <section className="panel overflow-hidden" aria-labelledby="topClientsTableTitle">
-      <h2 id="topClientsTableTitle" className="px-5 pb-3 pt-5 text-base font-black text-navy sm:px-6">
+      <h2 id="topClientsTableTitle" className="px-5 pb-3 pt-5 text-base font-bold text-navy sm:px-6">
         Top clients
       </h2>
       {clients.length === 0 ? (
@@ -12,7 +12,7 @@ export default function TopClientsTable({ clients, currency }: TopClientsTablePr
       ) : (
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-y border-navy/5 bg-navy/[0.02] text-[10px] font-black uppercase tracking-widest text-navy-500">
+            <tr className="border-y border-navy/5 bg-navy/[0.02] text-[10px] font-bold uppercase tracking-widest text-navy-500">
               <th className="px-5 py-2 text-left sm:px-6">Client</th>
               <th className="px-3 py-2 text-right">Invoices</th>
               <th className="px-5 py-2 text-right sm:px-6">Total</th>
@@ -25,7 +25,7 @@ export default function TopClientsTable({ clients, currency }: TopClientsTablePr
                   {client.name}
                 </td>
                 <td className="px-3 py-2.5 text-right tabular-nums text-navy-500">{client.count}</td>
-                <td className="px-5 py-2.5 text-right font-black tabular-nums text-navy sm:px-6">
+                <td className="px-5 py-2.5 text-right font-bold tabular-nums text-navy sm:px-6">
                   {formatCurrency(client.total, currency)}
                 </td>
               </tr>

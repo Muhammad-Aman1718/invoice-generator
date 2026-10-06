@@ -6,7 +6,7 @@ export default function SetupChecklist({ items }: SetupChecklistProps) {
   const doneCount = items.filter((item) => item.done).length;
   return (
     <section className="panel p-5 sm:p-6" aria-labelledby="setupTitle">
-      <h2 id="setupTitle" className="mb-1 text-base font-black text-navy">
+      <h2 id="setupTitle" className="mb-1 text-base font-bold text-navy">
         Get set up
       </h2>
       <p className="mb-4 text-xs text-navy-500">
