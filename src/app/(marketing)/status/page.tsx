@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import PageHero from "@/src/components/marketing/PageHero";
 import { cn } from "@/src/lib/utils";
 import { isStripeConfigured } from "@/src/lib/server/stripe";
 import { getHealthReport } from "@/src/lib/server/healthCheck";
 import { SERVICE_HEALTH_NOTES } from "@/src/constant/health";
-import { SITE_CONFIG } from "@/src/constant/site";
 import type { ServiceStatus } from "@/src/types/types";
 
-export const metadata: Metadata = {
-  title: "System Status",
-  description: `Current status of ${SITE_CONFIG.name} services.`,
-  alternates: { canonical: "/status" },
-};
+export const metadata: Metadata = buildPageMetadata("status");
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +34,7 @@ export default async function StatusPage() {
 
   return (
     <>
+      <PageJsonLd page="status" />
       <PageHero eyebrow="Status" title="System status" />
       <div className="mx-auto max-w-3xl space-y-6 px-4 pb-20 sm:px-6">
         <div

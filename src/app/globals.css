@@ -71,7 +71,7 @@
     @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-black transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
   }
   .btn-primary {
-    @apply btn bg-gold text-navy shadow-gold hover:bg-[#ffcd38];
+    @apply btn bg-gold text-navy shadow-button hover:bg-gold-hover;
   }
   .btn-navy {
     @apply btn bg-navy text-white hover:bg-navy-600;

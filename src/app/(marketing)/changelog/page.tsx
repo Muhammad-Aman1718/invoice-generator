@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import PageHero from "@/src/components/marketing/PageHero";
 import { RELEASES } from "@/src/constant/changelog";
 import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Changelog",
-  description: `What's new in ${SITE_CONFIG.name}: features, improvements and fixes.`,
-  alternates: { canonical: "/changelog" },
-};
+export const metadata: Metadata = buildPageMetadata("changelog");
 
 export default function ChangelogPage() {
   return (
     <>
+      <PageJsonLd page="changelog" />
       <PageHero
         eyebrow="Changelog"
         title="What's new"

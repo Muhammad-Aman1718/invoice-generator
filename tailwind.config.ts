@@ -27,7 +27,7 @@ export default {
           800: "#12124F",
           900: "#0B0B33",
         },
-        gold: { DEFAULT: "#FFC107", dark: "#B8860B", light: "#FFE08A" },
+        gold: { DEFAULT: "#FFC107", hover: "#F2B600", dark: "#B8860B", light: "#FFE08A" },
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {
@@ -77,7 +77,7 @@ export default {
       boxShadow: {
         card: "0 2px 12px rgba(25,25,112,0.06)",
         lift: "0 16px 40px rgba(25,25,112,0.12)",
-        gold: "0 4px 14px rgba(255,193,7,0.35)",
+        button: "0 1px 2px rgba(25,25,112,0.12)",
       },
       screens: {
         xs: "400px",

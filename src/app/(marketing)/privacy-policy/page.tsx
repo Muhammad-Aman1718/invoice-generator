@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import Link from "next/link";
 import LegalPage from "@/src/components/marketing/LegalPage";
 import type { LegalSection } from "@/src/types/types";
 import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: `How ${SITE_CONFIG.name} collects, uses, shares and protects your personal data.`,
-  alternates: { canonical: "/privacy-policy" },
-};
+export const metadata: Metadata = buildPageMetadata("privacyPolicy");
 
 const sections: LegalSection[] = [
   {
@@ -230,17 +228,20 @@ const sections: LegalSection[] = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <LegalPage
-      title="Privacy Policy"
-      current="/privacy-policy"
-      intro={
-        <p>
-          Your invoices contain sensitive business information, so we keep data collection to the minimum
-          needed to run {SITE_CONFIG.name}. This policy explains what we collect, why, and the choices you
-          have.
-        </p>
-      }
-      sections={sections}
-    />
+    <>
+      <PageJsonLd page="privacyPolicy" />
+      <LegalPage
+        title="Privacy Policy"
+        current="/privacy-policy"
+        intro={
+          <p>
+            Your invoices contain sensitive business information, so we keep data collection to the minimum
+            needed to run {SITE_CONFIG.name}. This policy explains what we collect, why, and the choices you
+            have.
+          </p>
+        }
+        sections={sections}
+      />
+    </>
   );
 }

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import { Suspense } from "react";
 import InvoiceLanding from "@/src/components/invoice/InvoiceLanding";
 import HomeHero from "@/src/components/marketing/HomeHero";
@@ -6,17 +8,13 @@ import HowItWorks from "@/src/components/marketing/HowItWorks";
 import HomeHighlights from "@/src/components/marketing/HomeHighlights";
 import PricingTeaser from "@/src/components/marketing/PricingTeaser";
 import Loader from "@/src/components/auth/Loader";
-import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: { absolute: `${SITE_CONFIG.name} — Free Invoice Generator & PDF Invoice Maker` },
-  description: SITE_CONFIG.description,
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = buildPageMetadata("home");
 
 export default function HomePage() {
   return (
     <>
+      <PageJsonLd page="home" />
       <HomeHero />
       <section
         id="builder"

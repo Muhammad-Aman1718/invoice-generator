@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import Link from "next/link";
 import LegalPage from "@/src/components/marketing/LegalPage";
 import type { LegalSection } from "@/src/types/types";
 import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Refund & Cancellation Policy",
-  description: `How cancellations, refunds and plan changes work for ${SITE_CONFIG.name} subscriptions.`,
-  alternates: { canonical: "/refund-policy" },
-};
+export const metadata: Metadata = buildPageMetadata("refundPolicy");
 
 const sections: LegalSection[] = [
   {
@@ -87,16 +85,19 @@ const sections: LegalSection[] = [
 
 export default function RefundPolicyPage() {
   return (
-    <LegalPage
-      title="Refund & Cancellation Policy"
-      current="/refund-policy"
-      intro={
-        <p>
-          We want you to pay for {SITE_CONFIG.name} only while it is useful to you. Here is exactly how
-          cancellations and refunds work.
-        </p>
-      }
-      sections={sections}
-    />
+    <>
+      <PageJsonLd page="refundPolicy" />
+      <LegalPage
+        title="Refund & Cancellation Policy"
+        current="/refund-policy"
+        intro={
+          <p>
+            We want you to pay for {SITE_CONFIG.name} only while it is useful to you. Here is exactly how
+            cancellations and refunds work.
+          </p>
+        }
+        sections={sections}
+      />
+    </>
   );
 }

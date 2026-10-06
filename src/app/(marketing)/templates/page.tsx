@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import PageHero from "@/src/components/marketing/PageHero";
 import TemplateMockup from "@/src/components/marketing/TemplateMockup";
 import { TEMPLATE_USES } from "@/src/constant/marketing";
-import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Invoice Templates",
-  description: `Free professional invoice template with logo, tax and discounts. Fill it online and download as PDF with ${SITE_CONFIG.name}.`,
-  alternates: { canonical: "/templates" },
-};
+export const metadata: Metadata = buildPageMetadata("templates");
 
 export default function TemplatesPage() {
   return (
     <>
+      <PageJsonLd page="templates" />
       <PageHero
         eyebrow="Templates"
         title="A clean, professional invoice template"

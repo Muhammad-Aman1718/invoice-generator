@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import PageHero from "@/src/components/marketing/PageHero";
 import { BLOG_POSTS } from "@/src/constant/blog";
-import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Blog",
-  description: `Invoicing tips, tax basics and cash-flow advice from the ${SITE_CONFIG.name} team.`,
-  alternates: { canonical: "/blog" },
-};
+export const metadata: Metadata = buildPageMetadata("blog");
 
 export default function BlogPage() {
   return (
     <>
+      <PageJsonLd page="blog" />
       <PageHero
         eyebrow="Blog"
         title="Invoicing, simplified"

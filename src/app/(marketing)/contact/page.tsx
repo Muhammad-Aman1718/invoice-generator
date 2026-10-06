@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import PageHero from "@/src/components/marketing/PageHero";
 import ContactForm from "@/src/components/marketing/ContactForm";
 import ContactChannels from "@/src/components/marketing/ContactChannels";
-import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: `Get in touch with the ${SITE_CONFIG.name} team for support, billing or privacy questions.`,
-  alternates: { canonical: "/contact" },
-};
+export const metadata: Metadata = buildPageMetadata("contact");
 
 export default function ContactPage() {
   return (
     <>
+      <PageJsonLd page="contact" />
       <PageHero
         eyebrow="Contact"
         title="We're here to help"

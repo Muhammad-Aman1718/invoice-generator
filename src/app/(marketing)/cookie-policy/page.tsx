@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
+import { buildPageMetadata } from "@/src/lib/seo";
+import PageJsonLd from "@/src/components/seo/PageJsonLd";
 import LegalPage from "@/src/components/marketing/LegalPage";
 import type { LegalSection } from "@/src/types/types";
 import { SITE_CONFIG } from "@/src/constant/site";
 
-export const metadata: Metadata = {
-  title: "Cookie Policy",
-  description: `The cookies and browser storage ${SITE_CONFIG.name} uses, and how to control them.`,
-  alternates: { canonical: "/cookie-policy" },
-};
+export const metadata: Metadata = buildPageMetadata("cookiePolicy");
 
 const sections: LegalSection[] = [
   {
@@ -84,13 +82,16 @@ const sections: LegalSection[] = [
 
 export default function CookiePolicyPage() {
   return (
-    <LegalPage
-      title="Cookie Policy"
-      current="/cookie-policy"
-      intro={
-        <p>Short version: only the cookies needed to keep you signed in, and nothing that tracks you.</p>
-      }
-      sections={sections}
-    />
+    <>
+      <PageJsonLd page="cookiePolicy" />
+      <LegalPage
+        title="Cookie Policy"
+        current="/cookie-policy"
+        intro={
+          <p>Short version: only the cookies needed to keep you signed in, and nothing that tracks you.</p>
+        }
+        sections={sections}
+      />
+    </>
   );
 }
