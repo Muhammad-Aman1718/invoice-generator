@@ -6,6 +6,7 @@ export const ROUTES = {
   forgotPassword: "/auth/forgot-password",
   updatePassword: "/auth/update-password",
   authCallback: "/auth/callback",
+  authConfirm: "/auth/confirm",
   authError: "/auth/error",
   dashboard: "/dashboard",
   invoices: "/dashboard/invoices",

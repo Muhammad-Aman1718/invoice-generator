@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { redirect } from "next/navigation";
 import { createClient } from "@/src/lib/supabase/server";
 import { getSafeRedirectPath } from "@/src/lib/redirects";
+import { getAuthErrorMessage } from "@/src/lib/authErrors";
 import { ROUTES } from "@/src/constant/routes";
 
 // Email links that use token_hash (instead of PKCE `code`) are verified here.
@@ -17,6 +18,6 @@ export async function GET(request: NextRequest) {
 
   const supabase = await createClient();
   const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
-  if (error) redirect(`${ROUTES.authError}?error=${encodeURIComponent(error.message)}`);
+  if (error) redirect(`${ROUTES.authError}?error=${encodeURIComponent(getAuthErrorMessage(error))}`);
   redirect(getSafeRedirectPath(searchParams.get("next")));
 }

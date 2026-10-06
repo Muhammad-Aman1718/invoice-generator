@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/src/lib/supabase/client";
 import { buildAuthCallbackUrl, getSafeRedirectPath } from "@/src/lib/redirects";
-import { getErrorMessage } from "@/src/lib/utils";
+import { getAuthErrorMessage } from "@/src/lib/authErrors";
 import { getSignUpProblem } from "@/src/lib/authValidation";
 import { showToast } from "@/src/utils/showToast";
 import { ROUTES } from "@/src/constant/routes";
@@ -39,7 +39,7 @@ export default function useSignUpForm() {
     setIsLoading(true);
     try {
       const { data, error } = await createClient().auth.signUp({
-        email: values.email,
+        email: values.email.trim(),
         password: values.password,
         options: { emailRedirectTo: buildAuthCallbackUrl(searchParams, window.location.origin) },
       });
@@ -55,7 +55,7 @@ export default function useSignUpForm() {
       router.replace(getSafeRedirectPath(searchParams.get("next")));
       router.refresh();
     } catch (error) {
-      showToast.error("Sign-up error", getErrorMessage(error));
+      showToast.error("Sign-up failed", getAuthErrorMessage(error));
     } finally {
       setIsLoading(false);
     }

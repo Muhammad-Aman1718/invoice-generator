@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { hasEnvVars } from "@/src/lib/utils";
-import { buildNextUrl } from "@/src/lib/redirects";
+import { buildNextUrl, getStrayAuthLinkTarget } from "@/src/lib/redirects";
 import { GUEST_ONLY_ROUTES, PROTECTED_PREFIXES, ROUTES } from "@/src/constant/routes";
 
 function matchesPrefix(pathname: string, prefix: string): boolean {
@@ -35,6 +35,9 @@ async function isAdmin(supabase: SupabaseClient, userId: string): Promise<boolea
 
 /** Refresh the Supabase session and enforce route access rules. */
 export async function updateSession(request: NextRequest) {
+  const strayAuthTarget = getStrayAuthLinkTarget(request.nextUrl);
+  if (strayAuthTarget) return NextResponse.redirect(new URL(strayAuthTarget, request.url));
+
   const response = { current: NextResponse.next({ request }) };
   if (!hasEnvVars) return response.current;
 
