@@ -28,7 +28,7 @@ export const HEALTH_HINTS = {
 /** Public wording on the /status page. */
 export const SERVICE_HEALTH_NOTES: Record<ServiceHealth, string> = {
   operational: "Operational",
-  "missing-env": "Not configured — sign-in is unavailable",
-  unreachable: "Degraded — sign-in and saving may fail",
-  "schema-missing": "Setup incomplete — saving data may fail",
+  "missing-env": "Not configured: sign-in is unavailable",
+  unreachable: "Degraded: sign-in and saving may fail",
+  "schema-missing": "Setup incomplete: saving data may fail",
 };

@@ -7,7 +7,7 @@ export default function Pagination({ page, pageCount, total, pageSize, onPageCha
   return (
     <div className="flex items-center justify-between text-xs font-semibold text-navy-500">
       <span>
-        Showing {firstItem}–{lastItem} of {total}
+        Showing {firstItem}-{lastItem} of {total}
       </span>
       <div className="flex items-center gap-1">
         <button

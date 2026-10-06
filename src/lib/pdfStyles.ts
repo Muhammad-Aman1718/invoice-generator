@@ -152,5 +152,4 @@ export const pdfStyles = StyleSheet.create({
   footerLeft: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: PDF_COLORS.muted },
   footerText: { fontSize: 7.5, color: PDF_COLORS.muted2 },
   footerRight: { flexDirection: "row", alignItems: "center", gap: 4 },
-  footerDot: { width: 4, height: 4, borderRadius: 2, backgroundColor: PDF_COLORS.amber },
 });

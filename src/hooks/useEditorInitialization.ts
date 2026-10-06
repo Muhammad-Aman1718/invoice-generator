@@ -26,7 +26,7 @@ function prepareNewInvoice({ clients, profile }: EditorInitOptions, searchParams
     .catch((error) => console.warn("[editor] could not fetch next invoice number:", error));
 
   if (searchParams.get("action") === "save_pending") {
-    showToast.info("Welcome!", "Your invoice draft is ready — click Save to store it.");
+    showToast.info("Welcome!", "Your invoice draft is ready. Click Save to store it.");
   }
 }
 

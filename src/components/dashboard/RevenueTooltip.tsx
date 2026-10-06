@@ -9,7 +9,7 @@ export default function RevenueTooltip({ point, currency }: RevenueTooltipProps)
       {REVENUE_SERIES.map((series) => (
         <p key={series.key} className="flex items-center justify-between gap-3 text-navy-500">
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-sm" style={{ background: series.color }} />
+            <span className="h-2 w-2 rounded-lg" style={{ background: series.color }} />
             {series.label}
           </span>
           <span className="font-bold tabular-nums text-navy">

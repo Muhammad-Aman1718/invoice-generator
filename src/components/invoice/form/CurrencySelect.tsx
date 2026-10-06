@@ -56,7 +56,7 @@ export default function CurrencySelect() {
                 <span className="block truncate">{currency.label}</span>
                 <span className="block text-[10px] uppercase text-[#555]">{currency.code}</span>
               </span>
-              <span className="ml-2 rounded-md bg-navy/5 px-1.5 py-0.5 tabular-nums text-[10px]">
+              <span className="ml-2 rounded-lg bg-navy/5 px-1.5 py-0.5 tabular-nums text-[10px]">
                 {currency.symbol}
               </span>
             </button>

@@ -1,30 +1,32 @@
 import Link from "next/link";
-import { ArrowRight, Zap } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import SampleInvoiceShowcase from "./SampleInvoiceShowcase";
 import { ROUTES } from "@/src/constant/routes";
 
 export default function HomeHero() {
   return (
-    <section className="mx-auto max-w-3xl px-4 pb-10 pt-12 text-center sm:px-6 sm:pt-16">
-      <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-navy">
-        <span className="h-1.5 w-1.5 rounded-full bg-gold" /> Free · No sign-up required
-      </span>
-      <h1 className="mb-4 text-3xl font-bold leading-tight text-navy sm:text-5xl">
-        Create professional
-        <span className="mt-1 block bg-gradient-to-br from-navy to-[#3a3a9e] bg-clip-text text-transparent">
-          invoices in seconds
+    <section className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:px-8 lg:pt-16">
+      <div className="min-w-0 motion-safe:animate-fade-up">
+        <span className="mb-5 inline-flex rounded-full bg-gold/15 px-3 py-1 text-xs font-semibold text-navy">
+          Free, no sign-up needed
         </span>
-      </h1>
-      <p className="mx-auto max-w-xl text-sm leading-relaxed text-navy-500 sm:text-base">
-        Fill, preview and export tax-ready PDF invoices right in your browser. Create a free account to save
-        clients, track payments and see your revenue.
-      </p>
-      <div className="mt-7 flex flex-col justify-center gap-3 xs:flex-row">
-        <a href="#builder" className="btn-primary">
-          <Zap size={16} /> Start invoicing
-        </a>
-        <Link href={ROUTES.signUp} className="btn-outline">
-          Create free account <ArrowRight size={15} />
-        </Link>
+        <h1 className="mb-5 text-4xl font-extrabold leading-[1.05] text-navy md:text-5xl lg:text-[3.5rem]">
+          Create professional invoices in seconds
+        </h1>
+        <p className="mb-8 max-w-[46ch] text-lg leading-relaxed text-navy-500">
+          Fill in your details, check the live preview and download a tax-ready PDF. No account needed.
+        </p>
+        <div className="flex flex-col gap-3 xs:flex-row">
+          <a href="#builder" className="btn-primary px-5 py-3 text-base">
+            Start invoicing
+          </a>
+          <Link href={ROUTES.signUp} className="btn-outline px-5 py-3 text-base">
+            Sign up free <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
+      </div>
+      <div className="min-w-0 motion-safe:animate-fade-up [animation-delay:120ms]">
+        <SampleInvoiceShowcase id="heroInvoiceSample" />
       </div>
     </section>
   );

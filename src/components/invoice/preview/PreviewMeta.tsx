@@ -5,8 +5,8 @@ import type { PreviewMetaProps } from "@/src/types/types";
 
 export default function PreviewMeta({ invoice, formatMoney }: PreviewMetaProps) {
   const details = [
-    { label: "Issue date", value: invoice.issueDate ? formatInvoiceDate(invoice.issueDate) : "—" },
-    { label: "Due date", value: invoice.dueDate ? formatInvoiceDate(invoice.dueDate) : "—" },
+    { label: "Issue date", value: invoice.issueDate ? formatInvoiceDate(invoice.issueDate) : "-" },
+    { label: "Due date", value: invoice.dueDate ? formatInvoiceDate(invoice.dueDate) : "-" },
     ...(invoice.poNumber ? [{ label: "PO number", value: invoice.poNumber }] : []),
   ];
 

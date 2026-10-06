@@ -620,6 +620,8 @@ export interface LayoutProps {
 export interface BrandLogoProps {
   href?: string;
   size?: "sm" | "md";
+  /** Background the logo sits on. */
+  tone?: "onDark" | "onLight";
 }
 
 export interface MobileMenuProps {
@@ -1106,6 +1108,15 @@ export interface LineItemRowProps {
 export interface InvoicePreviewProps {
   id?: string;
   className?: string;
+  /** Render this invoice instead of the editor's draft (e.g. a marketing sample). */
+  invoice?: InvoiceData;
+}
+
+export interface RevealProps {
+  children: ReactNode;
+  className?: string;
+  /** Stagger offset when several items reveal together. */
+  delayMs?: number;
 }
 
 export interface PreviewSectionProps {
@@ -1226,10 +1237,6 @@ export interface LegalNavProps {
   current: string;
 }
 
-export interface FeatureGridProps {
-  items: FeatureItem[];
-}
-
 export interface ApiEndpointCardProps {
   endpoint: ApiEndpoint;
 }
@@ -1308,4 +1315,19 @@ export interface AboutValue {
 
 export interface ClientDetailsProps {
   client: Client;
+}
+
+export interface FeatureGroup {
+  title: string;
+  body: string;
+  features: FeatureItem[];
+}
+
+export interface FeatureSectionProps {
+  group: FeatureGroup;
+}
+
+export interface SampleInvoiceShowcaseProps {
+  /** DOM id for the preview element (must be unique per page). */
+  id: string;
 }

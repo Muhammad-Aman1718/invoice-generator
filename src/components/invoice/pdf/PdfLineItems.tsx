@@ -14,10 +14,10 @@ export default function PdfLineItems({ invoice, formatMoney }: PdfLineItemsProps
       </View>
       {invoice.lineItems.map((item, index) => (
         <View key={item.id || index} style={s.tableRow} wrap={false}>
-          <Text style={[s.td, s.cDesc]}>{item.description || "—"}</Text>
+          <Text style={[s.td, s.cDesc]}>{item.description || "-"}</Text>
           <Text style={[s.tdMuted, s.cQty]}>{item.quantity}</Text>
           <Text style={[s.tdMuted, s.cRate]}>{formatMoney(item.rate)}</Text>
-          <Text style={[s.tdMuted, s.cDisc]}>{item.discount ? `${item.discount}%` : "—"}</Text>
+          <Text style={[s.tdMuted, s.cDisc]}>{item.discount ? `${item.discount}%` : "-"}</Text>
           <Text style={[s.tdBold, s.cAmt]}>{formatMoney(item.amount)}</Text>
         </View>
       ))}

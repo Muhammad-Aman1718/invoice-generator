@@ -29,7 +29,7 @@ export default function LoginForm() {
       <AuthHeader title="Welcome back" description="Sign in to manage your invoices" />
       {isVerified && (
         <p className="rounded-xl bg-emerald-50 p-3 text-center text-sm font-semibold text-emerald-800">
-          Email verified — sign in to continue.
+          Email verified. Sign in to continue.
         </p>
       )}
       <SocialLoginButtons />

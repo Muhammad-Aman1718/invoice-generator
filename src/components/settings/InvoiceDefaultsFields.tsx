@@ -20,7 +20,7 @@ export default function InvoiceDefaultsFields({ values, onChange }: SettingsFiel
         >
           {CURRENCIES.map((currency) => (
             <option key={currency.code} value={currency.code}>
-              {currency.code} — {currency.label}
+              {currency.code} - {currency.label}
             </option>
           ))}
         </select>
