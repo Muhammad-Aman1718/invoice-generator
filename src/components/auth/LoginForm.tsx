@@ -7,12 +7,22 @@ import AuthButton from "./AuthButton";
 import AuthDivider from "./AuthDivider";
 import AuthRedirect from "./AuthRedirect";
 import SocialLoginButtons from "./SocialLoginButtons";
+import ResendConfirmationNotice from "./ResendConfirmationNotice";
 import useLogin from "@/src/hooks/useLogin";
 import { ROUTES } from "@/src/constant/routes";
 
 export default function LoginForm() {
-  const { email, setEmail, password, setPassword, isLoading, handleLogin, queryString, isVerified } =
-    useLogin();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    isLoading,
+    needsConfirmation,
+    handleLogin,
+    queryString,
+    isVerified,
+  } = useLogin();
 
   return (
     <FormContainer>
@@ -46,6 +56,7 @@ export default function LoginForm() {
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
+        {needsConfirmation && <ResendConfirmationNotice email={email.trim()} />}
         <AuthButton isLoading={isLoading} label="Sign In" />
       </form>
       <AuthRedirect

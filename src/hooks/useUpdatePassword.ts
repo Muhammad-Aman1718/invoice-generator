@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/src/lib/supabase/client";
 import { getPasswordProblem } from "@/src/lib/authValidation";
-import { getErrorMessage } from "@/src/lib/utils";
+import { getAuthErrorMessage } from "@/src/lib/authErrors";
 import { showToast } from "@/src/utils/showToast";
 import type { UpdatePasswordOptions } from "@/src/types/types";
 
@@ -28,7 +28,7 @@ export default function useUpdatePassword(options: UpdatePasswordOptions = {}) {
       showToast.success("Password updated");
       if (options.redirectTo) router.push(options.redirectTo);
     } catch (error) {
-      showToast.error("Could not update password", getErrorMessage(error));
+      showToast.error("Could not update password", getAuthErrorMessage(error));
     } finally {
       setIsLoading(false);
     }

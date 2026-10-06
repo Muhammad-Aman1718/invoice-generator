@@ -23,3 +23,26 @@ export function buildAuthCallbackUrl(params: URLSearchParams, origin: string): s
   if (action) query.set("action", action);
   return `${origin}${ROUTES.authCallback}?${query}`;
 }
+
+/**
+ * Supabase sends users to the Site URL when a redirect URL isn't allow-listed, so an
+ * auth `code` or `token_hash` can land on any page. Returns the route that handles it.
+ */
+export function getStrayAuthLinkTarget(url: URL): string | null {
+  const { pathname, searchParams } = url;
+  if (pathname.startsWith("/auth/")) return null;
+  if (searchParams.has("code")) return `${ROUTES.authCallback}?${searchParams}`;
+  if (searchParams.has("token_hash") && searchParams.has("type")) {
+    return `${ROUTES.authConfirm}?${searchParams}`;
+  }
+  const description = searchParams.get("error_description");
+  return description ? `${ROUTES.authError}?error=${encodeURIComponent(description)}` : null;
+}
+
+/** Login page that tells the user their email is confirmed and keeps the `next` target. */
+export function buildVerifiedLoginUrl(params: URLSearchParams): string {
+  const query = new URLSearchParams({ verified: "true" });
+  const next = params.get("next");
+  if (next) query.set("next", getSafeRedirectPath(next));
+  return `${ROUTES.login}?${query}`;
+}

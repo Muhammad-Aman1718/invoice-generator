@@ -625,6 +625,10 @@ export interface LoaderProps {
   text?: string;
 }
 
+export interface ResendConfirmationNoticeProps {
+  email: string;
+}
+
 export interface UpdatePasswordOptions {
   /** Where to go after a successful change (e.g. after a reset link). */
   redirectTo?: string;
@@ -1142,6 +1146,28 @@ export interface FeatureGridProps {
 
 export interface ApiEndpointCardProps {
   endpoint: ApiEndpoint;
+}
+
+export interface DatabaseSetupNoticeProps {
+  missingTables: string[];
+}
+
+export interface SchemaProbe {
+  table: string;
+  columns: string;
+}
+
+export type ServiceHealth = "operational" | "missing-env" | "unreachable" | "schema-missing";
+
+export interface DatabaseHealth {
+  status: ServiceHealth;
+  /** Tables whose expected columns could not be read. */
+  missingTables: string[];
+}
+
+export interface HealthReport {
+  auth: ServiceHealth;
+  database: DatabaseHealth;
 }
 
 export interface ServiceStatus {
