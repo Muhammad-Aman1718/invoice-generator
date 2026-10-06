@@ -6,7 +6,7 @@ export default function AuthButton({ isLoading = false, label }: AuthButtonProps
     <button
       type="submit"
       disabled={isLoading}
-      className="btn h-12 w-full bg-navy text-white shadow-lg shadow-navy/10 hover:bg-gold hover:text-navy"
+      className="btn h-12 w-full bg-navy text-white shadow-sm hover:bg-navy-600"
     >
       {isLoading ? <Loader2 size={20} className="animate-spin" aria-label="Loading" /> : label}
     </button>
