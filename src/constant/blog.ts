@@ -2,7 +2,12 @@ import type { BlogPost } from "@/src/types/types";
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "what-every-invoice-must-include",
     title: "What every invoice must include",
+    excerpt: "The ten details that make an invoice valid, professional and quick to pay.",
+    intro:
+      "A clear invoice gets paid faster and keeps you on the right side of tax rules. Whatever country you work in, these are the details clients and accountants expect to see.",
+    publishedAt: "2026-09-08",
     date: "September 2026",
     tag: "Basics",
     body: [
@@ -14,7 +19,12 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
   },
   {
+    slug: "get-invoices-paid-faster",
     title: "Five habits that get invoices paid faster",
+    excerpt: "Small changes to timing, wording and follow-up that shorten the wait for payment.",
+    intro:
+      "Late payments are rarely about money — they are usually about attention. These five habits keep your invoice at the top of your client's list.",
+    publishedAt: "2026-08-12",
     date: "August 2026",
     tag: "Cash flow",
     body: [
@@ -26,7 +36,12 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
   },
   {
+    slug: "vat-vs-gst-vs-sales-tax",
     title: "VAT vs GST vs sales tax in one minute",
+    excerpt: "How the three most common consumption taxes differ, and how to show them on an invoice.",
+    intro:
+      "Different countries tax sales in different ways. Here is the one-minute version of what you need to know before you add tax to an invoice.",
+    publishedAt: "2026-07-15",
     date: "July 2026",
     tag: "Tax",
     body: [

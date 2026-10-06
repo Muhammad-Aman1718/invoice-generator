@@ -14,6 +14,7 @@ export default async function InvoicesPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
+        refreshable
         icon={Receipt}
         title="Invoices"
         description="Search, filter and manage every invoice you've created."
@@ -27,6 +28,8 @@ export default async function InvoicesPage() {
         invoices={invoices}
         canExportCsv={viewer.plan.perks.csvExport}
         pdfBranding={!viewer.plan.perks.removeBranding}
+        earlyAccess={viewer.plan.perks.earlyAccess}
+        senderName={viewer.profile.companyName || viewer.profile.fullName || ""}
       />
     </div>
   );

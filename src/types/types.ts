@@ -211,6 +211,9 @@ export interface Plan {
     csvExport: boolean;
     removeBranding: boolean;
     prioritySupport: boolean;
+    /** Beta features before they reach every plan. */
+    earlyAccess: boolean;
+    onboardingCall: boolean;
   };
   features: string[];
   highlighted?: boolean;
@@ -411,7 +414,14 @@ export interface Release {
 }
 
 export interface BlogPost {
+  /** URL segment: /blog/<slug>. */
+  slug: string;
   title: string;
+  /** One-line summary for cards and the meta description. */
+  excerpt: string;
+  intro: string;
+  /** YYYY-MM-DD, used in structured data and the sitemap. */
+  publishedAt: string;
   date: string;
   tag: string;
   body: string[];
@@ -419,6 +429,7 @@ export interface BlogPost {
 
 export type SeoPageKey =
   | "home"
+  | "about"
   | "features"
   | "pricing"
   | "templates"
@@ -559,6 +570,8 @@ export interface PageHeaderProps {
   description?: string;
   icon?: LucideIcon;
   actions?: ReactNode;
+  /** Show a button that reloads the page's server data. */
+  refreshable?: boolean;
 }
 
 export interface EmptyStateProps {
@@ -848,13 +861,37 @@ export interface StatusBreakdownProps {
 export interface InvoiceListProps {
   invoices: InvoiceSummary[];
   canExportCsv: boolean;
+  /** Hide the CSV button (e.g. on a client page, where it would export every invoice). */
+  hideCsvExport?: boolean;
   pdfBranding: boolean;
+  /** Early-access features (Business plan), e.g. payment reminders. */
+  earlyAccess: boolean;
+  /** Name used to sign payment reminders. */
+  senderName: string;
+}
+
+export interface InvoiceActionsOptions {
+  pdfBranding: boolean;
+  earlyAccess: boolean;
+  senderName: string;
+}
+
+export interface PaymentReminderInput {
+  invoice: Pick<InvoiceSummary, "invoiceNumber" | "clientName" | "totalAmount" | "currency" | "dueDate">;
+  senderName: string;
+  /** YYYY-MM-DD; defaults to today. */
+  today?: string;
+}
+
+export interface SupportCardProps {
+  plan: Plan;
 }
 
 export interface InvoiceToolbarProps {
   listQuery: InvoiceListQuery;
   counts: Partial<Record<InvoiceFilter, number>>;
   canExportCsv: boolean;
+  hideCsvExport?: boolean;
   onChange: (changes: Partial<InvoiceListQuery>) => void;
 }
 
@@ -878,6 +915,9 @@ export interface InvoiceActions {
   onDuplicate: (invoice: InvoiceSummary) => void;
   onStatusChange: (invoice: InvoiceSummary, status: InvoiceStatus) => void;
   onDelete: (invoice: InvoiceSummary) => void;
+  onCopyReminder: (invoice: InvoiceSummary) => void;
+  /** Whether payment reminders are unlocked (Business early access). */
+  canCopyReminder: boolean;
 }
 
 export interface InvoiceActionMenuProps {
@@ -1078,11 +1118,13 @@ export type PreviewPartiesProps = Pick<PreviewSectionProps, "invoice">;
 export type PreviewNotesProps = Pick<PreviewSectionProps, "invoice">;
 export type PreviewFooterProps = Pick<PreviewSectionProps, "invoice">;
 export type PreviewLineItemsProps = PreviewSectionProps;
+export type PreviewMetaProps = PreviewSectionProps;
 export type PreviewTotalsProps = PreviewSectionProps;
 
 export interface PreviewLabelProps {
   children: ReactNode;
-  accent?: "gold" | "muted";
+  /** "inverse" for labels on the navy amount card. */
+  tone?: "muted" | "inverse";
 }
 
 export interface InvoicePdfDocumentProps {
@@ -1105,6 +1147,17 @@ export interface PdfLineItemsProps {
 }
 
 export interface PdfTotalsProps {
+  invoice: InvoiceData;
+  formatMoney: (amount: number) => string;
+}
+
+export interface FitToWidthProps {
+  /** Width the content is designed for, in CSS pixels. */
+  designWidth: number;
+  children: ReactNode;
+}
+
+export interface PdfMetaProps {
   invoice: InvoiceData;
   formatMoney: (amount: number) => string;
 }
@@ -1237,4 +1290,22 @@ export interface AuthErrorPageProps {
 export interface ErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
+}
+
+export interface BlogPostPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export interface ClientDetailPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export interface AboutValue {
+  icon: LucideIcon;
+  title: string;
+  body: string;
+}
+
+export interface ClientDetailsProps {
+  client: Client;
 }

@@ -13,6 +13,7 @@ export default async function ClientsPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
+        refreshable
         icon={Users}
         title="Clients"
         description="Your saved customers, ready to drop into any invoice."

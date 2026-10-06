@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { FaqItem, JsonLdData, SeoPageKey } from "@/src/types/types";
+import type { BlogPost, FaqItem, JsonLdData, SeoPageKey } from "@/src/types/types";
 import { SITE_CONFIG } from "@/src/constant/site";
 import { PLANS } from "@/src/constant/plans";
 import {
@@ -103,12 +103,13 @@ export function buildSiteJsonLd(): JsonLdData {
   };
 }
 
-/** Home › Page breadcrumb trail for search results. */
-export function buildBreadcrumbJsonLd(page: SeoPageKey): JsonLdData {
+/** Home › Page (› Child) breadcrumb trail for search results. */
+export function buildBreadcrumbJsonLd(page: SeoPageKey, child?: { name: string; path: string }): JsonLdData {
   const { path, title } = PAGE_SEO[page];
   const crumbs = [
     { name: "Home", path: "/" },
     { name: title.split(" — ")[0], path },
+    ...(child ? [child] : []),
   ];
   return {
     "@context": SCHEMA_CONTEXT,
@@ -138,4 +139,51 @@ export function buildFaqJsonLd(faqs: FaqItem[]): JsonLdData {
 /** JSON for a <script type="application/ld+json">; `<` is escaped so content can't close the tag. */
 export function serializeJsonLd(data: JsonLdData): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
+export function getBlogPostPath(post: BlogPost): string {
+  return `${PAGE_SEO.blog.path}/${post.slug}`;
+}
+
+export function buildBlogPostMetadata(post: BlogPost): Metadata {
+  const path = getBlogPostPath(post);
+  const fullTitle = `${post.title} | ${SITE_CONFIG.name}`;
+  return {
+    title: post.title,
+    description: post.excerpt,
+    keywords: SEO_KEYWORDS,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "article",
+      siteName: SITE_CONFIG.name,
+      locale: SEO_LOCALE,
+      url: path,
+      title: fullTitle,
+      description: post.excerpt,
+      publishedTime: post.publishedAt,
+      images: [OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description: post.excerpt,
+      images: [TWITTER_IMAGE],
+    },
+  };
+}
+
+/** Article rich result for a blog post. */
+export function buildArticleJsonLd(post: BlogPost): JsonLdData {
+  return {
+    "@context": SCHEMA_CONTEXT,
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    dateModified: post.publishedAt,
+    mainEntityOfPage: getAbsoluteUrl(getBlogPostPath(post)),
+    image: getAbsoluteUrl("/opengraph-image"),
+    author: { "@type": "Organization", name: SITE_CONFIG.company, url: SITE_CONFIG.url },
+    publisher: { "@id": `${SITE_CONFIG.url}/#organization` },
+  };
 }

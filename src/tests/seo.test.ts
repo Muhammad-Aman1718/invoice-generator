@@ -69,3 +69,27 @@ describe("structured data", () => {
     expect(serializeJsonLd({ name: "</script><script>alert(1)</script>" })).not.toContain("</script>");
   });
 });
+
+describe("blog posts", () => {
+  it("have unique slugs, short excerpts and valid publish dates", async () => {
+    const { BLOG_POSTS } = await import("@/src/constant/blog");
+    const slugs = BLOG_POSTS.map((post) => post.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    for (const post of BLOG_POSTS) {
+      expect(post.slug).toMatch(/^[a-z0-9-]+$/);
+      expect(post.excerpt.length).toBeLessThanOrEqual(160);
+      expect(Number.isNaN(Date.parse(post.publishedAt))).toBe(false);
+    }
+  });
+
+  it("build Article structured data and a three-level breadcrumb", async () => {
+    const { BLOG_POSTS } = await import("@/src/constant/blog");
+    const { buildArticleJsonLd, buildBreadcrumbJsonLd, getBlogPostPath } = await import("@/src/lib/seo");
+    const post = BLOG_POSTS[0];
+    expect(buildArticleJsonLd(post)).toMatchObject({ "@type": "Article", headline: post.title });
+    const crumbs = buildBreadcrumbJsonLd("blog", { name: post.title, path: getBlogPostPath(post) })
+      .itemListElement as { item: string }[];
+    expect(crumbs).toHaveLength(3);
+    expect(crumbs[2].item).toBe(`${SITE_CONFIG.url}/blog/${post.slug}`);
+  });
+});

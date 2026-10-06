@@ -8,18 +8,19 @@ Theme: 60·30·10 — mist `#ECEFF1`, navy `#191970`, amber `#FFC107`.
 
 ## Features
 
-| Area              | What's included                                                                                                                                      |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Free builder**  | Live preview, PDF export, 40+ currencies, VAT/GST presets, logo & signature — no account needed (draft saved in the browser)                         |
-| **Dashboard**     | Overview with KPIs, 6‑month revenue chart, setup checklist, recent invoices                                                                          |
-| **Invoices**      | Search, status filters, sort, pagination, duplicate, mark paid/pending/cancelled, PDF download, CSV export (Pro), automatic _overdue_ status         |
-| **Clients**       | Client book with CRUD; pick a client in the editor to fill "Bill To"                                                                                 |
-| **Reports** (Pro) | 12‑month trend, collection rate, average invoice, top clients, date ranges                                                                           |
-| **Billing**       | Free / Pro / Business plans, usage meters, Stripe Checkout + customer portal, manual upgrades when Stripe isn't configured                           |
-| **Settings**      | Profile, business details & logo, invoice defaults (currency, tax, payment terms, notes, terms), password change, GDPR data export, account deletion |
-| **Roles**         | `user` / `admin`. Admin area: platform KPIs, est. MRR, users table with plan/role changes and suspension                                             |
-| **Legal**         | Privacy Policy, Terms of Service, Refund Policy, Cookie Policy, GDPR page, cookie notice, terms checkbox on sign‑up                                  |
-| **API**           | Validated JSON REST API (`/api/...`) documented at `/api-docs`                                                                                       |
+| Area              | What's included                                                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Free builder**  | Live preview, PDF export, 40+ currencies, VAT/GST presets, logo & signature — no account needed (draft saved in the browser)                                        |
+| **Dashboard**     | Overview with KPIs, 6‑month revenue chart, setup checklist, recent invoices, **Refresh** button on every data page                                                  |
+| **Invoices**      | Search, status filters, sort, pagination, duplicate, mark paid/pending/cancelled, PDF download, CSV export (Pro), automatic _overdue_ status                        |
+| **Clients**       | Client book with CRUD, client detail page (stats + invoices), pick a client in the editor to fill "Bill To"                                                         |
+| **Reports** (Pro) | 12‑month trend, collection rate, average invoice, top clients, date ranges                                                                                          |
+| **Billing**       | Free / Pro / Business plans, usage meters, Stripe Checkout + portal, manual upgrades; Business: priority support, onboarding call, early access (payment reminders) |
+| **Settings**      | Profile, business details & logo, invoice defaults (currency, tax, payment terms, notes, terms), password change, GDPR data export, account deletion                |
+| **Roles**         | `user` / `admin`. Admin area: platform KPIs, est. MRR, users table with plan/role changes and suspension                                                            |
+| **Legal**         | Privacy Policy, Terms of Service, Refund Policy, Cookie Policy, GDPR page, cookie notice, terms checkbox on sign‑up                                                 |
+| **Content**       | About page, blog with a page per guide (Article structured data)                                                                                                    |
+| **API**           | Validated JSON REST API (`/api/...`) documented at `/api-docs`                                                                                                      |
 
 ## Getting started
 
@@ -55,7 +56,12 @@ Then open **Dashboard → Admin**.
 In **Authentication → URL Configuration** add your site URL and the redirect
 `https://YOUR-DOMAIN/auth/callback` (used by Google/GitHub login, email confirmation and password reset).
 
-### 4. Payments (optional)
+### 4. Business plan extras (optional)
+
+Set `NEXT_PUBLIC_ONBOARDING_BOOKING_URL` to your Calendly/Cal.com link for the Business onboarding call
+(defaults to an email to support). Contact-form messages from Business users are prefixed with `[Priority]`.
+
+### 5. Payments (optional)
 
 Without Stripe keys the app runs fine: the billing page tells users to email support and an admin
 upgrades them from **Admin → Users & plans** (31‑day manual period).

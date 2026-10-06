@@ -7,7 +7,8 @@ import { getErrorMessage } from "@/src/lib/utils";
 import { showToast } from "@/src/utils/showToast";
 import { STATUS_META } from "@/src/constant/invoice";
 import { ROUTES } from "@/src/constant/routes";
-import type { InvoiceActions, InvoiceStatus, InvoiceSummary } from "@/src/types/types";
+import { buildPaymentReminder } from "@/src/lib/paymentReminder";
+import type { InvoiceActions, InvoiceActionsOptions, InvoiceStatus, InvoiceSummary } from "@/src/types/types";
 
 /** Run an async action with a loading toast and an error toast on failure. */
 async function runWithToast(loadingMessage: string, action: () => Promise<void>, errorTitle: string) {
@@ -21,8 +22,8 @@ async function runWithToast(loadingMessage: string, action: () => Promise<void>,
   }
 }
 
-/** Row actions for the invoice list (status, duplicate, PDF, delete with confirmation). */
-export default function useInvoiceActions(pdfBranding: boolean) {
+/** Row actions for the invoice list (status, duplicate, PDF, reminder, delete with confirmation). */
+export default function useInvoiceActions({ pdfBranding, earlyAccess, senderName }: InvoiceActionsOptions) {
   const router = useRouter();
   const [pendingDelete, setPendingDelete] = useState<InvoiceSummary | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -65,6 +66,19 @@ export default function useInvoiceActions(pdfBranding: boolean) {
       "Download failed",
     );
 
+  const copyReminder = async (invoice: InvoiceSummary) => {
+    if (!earlyAccess) {
+      showToast.info("Business early access", "Payment reminders are available on the Business plan.");
+      return router.push(ROUTES.billing);
+    }
+    try {
+      await navigator.clipboard.writeText(buildPaymentReminder({ invoice, senderName }));
+      showToast.success("Reminder copied", "Paste it into an email to your client.");
+    } catch (error) {
+      showToast.error("Could not copy", getErrorMessage(error, "Clipboard access was blocked."));
+    }
+  };
+
   const confirmDelete = async () => {
     if (!pendingDelete) return;
     setIsDeleting(true);
@@ -85,6 +99,8 @@ export default function useInvoiceActions(pdfBranding: boolean) {
     onDuplicate: duplicate,
     onStatusChange: changeStatus,
     onDelete: setPendingDelete,
+    onCopyReminder: copyReminder,
+    canCopyReminder: earlyAccess,
   };
   return { actions, pendingDelete, isDeleting, confirmDelete, cancelDelete: () => setPendingDelete(null) };
 }

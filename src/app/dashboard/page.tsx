@@ -29,6 +29,7 @@ export default async function DashboardPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
+        refreshable
         icon={LayoutDashboard}
         title={firstName ? `Welcome back, ${firstName}` : "Overview"}
         description="Here's how your invoicing is going."
@@ -48,7 +49,7 @@ export default async function DashboardPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         <section className="panel p-5 sm:p-6 lg:col-span-2" aria-labelledby="revenueTitle">
           <div className="mb-1 flex items-center justify-between">
-            <h2 id="revenueTitle" className="text-base font-black text-navy">
+            <h2 id="revenueTitle" className="text-base font-bold text-navy">
               Revenue — last 6 months
             </h2>
             <span className="text-xs font-bold text-navy-500">{stats.currency}</span>

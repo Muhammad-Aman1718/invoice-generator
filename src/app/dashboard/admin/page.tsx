@@ -18,6 +18,7 @@ export default async function AdminPage() {
   return (
     <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
       <PageHeader
+        refreshable
         icon={Shield}
         title="Admin overview"
         description="Platform health, subscriptions and growth."
@@ -30,7 +31,7 @@ export default async function AdminPage() {
       <StatsCards items={buildAdminStatItems(stats)} />
       <div className="grid gap-6 lg:grid-cols-3">
         <section className="panel p-5 sm:p-6" aria-labelledby="plansTitle">
-          <h2 id="plansTitle" className="mb-4 text-base font-black text-navy">
+          <h2 id="plansTitle" className="mb-4 text-base font-bold text-navy">
             Users by plan
           </h2>
           <PlanDistribution byPlan={stats.byPlan} totalUsers={stats.totalUsers} />

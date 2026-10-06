@@ -11,13 +11,18 @@ function belongsToClient(invoice: InvoiceSummary, client: Client): boolean {
   return normalizeName(invoice.clientName) === normalizeName(client.name);
 }
 
+/** The invoices that belong to one client (cancelled ones excluded). */
+export function filterClientInvoices(invoices: InvoiceSummary[], client: Client): InvoiceSummary[] {
+  return invoices.filter((invoice) => belongsToClient(invoice, client));
+}
+
 export function attachClientStats(
   clients: Client[],
   invoices: InvoiceSummary[],
   fallbackCurrency: string,
 ): ClientWithStats[] {
   return clients.map((client) => {
-    const clientInvoices = invoices.filter((invoice) => belongsToClient(invoice, client));
+    const clientInvoices = filterClientInvoices(invoices, client);
     return {
       ...client,
       invoiceCount: clientInvoices.length,

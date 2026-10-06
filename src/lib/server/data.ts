@@ -8,6 +8,7 @@ import { getPlan } from "@/src/lib/plans";
 import { getUtcMonthStart } from "@/src/lib/dateUtils";
 import { getProfile, getSession, getSubscription } from "@/src/lib/server/auth";
 import { ROUTES } from "@/src/constant/routes";
+import { UUID_PATTERN } from "@/src/constant/http";
 import type { Client, InvoiceSummary, Session, Viewer } from "@/src/types/types";
 
 /** Current user + profile + plan for server components (deduped per request). */
@@ -32,6 +33,19 @@ export async function listClients({ supabase, user }: Session): Promise<Client[]
   const { data, error } = await supabase.from("clients").select("*").eq("user_id", user.id).order("name");
   if (error) throw new Error(`Could not load clients: ${error.message}`);
   return (data ?? []).map(rowToClient);
+}
+
+/** One saved client, or null when it doesn't exist or belongs to someone else (RLS). */
+export async function getClient({ supabase, user }: Session, id: string): Promise<Client | null> {
+  if (!UUID_PATTERN.test(id)) return null;
+  const { data, error } = await supabase
+    .from("clients")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw new Error(`Could not load client: ${error.message}`);
+  return data ? rowToClient(data) : null;
 }
 
 export async function countInvoicesThisMonth({ supabase, user }: Session): Promise<number> {

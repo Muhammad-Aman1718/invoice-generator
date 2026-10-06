@@ -39,6 +39,7 @@ export const FOOTER_NAV: FooterColumn[] = [
   {
     title: "Resources",
     links: [
+      { href: "/about", label: "About" },
       { href: "/help-center", label: "Help Center" },
       { href: "/blog", label: "Blog" },
       { href: "/api-docs", label: "API Docs" },
