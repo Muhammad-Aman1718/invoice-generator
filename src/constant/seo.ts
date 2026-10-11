@@ -14,7 +14,7 @@ export const SEO_LAST_UPDATED = "2026-10-06";
 /** Default title used on the home page, in link previews and the OG image. */
 export const SEO_DEFAULT_TITLE = "Free Invoice Generator & PDF Invoice Maker";
 
-export const SEO_TAGLINE = "Create professional invoices in seconds — free, no sign-up needed.";
+export const SEO_TAGLINE = "Create professional invoices in seconds. Free, no sign-up needed.";
 
 /** Site-wide keywords, merged with each page's own keywords. */
 export const SEO_KEYWORDS = [
@@ -39,7 +39,7 @@ export const SEO_SAME_AS = ["https://github.com/muhammad-aman1718/invoice-genera
 
 export const OG_IMAGE_SIZE = { width: 1200, height: 630 };
 export const APPLE_ICON_SIZE = { width: 180, height: 180 };
-export const OG_IMAGE_ALT = "InvoiceGen — free invoice generator and PDF invoice maker";
+export const OG_IMAGE_ALT = "InvoiceGen, the free invoice generator and PDF invoice maker";
 
 export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
   home: {
@@ -63,7 +63,7 @@ export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
   },
   features: {
     path: "/features",
-    title: "Features — Invoicing Made Simple",
+    title: "Features: Invoicing Made Simple",
     description:
       "Live preview, instant PDF export, 40+ currencies, VAT/GST presets, saved clients, payment " +
       "tracking and revenue reports. Everything you need to invoice clients.",
@@ -73,7 +73,7 @@ export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
   },
   pricing: {
     path: "/pricing",
-    title: "Pricing — Free, Pro & Business Plans",
+    title: "Pricing: Free, Pro & Business Plans",
     description:
       "Start free with no card required. Upgrade to Pro or Business for unlimited invoices, clients, " +
       "reports and CSV export. Cancel anytime.",
@@ -83,7 +83,7 @@ export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
   },
   templates: {
     path: "/templates",
-    title: "Free Invoice Template — Download as PDF",
+    title: "Free Invoice Template: Download as PDF",
     description:
       "Free professional invoice template with your logo, taxes and discounts. Fill it in online and " +
       "download a print-ready PDF in seconds.",
@@ -103,7 +103,7 @@ export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
   },
   helpCenter: {
     path: "/help-center",
-    title: "Help Center — Invoicing FAQ",
+    title: "Help Center: Invoicing FAQ",
     description:
       "Answers to common questions about creating invoices, PDF downloads, taxes, plans, billing and " +
       "your data in InvoiceGen.",
@@ -112,7 +112,7 @@ export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
   },
   changelog: {
     path: "/changelog",
-    title: "Changelog — What's New",
+    title: "Changelog: What's New",
     description: "New features, improvements and fixes in InvoiceGen, newest first.",
     priority: 0.4,
     changeFrequency: "monthly",
@@ -132,7 +132,7 @@ export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
     title: "Contact Us",
     description:
       "Get in touch with the InvoiceGen team for product support, billing questions or privacy " +
-      "requests. We usually reply within one business day.",
+      "requests. We reply within 2 business days, or 24 hours on Business.",
     priority: 0.5,
     changeFrequency: "yearly",
   },

@@ -13,39 +13,42 @@ export default function AboutPage() {
     <>
       <PageJsonLd page="about" />
       <PageHero eyebrow="About us" title="We make getting paid simple" description={ABOUT_MISSION} />
-      <section className="mx-auto max-w-3xl px-4 pb-14 sm:px-6" aria-labelledby="storyTitle">
-        <div className="panel p-6 sm:p-10">
-          <h2 id="storyTitle" className="mb-4 text-2xl font-bold text-navy">
-            Our story
-          </h2>
-          <div className="space-y-4 text-base leading-relaxed text-navy-500">
-            {ABOUT_STORY.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
+      <section
+        className="mx-auto grid max-w-6xl gap-8 px-4 pb-16 sm:px-6 lg:grid-cols-[0.8fr_1.4fr] lg:px-8"
+        aria-labelledby="storyTitle"
+      >
+        <h2 id="storyTitle" className="text-3xl font-bold text-navy">
+          Our story
+        </h2>
+        <div className="max-w-[65ch] space-y-4 text-lg leading-relaxed text-navy-500">
+          {ABOUT_STORY.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </div>
       </section>
-      <section className="mx-auto max-w-5xl px-4 pb-16 sm:px-6" aria-labelledby="valuesTitle">
-        <h2 id="valuesTitle" className="mb-8 text-center text-2xl font-bold text-navy sm:text-3xl">
-          What we care about
-        </h2>
-        <ul className="grid gap-5 sm:grid-cols-2">
-          {ABOUT_VALUES.map(({ icon: Icon, title, body }, index) => (
-            <li
-              key={title}
-              className="panel flex gap-4 p-6 motion-safe:animate-fade-up"
-              style={{ animationDelay: `${index * CARD_STAGGER_MS}ms` }}
-            >
-              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-navy text-gold">
-                <Icon size={20} aria-hidden="true" />
-              </span>
-              <div>
-                <h3 className="mb-1 font-bold text-navy">{title}</h3>
-                <p className="text-sm leading-relaxed text-navy-500">{body}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+      <section className="border-t border-navy/[0.07] bg-white py-16" aria-labelledby="valuesTitle">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <h2 id="valuesTitle" className="mb-10 text-3xl font-bold text-navy">
+            What we care about
+          </h2>
+          <ul className="grid gap-x-12 gap-y-10 sm:grid-cols-2">
+            {ABOUT_VALUES.map(({ icon: Icon, title, body }, index) => (
+              <li
+                key={title}
+                className="flex gap-4 motion-safe:animate-fade-up"
+                style={{ animationDelay: `${index * CARD_STAGGER_MS}ms` }}
+              >
+                <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-navy text-gold">
+                  <Icon size={20} aria-hidden="true" />
+                </span>
+                <div>
+                  <h3 className="mb-1 text-lg font-bold text-navy">{title}</h3>
+                  <p className="leading-relaxed text-navy-500">{body}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
       <TryBuilderCta />
     </>

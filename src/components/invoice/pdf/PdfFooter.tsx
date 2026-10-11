@@ -10,7 +10,6 @@ export default function PdfFooter({ invoice, branding }: PdfFooterProps) {
         {branding ? `Made with ${SITE_CONFIG.name}` : "Thank you for your business!"}
       </Text>
       <View style={s.footerRight}>
-        <View style={s.footerDot} />
         <Text
           style={s.footerText}
           render={({ pageNumber, totalPages }) =>

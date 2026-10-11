@@ -13,7 +13,7 @@ const invoice = {
 describe("buildPaymentReminder", () => {
   it("mentions the number, amount and how overdue the invoice is", () => {
     const text = buildPaymentReminder({ invoice, senderName: "Acme Studio", today: "2026-10-06" });
-    expect(text).toContain("Subject: Payment reminder — Invoice #1003 ($1,518.00)");
+    expect(text).toContain("Subject: Payment reminder for invoice #1003 ($1,518.00)");
     expect(text).toContain("Hi Umbrella Health,");
     expect(text).toContain("was due on Sep 16, 2026 (20 days ago)");
     expect(text.trim().endsWith("Acme Studio")).toBe(true);

@@ -20,12 +20,12 @@ export function buildPaymentReminder({
   const greeting = invoice.clientName ? `Hi ${invoice.clientName},` : "Hello,";
   const signature = senderName || "Thanks";
   return [
-    `Subject: Payment reminder — Invoice #${invoice.invoiceNumber} (${amount})`,
+    `Subject: Payment reminder for invoice #${invoice.invoiceNumber} (${amount})`,
     "",
     greeting,
     "",
     `This is a friendly reminder that invoice #${invoice.invoiceNumber} for ${amount} ${describeDueDate(invoice.dueDate, today)}.`,
-    "If you've already sent the payment, please ignore this message — and thank you!",
+    "If you've already sent the payment, please ignore this message, and thank you!",
     "Otherwise, could you let me know when we can expect it?",
     "",
     "Kind regards,",

@@ -34,7 +34,7 @@ export default function ProfileSettingsForm({ profile, email }: ProfileSettingsF
       <SettingsSection
         id="defaults"
         title="Invoice defaults"
-        description="Applied to new invoices — you can still change them per invoice."
+        description="Applied to new invoices. You can still change them on each invoice."
       >
         <InvoiceDefaultsFields values={values} onChange={setValue} />
       </SettingsSection>

@@ -20,7 +20,7 @@ export default function PlanAction({
       plan.id === "free" ? ROUTES.signUp : `${ROUTES.signUp}?next=${encodeURIComponent(ROUTES.billing)}`;
     return (
       <Link href={href} className={buttonClass}>
-        {plan.id === "free" ? "Start for free" : `Get ${plan.name}`}
+        {plan.id === "free" ? "Sign up free" : `Get ${plan.name}`}
       </Link>
     );
   }

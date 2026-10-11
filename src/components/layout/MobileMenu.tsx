@@ -11,7 +11,7 @@ export default function MobileMenu({ open, signedIn, pathname }: MobileMenuProps
       id="mobile-menu"
       className={cn(
         "overflow-hidden transition-all md:hidden",
-        open ? "max-h-96 border-t border-white/10" : "max-h-0",
+        open ? "max-h-96 border-t border-navy/[0.07]" : "max-h-0",
       )}
     >
       <ul className="space-y-1 px-4 py-3">
@@ -21,7 +21,7 @@ export default function MobileMenu({ open, signedIn, pathname }: MobileMenuProps
               href={item.href}
               className={cn(
                 "block rounded-xl px-3 py-2.5 text-sm font-semibold",
-                pathname === item.href ? "bg-white/10 text-gold" : "text-white/80",
+                pathname === item.href ? "bg-navy/[0.06] text-navy" : "text-navy-500",
               )}
             >
               {item.label}

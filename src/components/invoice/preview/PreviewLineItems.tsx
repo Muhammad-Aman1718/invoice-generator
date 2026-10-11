@@ -24,11 +24,11 @@ export default function PreviewLineItems({ invoice, formatMoney }: PreviewLineIt
         <tbody>
           {invoice.lineItems.map((item, index) => (
             <tr key={item.id || index} className="avoid-break border-b border-navy/[0.07]">
-              <td className="py-2.5 pr-2 align-top font-medium">{item.description || "—"}</td>
+              <td className="py-2.5 pr-2 align-top font-medium">{item.description || "-"}</td>
               <td className="px-2 py-2.5 text-center align-top text-navy/65">{item.quantity}</td>
               <td className="px-2 py-2.5 text-right align-top text-navy/65">{formatMoney(item.rate)}</td>
               <td className="px-2 py-2.5 text-center align-top text-navy/50">
-                {item.discount ? `${item.discount}%` : "—"}
+                {item.discount ? `${item.discount}%` : "-"}
               </td>
               <td className="py-2.5 pl-2 text-right align-top font-semibold">{formatMoney(item.amount)}</td>
             </tr>

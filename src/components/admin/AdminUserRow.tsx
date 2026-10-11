@@ -17,7 +17,7 @@ export default function AdminUserRow({ user, isSelf, busy, onUpdate }: AdminUser
     <tr className={cn(user.isSuspended && "bg-red-50/50")}>
       <td className="px-5 py-3">
         <p className="font-semibold text-navy">
-          {user.fullName || "—"} {isSelf && <span className="text-xs text-navy-400">(you)</span>}
+          {user.fullName || "-"} {isSelf && <span className="text-xs text-navy-400">(you)</span>}
         </p>
         <p className="text-xs text-navy-500">{user.email}</p>
       </td>

@@ -1,4 +1,4 @@
-import { Clock, Github, Linkedin, Mail, ShieldCheck, Twitter } from "lucide-react";
+import { Clock, Github, Mail, ShieldCheck } from "lucide-react";
 import type { ContactChannel, FooterColumn, NavLink } from "@/src/types/types";
 import { getSiteUrl } from "@/src/lib/siteUrl";
 
@@ -12,10 +12,9 @@ export const SITE_CONFIG = {
   privacyEmail: "privacy@invoicegen.app",
   legalUpdated: "October 5, 2026",
   company: "InvoiceGen",
+  // Only real profiles belong here; add X/LinkedIn once those accounts exist.
   social: {
-    twitter: "https://twitter.com",
     github: "https://github.com/muhammad-aman1718/invoice-generator",
-    linkedin: "https://linkedin.com",
   },
 };
 
@@ -59,11 +58,7 @@ export const FOOTER_NAV: FooterColumn[] = [
   },
 ];
 
-export const SOCIAL_LINKS = [
-  { icon: Twitter, label: "Twitter", href: SITE_CONFIG.social.twitter },
-  { icon: Github, label: "GitHub", href: SITE_CONFIG.social.github },
-  { icon: Linkedin, label: "LinkedIn", href: SITE_CONFIG.social.linkedin },
-];
+export const SOCIAL_LINKS = [{ icon: Github, label: "GitHub", href: SITE_CONFIG.social.github }];
 
 export const LEGAL_LINKS: NavLink[] = [
   { href: "/privacy-policy", label: "Privacy Policy" },
@@ -86,7 +81,7 @@ export const CONTACT_CHANNELS: ContactChannel[] = [
     body: SITE_CONFIG.privacyEmail,
     href: `mailto:${SITE_CONFIG.privacyEmail}`,
   },
-  { icon: Clock, title: "Response time", body: "Within 1 business day (24h on Business)" },
+  { icon: Clock, title: "Response time", body: "Within 2 business days (24h on Business)" },
 ];
 
 export const EMPTY_CONTACT_MESSAGE = { name: "", email: "", subject: "", message: "" };

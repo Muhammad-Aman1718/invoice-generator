@@ -8,7 +8,7 @@ export const PRICING_FAQS: FaqItem[] = [
   },
   {
     q: "Can I cancel any time?",
-    a: "Yes — cancel from Billing in one click. You keep paid features until the end of the period you paid for, then drop to Free without losing data.",
+    a: "Yes. Cancel from Billing in one click. You keep paid features until the end of the period you paid for, then drop to Free without losing data.",
   },
   {
     q: "Do you offer refunds?",
@@ -30,7 +30,7 @@ export const HELP_CENTER_GROUPS: FaqGroup[] = [
     items: [
       {
         q: "Do I need an account?",
-        a: "No. The builder on the home page works without one — your draft is saved in your browser and you can download the PDF. Create a free account to save invoices, clients and track payments.",
+        a: "No. The builder on the home page works without one. Your draft is saved in your browser and you can download the PDF. Create a free account to save invoices, clients and track payments.",
       },
       {
         q: "How do I create my first invoice?",
@@ -51,7 +51,7 @@ export const HELP_CENTER_GROUPS: FaqGroup[] = [
       },
       {
         q: "What do the statuses mean?",
-        a: "Draft — not sent yet. Pending — sent and awaiting payment. Paid — settled. Cancelled — void. Pending invoices past their due date show as Overdue automatically.",
+        a: "Draft: not sent yet. Pending: sent and awaiting payment. Paid: settled. Cancelled: void. Pending invoices past their due date show as Overdue automatically.",
       },
       {
         q: "Can I copy an invoice?",

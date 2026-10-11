@@ -10,7 +10,7 @@ export default function CurrentPlanCard({ plan, subscription }: CurrentPlanCardP
     : "";
   const priceText =
     plan.id === "free"
-      ? "Free forever — upgrade any time."
+      ? "Free forever. Upgrade any time."
       : `$${plan.price[subscription.billingInterval]} / ${subscription.billingInterval}${renewalText}`;
 
   return (

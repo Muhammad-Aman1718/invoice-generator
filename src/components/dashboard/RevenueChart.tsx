@@ -20,7 +20,7 @@ export default function RevenueChart({ data, currency }: RevenueChartProps) {
           {REVENUE_SERIES.map((series) => (
             <li key={series.key} className="flex items-center gap-1.5 text-xs font-semibold text-navy-500">
               <span
-                className="h-2.5 w-2.5 rounded-sm"
+                className="h-2.5 w-2.5 rounded-lg"
                 style={{ background: series.color }}
                 aria-hidden="true"
               />

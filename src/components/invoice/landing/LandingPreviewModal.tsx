@@ -24,7 +24,7 @@ export default function LandingPreviewModal({
       aria-label="Invoice preview"
     >
       <div className="absolute inset-0 bg-navy/70 backdrop-blur-md" onClick={onClose} aria-hidden="true" />
-      <div className="relative flex h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-mist shadow-2xl">
+      <div className="relative flex h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-mist shadow-2xl">
         <div className="flex flex-shrink-0 items-center justify-between bg-navy px-4 py-3 sm:px-6">
           <h3 className="flex items-center gap-3 text-sm font-bold text-white">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/20">

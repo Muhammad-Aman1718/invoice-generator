@@ -25,7 +25,7 @@ export function getAbsoluteUrl(path: string): string {
 /** Title, description, canonical URL and social tags (with preview image) for a public page. */
 export function buildPageMetadata(page: SeoPageKey): Metadata {
   const { path, title, description, keywords = [] } = PAGE_SEO[page];
-  const fullTitle = page === "home" ? `${SITE_CONFIG.name} — ${title}` : `${title} | ${SITE_CONFIG.name}`;
+  const fullTitle = `${title} | ${SITE_CONFIG.name}`;
   return {
     title: page === "home" ? { absolute: fullTitle } : title,
     description,
@@ -72,7 +72,7 @@ function buildApplicationJsonLd(): JsonLdData {
   return {
     "@type": "WebApplication",
     "@id": `${SITE_CONFIG.url}/#app`,
-    name: `${SITE_CONFIG.name} — ${SEO_DEFAULT_TITLE}`,
+    name: `${SITE_CONFIG.name}: ${SEO_DEFAULT_TITLE}`,
     url: SITE_CONFIG.url,
     description: SITE_CONFIG.description,
     applicationCategory: "BusinessApplication",
@@ -108,7 +108,7 @@ export function buildBreadcrumbJsonLd(page: SeoPageKey, child?: { name: string; 
   const { path, title } = PAGE_SEO[page];
   const crumbs = [
     { name: "Home", path: "/" },
-    { name: title.split(" — ")[0], path },
+    { name: title.split(": ")[0], path },
     ...(child ? [child] : []),
   ];
   return {

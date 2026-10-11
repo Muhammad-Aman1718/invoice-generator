@@ -41,7 +41,7 @@ describe("buildPageMetadata", () => {
 
   it("uses an absolute title on the home page", () => {
     expect(buildPageMetadata("home").title).toEqual({
-      absolute: `${SITE_CONFIG.name} — ${PAGE_SEO.home.title}`,
+      absolute: `${PAGE_SEO.home.title} | ${SITE_CONFIG.name}`,
     });
   });
 });

@@ -23,7 +23,7 @@ export default function RecentInvoices({ invoices }: RecentInvoicesProps) {
       {invoices.length === 0 ? (
         <div className="flex flex-col items-center gap-3 p-10 text-center">
           <FileText className="text-navy-300" size={28} />
-          <p className="text-sm text-navy-500">No invoices yet — your first one takes under a minute.</p>
+          <p className="text-sm text-navy-500">No invoices yet. Your first one takes under a minute.</p>
           <Link href={ROUTES.newInvoice} className="btn-primary btn-sm">
             <Plus size={14} /> Create invoice
           </Link>

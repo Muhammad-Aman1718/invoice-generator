@@ -5,8 +5,8 @@ import type { PdfMetaProps } from "@/src/types/types";
 
 export default function PdfMeta({ invoice, formatMoney }: PdfMetaProps) {
   const details = [
-    { label: "Issue date", value: invoice.issueDate ? formatInvoiceDate(invoice.issueDate) : "—" },
-    { label: "Due date", value: invoice.dueDate ? formatInvoiceDate(invoice.dueDate) : "—" },
+    { label: "Issue date", value: invoice.issueDate ? formatInvoiceDate(invoice.issueDate) : "-" },
+    { label: "Due date", value: invoice.dueDate ? formatInvoiceDate(invoice.dueDate) : "-" },
     ...(invoice.poNumber ? [{ label: "PO number", value: invoice.poNumber }] : []),
   ];
   return (

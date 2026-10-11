@@ -79,7 +79,9 @@
   }
 }
 
-/* ─── Reusable component classes (keeps JSX free of repeated inline styles) ─ */
+/* ─── Reusable component classes (keeps JSX free of repeated inline styles) ─
+   Shape system, used everywhere: buttons & inputs rounded-xl (12px), cards &
+   panels rounded-2xl (16px), pills & badges rounded-full, chips < 32px rounded-lg. */
 @layer components {
   .input {
     @apply w-full rounded-xl border border-navy/10 bg-white px-3 py-2.5 text-sm font-medium text-navy outline-none transition-all placeholder:text-[#707070] focus:border-gold focus:ring-2 focus:ring-gold/20 disabled:cursor-not-allowed disabled:opacity-60;
@@ -91,7 +93,7 @@
     @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
   }
   .btn-primary {
-    @apply btn bg-gold text-navy shadow-button hover:bg-gold-hover;
+    @apply btn bg-gold text-navy shadow-button hover:-translate-y-px hover:bg-gold-hover;
   }
   .btn-navy {
     @apply btn bg-navy text-white hover:bg-navy-600;
@@ -142,6 +144,31 @@
   .prose-legal td {
     @apply border-b border-navy/5 py-2 pr-4 align-top text-navy-500;
   }
+}
+
+/* Frosted header (web approximation of a glass bar, not an official material). */
+.glass-bar {
+  background: rgb(255 255 255 / 0.85);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass-bar {
+    background: #ffffff;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Scroll reveal (see components/ui/Reveal.tsx); only transform + opacity animate. */
+.reveal {
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(16px);
 }
 
 /* Custom scrollbar */

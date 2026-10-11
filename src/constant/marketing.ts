@@ -17,7 +17,7 @@ import {
   Users,
   Zap,
 } from "lucide-react";
-import type { AboutValue, FeatureItem, TemplateUse } from "@/src/types/types";
+import type { AboutValue, FeatureItem, InvoiceData, TemplateUse } from "@/src/types/types";
 
 export const FEATURES: FeatureItem[] = [
   {
@@ -28,7 +28,7 @@ export const FEATURES: FeatureItem[] = [
   {
     icon: Download,
     title: "One-click PDF",
-    body: "Crisp A4 PDFs with page numbers and repeating headers — even for 100+ line items.",
+    body: "Crisp A4 PDFs with page numbers and repeating headers, even for 100+ line items.",
   },
   {
     icon: Globe,
@@ -68,7 +68,7 @@ export const FEATURES: FeatureItem[] = [
   {
     icon: Smartphone,
     title: "Works everywhere",
-    body: "Fully responsive — create and send invoices from your phone, tablet or desktop.",
+    body: "Fully responsive: create and send invoices from your phone, tablet or desktop.",
   },
 ];
 
@@ -78,7 +78,7 @@ export const HOW_IT_WORKS_STEPS: FeatureItem[] = [
     title: "Fill in the details",
     body: "Your business, your client, line items, tax and discounts.",
   },
-  { icon: Download, title: "Download the PDF", body: "A clean, printer-friendly A4 invoice — instantly." },
+  { icon: Download, title: "Download the PDF", body: "A clean, printer-friendly A4 invoice, instantly." },
   {
     icon: Send,
     title: "Track payment",
@@ -112,19 +112,12 @@ export const TEMPLATE_USES: TemplateUse[] = [
 ];
 
 /** Sample rows shown in the template preview on /templates. */
-export const TEMPLATE_MOCKUP_LINES = [
-  { description: "Brand identity", amount: "£1,200.00" },
-  { description: "Website design", amount: "£2,400.00" },
-  { description: "Hosting (12 mo)", amount: "£180.00" },
-];
-export const TEMPLATE_MOCKUP_TOTAL = "£4,536.00";
 
 /** Plan features shown per card in the home-page pricing teaser. */
 export const TEASER_FEATURE_COUNT = 3;
 
 export const ABOUT_MISSION =
-  "Invoicing should take a minute, not an afternoon. We build simple tools that help freelancers and " +
-  "small businesses look professional, stay tax-ready and get paid on time.";
+  "Invoicing should take a minute, not an afternoon. We build simple tools that help small businesses get paid on time.";
 
 export const ABOUT_STORY = [
   "InvoiceGen started as a free, no-sign-up invoice builder for people who just needed a clean PDF fast.",
@@ -153,5 +146,51 @@ export const ABOUT_VALUES: AboutValue[] = [
     icon: Eye,
     title: "Built in the open",
     body: "Our code is on GitHub and our changelog lists every improvement, so you always know what changed.",
+  },
+];
+
+/** Number of real currency codes / tax presets shown in the home bento. */
+export const BENTO_CURRENCY_PREVIEW = 24;
+export const BENTO_TAX_PREVIEW = 6;
+
+/** Example invoice shown on marketing pages (rendered with the real preview component). */
+export const SAMPLE_INVOICE_DRAFT: Partial<InvoiceData> = {
+  invoiceNumber: 1047,
+  currency: "GBP",
+  businessName: "Harborlane Design Studio",
+  bussinessInfo: "Unit 4, Canal Works, Leeds LS10 1PJ\nhello@harborlane.studio",
+  clientName: "Meridian Freight Co.",
+  clientAddress: "18 Dock Street, Hull HU1 3DL\naccounts@meridianfreight.co.uk",
+  issueDate: "2026-10-02",
+  dueDate: "2026-10-16",
+  poNumber: "MF-2291",
+  taxRate: 20,
+  overallDiscount: 0,
+  notes: "Thank you for working with us. Please pay by bank transfer.",
+  terms: "Payment due within 14 days.",
+  status: "pending",
+  lineItems: [
+    { id: "s1", description: "Brand identity refresh", quantity: 1, rate: 2850, discount: 0, amount: 0 },
+    { id: "s2", description: "Website design, 5 pages", quantity: 1, rate: 3400, discount: 10, amount: 0 },
+    { id: "s3", description: "Copywriting (hours)", quantity: 7.5, rate: 85, discount: 0, amount: 0 },
+  ],
+};
+
+/** Features page clusters (titles must match FEATURES). */
+export const FEATURE_GROUPS = [
+  {
+    title: "Create invoices fast",
+    body: "Everything happens on one screen, with the PDF exactly as you see it.",
+    features: ["Live preview", "One-click PDF", "Your branding", "Works everywhere"],
+  },
+  {
+    title: "Any currency, any tax",
+    body: "Bill clients at home or abroad with the right symbol, format and tax.",
+    features: ["40+ currencies", "VAT, GST & sales tax"],
+  },
+  {
+    title: "Run the business side",
+    body: "Keep clients, payments and numbers in one place.",
+    features: ["Client book", "Dashboard & reports", "CSV export", "Private by design"],
   },
 ];

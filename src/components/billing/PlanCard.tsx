@@ -14,7 +14,7 @@ export default function PlanCard({ plan, interval, action }: PlanCardProps) {
   return (
     <div
       className={cn(
-        "relative flex flex-col rounded-3xl border-2 bg-white p-6 sm:p-7",
+        "relative flex flex-col rounded-2xl border-2 bg-white p-6 sm:p-7",
         plan.highlighted ? "border-gold shadow-lift" : "border-navy/[0.08] shadow-card",
       )}
     >

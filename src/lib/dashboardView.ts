@@ -87,7 +87,7 @@ export function buildAdminStatItems(stats: AdminStats): StatItem[] {
   const paid = stats.byPlan.pro + stats.byPlan.business;
   const conversion = stats.totalUsers
     ? `${Math.round((paid / stats.totalUsers) * FULL_PERCENT)}% conversion`
-    : "—";
+    : "-";
   return [
     {
       label: "Users",

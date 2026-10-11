@@ -16,7 +16,7 @@ export default function GlobalError({ error, reset }: ErrorPageProps) {
       </span>
       <h1 className="mb-2 text-2xl font-bold text-navy">Something went wrong</h1>
       <p className="mb-6 max-w-sm text-sm text-navy-500">
-        An unexpected error occurred. Try again — if it keeps happening, contact support.
+        An unexpected error occurred. Try again. If it keeps happening, contact support.
         {error.digest && <span className="mt-1 block tabular-nums text-xs">Ref: {error.digest}</span>}
       </p>
       <button onClick={reset} className="btn-primary">

@@ -47,7 +47,7 @@ export default function SupportCard({ plan }: SupportCardProps) {
         <ul className="space-y-2">
           {EARLY_ACCESS_FEATURES.map((feature) => (
             <li key={feature.title} className="text-sm text-navy-500">
-              <span className="font-semibold text-navy">{feature.title}</span> — {feature.detail}
+              <span className="font-semibold text-navy">{feature.title}</span>: {feature.detail}
             </li>
           ))}
         </ul>

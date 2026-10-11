@@ -21,7 +21,7 @@ export default function ApiDocsPage() {
           <h2 className="mb-2 text-lg font-bold text-navy">Conventions</h2>
           <ul className="list-disc space-y-1.5 pl-5 marker:text-gold-dark">
             <li>
-              All bodies are JSON. Dates use <code>YYYY-MM-DD</code>; percentages are 0–100.
+              All bodies are JSON. Dates use <code>YYYY-MM-DD</code>; percentages are 0-100.
             </li>
             <li>
               Errors return <code>{`{ "error": "message", "code"?: "PLAN_LIMIT" }`}</code> with status 400,
