@@ -1,25 +1,21 @@
-import { Calendar } from "lucide-react";
-import Field from "@/src/components/ui/Field";
+"use client";
+
+import FormField from "@/src/components/ui/FormField";
+import useFieldValidation from "@/src/hooks/useFieldValidation";
 import type { DateInputProps } from "@/src/types/types";
 
-export default function DateInput({ id, label, value, onChange }: DateInputProps) {
+export default function DateInput({ id, label, value, onChange, required }: DateInputProps) {
+  const { error, inputProps } = useFieldValidation(id);
   return (
-    <Field label={label} htmlFor={id}>
-      <div className="relative w-full">
-        <Calendar
-          size={15}
-          strokeWidth={2.5}
-          className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-gold"
-          aria-hidden="true"
-        />
-        <input
-          id={id}
-          type="date"
-          value={value || ""}
-          onChange={(event) => onChange(event.target.value)}
-          className="input cursor-pointer pl-9 [color-scheme:light]"
-        />
-      </div>
-    </Field>
+    <FormField id={id} label={label} required={required} error={error}>
+      <input
+        id={id}
+        type="date"
+        value={value || ""}
+        onChange={(event) => onChange(event.target.value)}
+        className="input cursor-pointer [color-scheme:light]"
+        {...inputProps}
+      />
+    </FormField>
   );
 }

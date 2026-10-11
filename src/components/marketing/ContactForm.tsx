@@ -6,6 +6,7 @@ import TextField from "@/src/components/ui/TextField";
 import TextAreaField from "@/src/components/ui/TextAreaField";
 import useContactForm from "@/src/hooks/useContactForm";
 import { CONTACT_MESSAGE_MIN_LENGTH } from "@/src/constant/limits";
+import { FIELD_LIMITS } from "@/src/constant/limits";
 
 export default function ContactForm() {
   const { values, setValue, isSending, isSent, handleSubmit } = useContactForm();
@@ -15,6 +16,7 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="panel grid gap-4 p-6 sm:grid-cols-2 sm:p-8">
       <TextField
         id="contactName"
+        maxLength={FIELD_LIMITS.personName}
         label="Your name"
         autoComplete="name"
         required
@@ -23,6 +25,7 @@ export default function ContactForm() {
       />
       <TextField
         id="contactEmail"
+        maxLength={FIELD_LIMITS.email}
         label="Email"
         type="email"
         autoComplete="email"
@@ -32,6 +35,7 @@ export default function ContactForm() {
       />
       <TextField
         id="contactSubject"
+        maxLength={FIELD_LIMITS.subject}
         label="Subject"
         className="sm:col-span-2"
         required
@@ -40,6 +44,7 @@ export default function ContactForm() {
       />
       <TextAreaField
         id="contactMessage"
+        maxLength={FIELD_LIMITS.message}
         label="Message"
         className="sm:col-span-2"
         rows={6}

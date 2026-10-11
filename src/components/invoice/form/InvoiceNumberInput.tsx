@@ -1,31 +1,38 @@
 "use client";
 
-import { Hash } from "lucide-react";
+import FormField from "@/src/components/ui/FormField";
+import useFieldValidation from "@/src/hooks/useFieldValidation";
 import { useInvoiceStore } from "@/src/lib/invoiceStore";
-import { DIGITS_ONLY } from "@/src/constant/limits";
+import { DIGITS_ONLY, MAX_INVOICE_NUMBER_DIGITS } from "@/src/constant/limits";
 
 export default function InvoiceNumberInput() {
   const invoiceNumber = useInvoiceStore((state) => state.invoiceNumber);
   const setField = useInvoiceStore((state) => state.setField);
+  const { error, inputProps } = useFieldValidation("invoiceNumber");
 
   return (
-    <div className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2 py-1 transition focus-within:border-gold/50">
-      <Hash size={12} className="flex-shrink-0 text-gold" aria-hidden="true" />
-      <label htmlFor="invoiceNumber" className="sr-only">
-        Invoice number
-      </label>
-      <input
-        id="invoiceNumber"
-        type="text"
-        inputMode="numeric"
-        placeholder="#"
-        className="w-12 border-none bg-transparent text-sm font-bold text-white outline-none placeholder:text-white/40 sm:w-24 sm:text-base"
-        value={invoiceNumber === 0 ? "" : invoiceNumber}
-        onChange={(event) => {
-          const value = event.target.value;
-          if (DIGITS_ONLY.test(value)) setField("invoiceNumber", value === "" ? 0 : Number(value));
-        }}
-      />
-    </div>
+    <FormField id="invoiceNumber" label="Invoice number" required error={error}>
+      <div className="relative">
+        <span
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-navy-400"
+          aria-hidden="true"
+        >
+          #
+        </span>
+        <input
+          id="invoiceNumber"
+          type="text"
+          inputMode="numeric"
+          maxLength={MAX_INVOICE_NUMBER_DIGITS}
+          className="input pl-7 tabular-nums"
+          value={invoiceNumber === 0 ? "" : invoiceNumber}
+          onChange={(event) => {
+            const value = event.target.value;
+            if (DIGITS_ONLY.test(value)) setField("invoiceNumber", value === "" ? 0 : Number(value));
+          }}
+          {...inputProps}
+        />
+      </div>
+    </FormField>
   );
 }

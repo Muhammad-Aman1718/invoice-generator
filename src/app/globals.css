@@ -73,9 +73,11 @@
       transition-duration: 0.01ms !important;
     }
   }
+  /* Navy ring (>= 3:1 on light surfaces) plus an amber halo that stays visible on navy. */
   :focus-visible {
-    outline: 2px solid #ffc107;
+    outline: 2px solid #191970;
     outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgb(255 193 7 / 0.55);
   }
 }
 
@@ -83,14 +85,15 @@
    Shape system, used everywhere: buttons & inputs rounded-xl (12px), cards &
    panels rounded-2xl (16px), pills & badges rounded-full, chips < 32px rounded-lg. */
 @layer components {
+  /* 16px text on phones stops iOS zooming into focused fields; 44px tall for touch. */
   .input {
-    @apply w-full rounded-xl border border-navy/10 bg-white px-3 py-2.5 text-sm font-medium text-navy outline-none transition-all placeholder:text-[#707070] focus:border-gold focus:ring-2 focus:ring-gold/20 disabled:cursor-not-allowed disabled:opacity-60;
+    @apply min-h-[2.75rem] w-full rounded-xl border border-navy/15 bg-white px-3 py-2.5 text-base font-medium text-navy outline-none transition-colors placeholder:text-[#707070] focus:border-navy focus:ring-2 focus:ring-gold/40 disabled:cursor-not-allowed disabled:opacity-60 aria-[invalid=true]:border-red-600 sm:text-sm;
   }
   .label {
     @apply mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-navy-500;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex min-h-[2.75rem] cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition-all active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
   }
   .btn-primary {
     @apply btn bg-gold text-navy shadow-button hover:-translate-y-px hover:bg-gold-hover;
@@ -108,7 +111,7 @@
     @apply btn bg-red-500 text-white hover:bg-red-600;
   }
   .btn-sm {
-    @apply px-3 py-1.5 text-xs;
+    @apply min-h-[2.25rem] px-3 py-1.5 text-xs;
   }
   .panel {
     @apply rounded-2xl border border-navy/[0.07] bg-white shadow-card;
@@ -169,6 +172,14 @@
 .reveal[data-reveal="hidden"] {
   opacity: 0;
   transform: translateY(16px);
+}
+
+/* Invoice line items: stacked on phones, aligned columns from 640px. */
+@media (min-width: 640px) {
+  .line-item-grid {
+    grid-template-columns: minmax(0, 1fr) 5rem 7.5rem 5.25rem 7.5rem 2.75rem;
+    column-gap: 0.5rem;
+  }
 }
 
 /* Custom scrollbar */

@@ -36,10 +36,6 @@ export const MENU_LABEL_CLASS =
 export const COMPACT_SELECT_CLASS =
   "rounded-lg border border-navy/10 bg-white px-2 py-1.5 text-xs font-bold text-navy";
 
-/** Borderless input used inside the line-items table. */
-export const LINE_ITEM_INPUT_CLASS =
-  "w-full rounded-lg border border-transparent bg-white px-2.5 py-2 text-sm font-medium text-navy outline-none transition placeholder:text-navy/25 hover:border-navy/15 focus:border-gold focus:ring-2 focus:ring-gold/20";
-
 /** Delay between stat cards fading in, so they appear one after another. */
 export const STAT_CARD_STAGGER_MS = 60;
 

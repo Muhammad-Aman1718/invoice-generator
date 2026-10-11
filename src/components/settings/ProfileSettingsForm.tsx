@@ -7,6 +7,7 @@ import InvoiceDefaultsFields from "./InvoiceDefaultsFields";
 import TextField from "@/src/components/ui/TextField";
 import useProfileSettings from "@/src/hooks/useProfileSettings";
 import type { ProfileSettingsFormProps } from "@/src/types/types";
+import { FIELD_LIMITS } from "@/src/constant/limits";
 
 export default function ProfileSettingsForm({ profile, email }: ProfileSettingsFormProps) {
   const { values, setValue, isSaving, handleSubmit } = useProfileSettings(profile);
@@ -17,6 +18,7 @@ export default function ProfileSettingsForm({ profile, email }: ProfileSettingsF
         <div className="grid gap-4 sm:grid-cols-2">
           <TextField
             id="fullName"
+            maxLength={FIELD_LIMITS.personName}
             label="Full name"
             value={values.fullName}
             onChange={(event) => setValue("fullName", event.target.value)}
