@@ -4,6 +4,7 @@ import { CURRENCIES } from "@/src/constant/currencies";
 import { MAX_PAYMENT_TERMS_DAYS } from "@/src/constant/app";
 import { MAX_PERCENT } from "@/src/constant/limits";
 import type { SettingsFieldsProps } from "@/src/types/types";
+import { FIELD_LIMITS } from "@/src/constant/limits";
 
 export default function InvoiceDefaultsFields({ values, onChange }: SettingsFieldsProps) {
   return (
@@ -46,6 +47,7 @@ export default function InvoiceDefaultsFields({ values, onChange }: SettingsFiel
       />
       <TextAreaField
         id="defaultNotes"
+        maxLength={FIELD_LIMITS.notes}
         label="Default notes"
         className="sm:col-span-3"
         rows={2}
@@ -55,6 +57,7 @@ export default function InvoiceDefaultsFields({ values, onChange }: SettingsFiel
       />
       <TextAreaField
         id="defaultTerms"
+        maxLength={FIELD_LIMITS.notes}
         label="Default terms"
         className="sm:col-span-3"
         rows={2}

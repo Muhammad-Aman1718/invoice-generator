@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import useInvoiceValidation from "@/src/hooks/useInvoiceValidation";
 import { ApiRequestError } from "@/src/lib/apiClient";
 import { useInvoiceStore } from "@/src/lib/invoiceStore";
 import { saveInvoice } from "@/src/lib/supabase/invoicesClient";
@@ -16,14 +17,14 @@ export default function useInvoiceSave({ mode, invoiceId, onSaved }: InvoiceSave
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [limitMessage, setLimitMessage] = useState<string | null>(null);
+  const { validateAll } = useInvoiceValidation();
 
   const save = async () => {
-    const invoice = useInvoiceStore.getState();
-    if (!invoice.clientName.trim()) {
-      showToast.warning("Client required", "Add who this invoice is for under “Bill To”.");
-      document.getElementById("clientName")?.focus();
+    if (!validateAll()) {
+      showToast.error("Check the invoice", "Fix the highlighted fields, then save again.");
       return;
     }
+    const invoice = useInvoiceStore.getState();
     setIsSaving(true);
     try {
       const saved = await saveInvoice({ ...invoice, id: mode === "edit" ? invoiceId : undefined });

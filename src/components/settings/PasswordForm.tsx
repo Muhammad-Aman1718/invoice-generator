@@ -5,6 +5,7 @@ import SettingsSection from "./SettingsSection";
 import TextField from "@/src/components/ui/TextField";
 import useUpdatePassword from "@/src/hooks/useUpdatePassword";
 import { PASSWORD_MIN_LENGTH } from "@/src/constant/app";
+import { FIELD_LIMITS } from "@/src/constant/limits";
 
 export default function PasswordForm() {
   const { password, setPassword, confirmation, setConfirmation, isLoading, handleSubmit } =
@@ -19,6 +20,7 @@ export default function PasswordForm() {
       <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
         <TextField
           id="newPassword"
+          maxLength={FIELD_LIMITS.password}
           label="New password"
           type="password"
           autoComplete="new-password"
@@ -28,6 +30,7 @@ export default function PasswordForm() {
         />
         <TextField
           id="confirmPassword"
+          maxLength={FIELD_LIMITS.password}
           label="Confirm password"
           type="password"
           autoComplete="new-password"

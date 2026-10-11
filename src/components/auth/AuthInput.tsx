@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/src/lib/utils";
+import { FIELD_LIMITS } from "@/src/constant/limits";
 import type { AuthInputProps } from "@/src/types/types";
 
 function getBorderClass(hasError: boolean, isValidMatch: boolean): string {
@@ -25,6 +26,11 @@ export default function AuthInput({
 }: AuthInputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const inputType = isPassword ? (showPassword ? "text" : "password") : type;
+  const defaultMaxLength = isPassword
+    ? FIELD_LIMITS.password
+    : type === "email"
+      ? FIELD_LIMITS.email
+      : undefined;
 
   return (
     <div className="w-full space-y-1.5">
@@ -48,6 +54,7 @@ export default function AuthInput({
             isPassword && "pr-12",
             className,
           )}
+          maxLength={defaultMaxLength}
           {...inputProps}
         />
         {isPassword && (

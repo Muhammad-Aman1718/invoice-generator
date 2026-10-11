@@ -2,6 +2,7 @@ import LogoUpload from "@/src/components/invoice/LogoUpload";
 import TextField from "@/src/components/ui/TextField";
 import TextAreaField from "@/src/components/ui/TextAreaField";
 import type { SettingsFieldsProps } from "@/src/types/types";
+import { FIELD_LIMITS } from "@/src/constant/limits";
 
 export default function BusinessDetailsFields({ values, onChange }: SettingsFieldsProps) {
   return (
@@ -17,6 +18,7 @@ export default function BusinessDetailsFields({ values, onChange }: SettingsFiel
       <div className="space-y-4">
         <TextField
           id="companyName"
+          maxLength={FIELD_LIMITS.businessName}
           label="Business name"
           placeholder="Acme Studio LLC"
           value={values.companyName}
@@ -24,6 +26,7 @@ export default function BusinessDetailsFields({ values, onChange }: SettingsFiel
         />
         <TextAreaField
           id="businessInfo"
+          maxLength={FIELD_LIMITS.address}
           label="Address & contact"
           placeholder={"Street, City\nhello@acme.com · +1 555 0100\nVAT: GB123456789"}
           value={values.businessInfo}

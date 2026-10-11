@@ -5,7 +5,6 @@ import type {
   InvoiceListQuery,
   InvoiceSortKey,
   InvoiceStatus,
-  Tab,
 } from "@/src/types/types";
 
 export const INVOICE_STATUSES: [InvoiceStatus, ...InvoiceStatus[]] = [
@@ -58,11 +57,11 @@ export const DEFAULT_INVOICE_LIST_QUERY: InvoiceListQuery = { filter: "all", que
 
 /** Column headers of the editable line-items table. */
 export const LINE_ITEM_COLUMNS = [
-  { label: "Description", className: "w-[38%] text-left px-3 sm:px-4" },
-  { label: "Qty", className: "w-[10%] text-center px-2 sm:px-3" },
-  { label: "Rate", className: "w-[16%] text-center px-2 sm:px-3" },
-  { label: "Disc %", className: "w-[12%] text-center px-2 sm:px-3" },
-  { label: "Amount", className: "w-[16%] text-right px-3 sm:px-4" },
+  { label: "Description", className: "text-left" },
+  { label: "Qty", className: "text-right" },
+  { label: "Rate", className: "text-right" },
+  { label: "Disc %", className: "text-right" },
+  { label: "Amount", className: "text-right" },
 ];
 
 /** Column headers of the read-only invoice preview. */
@@ -79,8 +78,6 @@ export const PREVIEW_COLUMNS = [
   { label: "Disc %", className: "w-[9%] text-center" },
   { label: "Amount", className: "w-[16%] text-right" },
 ];
-
-export const EDITOR_TABS: Tab[] = ["edit", "preview"];
 
 export const INVOICE_SUMMARY_COLUMNS =
   "id, client_id, invoice_number, client_name, issue_date, due_date, currency, total_amount, status, created_at";

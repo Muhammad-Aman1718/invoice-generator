@@ -17,9 +17,9 @@ export default function ClientPicker({ clients }: ClientPickerProps) {
   };
 
   return (
-    <div>
-      <label htmlFor="savedClient" className="sr-only">
-        Choose a saved client
+    <div className="space-y-1.5 sm:max-w-sm">
+      <label htmlFor="savedClient" className="label mb-0">
+        Saved client
       </label>
       <select
         id="savedClient"
@@ -27,7 +27,7 @@ export default function ClientPicker({ clients }: ClientPickerProps) {
         value={clientId ?? ""}
         onChange={(event) => selectClient(event.target.value)}
       >
-        <option value="">Saved clients…</option>
+        <option value="">Type a new client below</option>
         {clients.map((client) => (
           <option key={client.id} value={client.id}>
             {client.name}

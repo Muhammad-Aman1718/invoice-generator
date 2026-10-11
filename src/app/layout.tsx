@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import { SITE_CONFIG } from "@/src/constant/site";
@@ -54,19 +54,18 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-// Geist for body text and figures; Plus Jakarta Sans gives headings character.
-const bodyFont = Geist({ variable: "--font-sans", display: "swap", subsets: ["latin"] });
-const displayFont = Plus_Jakarta_Sans({
-  variable: "--font-display",
+// One family for the whole product (ui-ux-pro-max: friendly, modern SaaS pairing).
+const brandFont = Plus_Jakarta_Sans({
+  variable: "--font-sans",
   display: "swap",
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${bodyFont.variable} ${displayFont.variable} font-sans antialiased`}>
+      <body className={`${brandFont.variable} font-sans antialiased`}>
         <JsonLd data={buildSiteJsonLd()} />
         {children}
         <Toaster position="top-right" richColors closeButton />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import useInvoiceValidation from "@/src/hooks/useInvoiceValidation";
 import { useInvoiceStore } from "@/src/lib/invoiceStore";
 import { supabase } from "@/src/lib/supabase/client";
 import { saveInvoice } from "@/src/lib/supabase/invoicesClient";
@@ -18,8 +19,13 @@ function redirectGuestToSignUp() {
 export default function useInvoiceLanding() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const { validateAll } = useInvoiceValidation();
 
   const handleSave = async () => {
+    if (!validateAll()) {
+      showToast.error("Check the invoice", "Fix the highlighted fields, then save again.");
+      return;
+    }
     setIsSaving(true);
     try {
       const { data } = await supabase.auth.getSession();

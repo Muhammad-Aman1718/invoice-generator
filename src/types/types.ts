@@ -6,8 +6,6 @@ import type { SupabaseClient, User } from "@supabase/supabase-js";
 
 export type CurrencyCode = string;
 
-export type Tab = "edit" | "preview";
-
 export type InvoiceStatus = "draft" | "pending" | "paid" | "overdue" | "cancelled";
 
 export type UserRole = "user" | "admin";
@@ -1017,15 +1015,25 @@ export interface InvoiceEditorProps {
 
 export interface EditorToolbarProps {
   title: string;
+  /** Compact title for phones. */
+  shortTitle: string;
   subtitle: string;
-  tab: Tab;
-  showPreviewPanel: boolean;
   isSaving: boolean;
   isDownloading: boolean;
-  onTabChange: (tab: Tab) => void;
-  onTogglePreview: () => void;
+  onPreview: () => void;
   onDownload: () => void;
   onSave: () => void;
+}
+
+export interface EditorSummaryProps {
+  /** Hide the status picker (the free builder has no saved status). */
+  showStatus?: boolean;
+}
+
+export interface FormSectionProps {
+  title: string;
+  description?: string;
+  children: ReactNode;
 }
 
 export interface EditorInitOptions {
@@ -1043,13 +1051,8 @@ export interface InvoiceSaveOptions {
   onSaved: () => void;
 }
 
-export interface PreviewPanelProps {
-  id: string;
-  /** Responsive visibility classes chosen by the editor. */
-  className: string;
-}
-
 export interface StatusSelectProps {
+  id?: string;
   className?: string;
 }
 
@@ -1059,8 +1062,10 @@ export interface PlanLimitModalProps {
 }
 
 export interface InvoiceFormProps {
-  /** Saved clients (signed-in users) — enables the "pick a client" menu. */
+  /** Saved clients (signed-in users): enables the "saved client" picker. */
   clients?: Client[];
+  /** Show the totals card inside the form (off when a summary rail shows them). */
+  showTotals?: boolean;
 }
 
 export type BillToSectionProps = InvoiceFormProps;
@@ -1074,6 +1079,7 @@ export interface DateInputProps {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  required?: boolean;
 }
 
 export interface TaxSelectProps {
@@ -1092,10 +1098,6 @@ export interface TotalRowProps {
   label: ReactNode;
   value: string;
   className?: string;
-}
-
-export interface LineItemsTableProps {
-  currencySymbol: string;
 }
 
 export interface LineItemRowProps {
@@ -1204,17 +1206,11 @@ export interface LandingToolbarProps {
   onSave: () => void;
 }
 
-export interface LandingPreviewModalProps {
+export interface InvoicePreviewModalProps {
   open: boolean;
   isDownloading: boolean;
   onClose: () => void;
   onDownload: () => void;
-}
-
-export interface EditPreviewTabsProps {
-  tab: Tab;
-  onChange: (tab: Tab) => void;
-  className?: string;
 }
 
 // marketing
@@ -1330,4 +1326,50 @@ export interface FeatureSectionProps {
 export interface SampleInvoiceShowcaseProps {
   /** DOM id for the preview element (must be unique per page). */
   id: string;
+}
+
+export interface InvoiceTextRule {
+  /** DOM id of the input. */
+  id: string;
+  key: keyof InvoiceData;
+  label: string;
+  max: number;
+  required?: boolean;
+}
+
+/** Error message per input id. */
+export type InvoiceFieldErrors = Record<string, string>;
+
+export interface InvoiceValidationContextValue {
+  errors: InvoiceFieldErrors;
+  /** True after a failed save/download, until the errors are fixed. */
+  showSummary: boolean;
+  validateField: (id: string) => void;
+  /** Validate everything; returns false (and shows the summary) when there are errors. */
+  validateAll: () => boolean;
+}
+
+export interface InvoiceValidationProviderProps {
+  children: ReactNode;
+}
+
+export interface FormFieldProps {
+  id: string;
+  label: string;
+  children: ReactNode;
+  required?: boolean;
+  error?: string;
+  hint?: string;
+  /** Character counter for text inputs. */
+  count?: { length: number; max: number; alwaysVisible?: boolean };
+  className?: string;
+  /** Hide the visible label (still announced to screen readers). */
+  hideLabel?: boolean;
+}
+
+export interface CharacterCountProps {
+  id: string;
+  length: number;
+  max: number;
+  alwaysVisible?: boolean;
 }

@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import Modal from "@/src/components/ui/Modal";
 import TextField from "@/src/components/ui/TextField";
 import TextAreaField from "@/src/components/ui/TextAreaField";
-import { TEXT_LIMITS } from "@/src/constant/limits";
+import { FIELD_LIMITS } from "@/src/constant/limits";
 import type { ClientFormModalProps, ClientFormValues } from "@/src/types/types";
 
 export default function ClientFormModal({
@@ -37,12 +37,13 @@ export default function ClientFormModal({
           label="Name / company *"
           className="sm:col-span-2"
           required
-          maxLength={TEXT_LIMITS.name}
+          maxLength={FIELD_LIMITS.businessName}
           value={values.name}
           onChange={(event) => update("name", event.target.value)}
         />
         <TextField
           id="clientEmail"
+          maxLength={FIELD_LIMITS.email}
           label="Email"
           type="email"
           value={values.email}
@@ -50,6 +51,7 @@ export default function ClientFormModal({
         />
         <TextField
           id="clientPhone"
+          maxLength={FIELD_LIMITS.phone}
           label="Phone"
           type="tel"
           value={values.phone}
@@ -57,6 +59,7 @@ export default function ClientFormModal({
         />
         <TextAreaField
           id="clientAddress"
+          maxLength={FIELD_LIMITS.address}
           label="Address"
           className="sm:col-span-2"
           value={values.address}
@@ -64,12 +67,14 @@ export default function ClientFormModal({
         />
         <TextField
           id="clientTaxId"
+          maxLength={FIELD_LIMITS.taxId}
           label="Tax / VAT ID"
           value={values.taxId}
           onChange={(event) => update("taxId", event.target.value)}
         />
         <TextField
           id="clientNotes"
+          maxLength={FIELD_LIMITS.notes}
           label="Internal note"
           value={values.notes}
           onChange={(event) => update("notes", event.target.value)}
