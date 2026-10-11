@@ -10,7 +10,8 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  { ignores: [".next/**", "node_modules/**", "next-env.d.ts"] },
+  // .agents and .claude hold vendored agent skills (third-party code, kept unmodified).
+  { ignores: [".next/**", "node_modules/**", "next-env.d.ts", ".agents/**", ".claude/**"] },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {

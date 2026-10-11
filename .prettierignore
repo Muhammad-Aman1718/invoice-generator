@@ -5,3 +5,4 @@ coverage
 *.sql
 # Vendored agent skills (installed with `npx skills add`), kept byte-identical
 .agents
+.claude
