@@ -16,8 +16,6 @@ function toFormValues(profile: Profile): ProfileFormValues {
     defaultCurrency: profile.defaultCurrency,
     defaultTaxRate: profile.defaultTaxRate,
     paymentTermsDays: profile.paymentTermsDays,
-    defaultNotes: profile.defaultNotes ?? "",
-    defaultTerms: profile.defaultTerms ?? "",
   };
 }
 

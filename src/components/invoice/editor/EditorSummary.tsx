@@ -12,7 +12,7 @@ export default function EditorSummary({ showStatus = true }: EditorSummaryProps)
   const dueDate = useInvoiceStore((state) => state.dueDate);
 
   return (
-    <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start" aria-label="Invoice summary">
+    <aside className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start" aria-label="Invoice summary">
       <div className="rounded-2xl border border-navy/[0.08] bg-white p-5 shadow-card">
         <h2 className="mb-4 text-base font-bold text-navy">Summary</h2>
         {showStatus && (

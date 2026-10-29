@@ -1,54 +1,52 @@
 "use client";
 
 import Field from "@/src/components/ui/Field";
-import FormField from "@/src/components/ui/FormField";
 import LogoUpload from "@/src/components/invoice/LogoUpload";
-import useFieldValidation from "@/src/hooks/useFieldValidation";
+import SavedTextChoice from "./SavedTextChoice";
 import { useInvoiceStore } from "@/src/lib/invoiceStore";
 import { FIELD_LIMITS } from "@/src/constant/limits";
+import type { NotesSectionProps } from "@/src/types/types";
 
-export default function NotesSection() {
-  const { notes, terms, stampUrl, setField, setStampUrl } = useInvoiceStore();
-  const notesField = useFieldValidation("notes");
-  const termsField = useFieldValidation("terms");
+export default function NotesSection({ noteDefaults }: NotesSectionProps) {
+  const { notes, terms, paymentDetails, stampUrl, setField, setStampUrl } = useInvoiceStore();
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <FormField
+    <div className="space-y-5">
+      <SavedTextChoice
         id="notes"
         label="Notes"
-        hint="Payment instructions or a thank-you note."
-        error={notesField.error}
-        count={{ length: notes.length, max: FIELD_LIMITS.notes, alwaysVisible: true }}
-      >
-        <textarea
-          id="notes"
-          className="input min-h-[96px] resize-y"
-          maxLength={FIELD_LIMITS.notes}
-          value={notes}
-          onChange={(event) => setField("notes", event.target.value)}
-          {...notesField.inputProps}
-        />
-      </FormField>
-      <FormField
+        hint="A thank-you line or anything the client should know."
+        max={FIELD_LIMITS.notes}
+        rows={3}
+        value={notes}
+        savedValue={noteDefaults?.notes}
+        onChange={(value) => setField("notes", value)}
+      />
+      <SavedTextChoice
         id="terms"
-        label="Terms"
-        hint="Late fees, refund rules, etc."
-        error={termsField.error}
-        count={{ length: terms.length, max: FIELD_LIMITS.notes, alwaysVisible: true }}
-      >
-        <textarea
-          id="terms"
-          className="input min-h-[96px] resize-y"
-          maxLength={FIELD_LIMITS.notes}
-          value={terms}
-          onChange={(event) => setField("terms", event.target.value)}
-          {...termsField.inputProps}
+        label="Terms & conditions"
+        hint="Start lines with “- ” or “1. ” to print them as a list."
+        max={FIELD_LIMITS.notes}
+        rows={4}
+        value={terms}
+        savedValue={noteDefaults?.terms}
+        onChange={(value) => setField("terms", value)}
+      />
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-[minmax(0,1fr)_240px]">
+        <SavedTextChoice
+          id="paymentDetails"
+          label="Payment details (optional)"
+          hint="Bank name, account, IBAN, SWIFT or wallet."
+          max={FIELD_LIMITS.paymentDetails}
+          rows={4}
+          value={paymentDetails}
+          savedValue={noteDefaults?.paymentDetails}
+          onChange={(value) => setField("paymentDetails", value)}
         />
-      </FormField>
-      <Field label="Signature or stamp (optional)" htmlFor="stamp" className="sm:max-w-xs">
-        <LogoUpload id="stamp" value={stampUrl} onChange={setStampUrl} />
-      </Field>
+        <Field label="Signature or stamp (optional)" htmlFor="stamp">
+          <LogoUpload id="stamp" value={stampUrl} onChange={setStampUrl} />
+        </Field>
+      </div>
     </div>
   );
 }

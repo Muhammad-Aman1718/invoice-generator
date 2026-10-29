@@ -194,3 +194,34 @@ export const FEATURE_GROUPS = [
     features: ["Client book", "Dashboard & reports", "CSV export", "Private by design"],
   },
 ];
+
+/** Fields almost every tax authority asks for (country hub page). */
+export const UNIVERSAL_INVOICE_FIELDS = [
+  "The word “Invoice” (or “Tax invoice” where VAT/GST law requires it)",
+  "A unique, sequential invoice number",
+  "Issue date, and the supply date when it is different",
+  "Your business name, address and tax number",
+  "Your client's name and address (and tax number for B2B sales)",
+  "A description, quantity and price for each item",
+  "The tax name, rate and amount, plus the total due",
+  "When and how to pay: due date and payment details",
+];
+
+export const COUNTRY_HUB_FAQS = [
+  {
+    q: "Is InvoiceGen really a free invoice generator?",
+    a: "Yes. Create, preview and download PDF invoices for free with no account. Sign up free to save invoices and clients.",
+  },
+  {
+    q: "Can I make a tax invoice?",
+    a: "Yes. Set Document type to “Tax invoice”, add your VAT/GST number in your business details and pick your tax preset.",
+  },
+  {
+    q: "Does InvoiceGen create government e-invoices?",
+    a: "No. It creates PDF invoices. Where e-invoicing is mandatory (for example ZATCA in Saudi Arabia or IRN in India), use the official system for those invoices.",
+  },
+  {
+    q: "Do invoice numbers continue automatically?",
+    a: "Yes. After you download invoice #5 the next one starts at #6, even after you close the browser. You can always type your own number.",
+  },
+];

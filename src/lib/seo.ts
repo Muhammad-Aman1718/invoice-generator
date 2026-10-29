@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import type { BlogPost, FaqItem, JsonLdData, SeoPageKey } from "@/src/types/types";
+import type { BlogPost, CountryGuide, FaqItem, JsonLdData, PageSeo, SeoPageKey } from "@/src/types/types";
+import { getCountryLabel } from "@/src/constant/countries";
 import { SITE_CONFIG } from "@/src/constant/site";
 import { PLANS } from "@/src/constant/plans";
 import {
@@ -24,10 +25,39 @@ export function getAbsoluteUrl(path: string): string {
 
 /** Title, description, canonical URL and social tags (with preview image) for a public page. */
 export function buildPageMetadata(page: SeoPageKey): Metadata {
-  const { path, title, description, keywords = [] } = PAGE_SEO[page];
+  return buildMetadata({ ...PAGE_SEO[page], absoluteTitle: page === "home" });
+}
+
+/** Landing page for one country, e.g. "Free Invoice Generator for Pakistan". */
+export function buildCountryMetadata(guide: CountryGuide): Metadata {
+  const label = getCountryLabel(guide);
+  return buildMetadata({
+    path: getCountryPath(guide),
+    title: `Free Invoice Generator for ${label}`,
+    description: guide.intro,
+    keywords: [
+      `free invoice generator ${label}`,
+      `invoice template ${label}`,
+      `${guide.taxName} invoice ${label}`,
+      `${guide.currency} invoice`,
+    ],
+  });
+}
+
+export function getCountryPath(guide: CountryGuide): string {
+  return `${PAGE_SEO.countries.path}/${guide.slug}`;
+}
+
+function buildMetadata({
+  path,
+  title,
+  description,
+  keywords = [],
+  absoluteTitle = false,
+}: Pick<PageSeo, "path" | "title" | "description" | "keywords"> & { absoluteTitle?: boolean }): Metadata {
   const fullTitle = `${title} | ${SITE_CONFIG.name}`;
   return {
-    title: page === "home" ? { absolute: fullTitle } : title,
+    title: absoluteTitle ? { absolute: fullTitle } : title,
     description,
     keywords: [...keywords, ...SEO_KEYWORDS],
     alternates: { canonical: path },

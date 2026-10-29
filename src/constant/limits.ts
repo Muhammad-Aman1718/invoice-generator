@@ -15,6 +15,8 @@ export const FIELD_LIMITS = {
   shipTo: 300,
   lineDescription: 300,
   notes: 1000,
+  paymentDetails: 500,
+  taxLabel: 24,
   message: 2000,
   /** Supabase Auth (bcrypt) ignores bytes beyond 72. */
   password: 72,

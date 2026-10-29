@@ -1,6 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { pdfStyles as s } from "@/src/lib/pdfStyles";
 import { SITE_CONFIG } from "@/src/constant/site";
+import { getDocumentTitleLabel } from "@/src/constant/invoice";
 import type { PdfFooterProps } from "@/src/types/types";
 
 export default function PdfFooter({ invoice, branding }: PdfFooterProps) {
@@ -13,7 +14,7 @@ export default function PdfFooter({ invoice, branding }: PdfFooterProps) {
         <Text
           style={s.footerText}
           render={({ pageNumber, totalPages }) =>
-            `Invoice #${invoice.invoiceNumber} · Page ${pageNumber}/${totalPages}`
+            `${getDocumentTitleLabel(invoice.documentTitle)} #${invoice.invoiceNumber} · Page ${pageNumber}/${totalPages}`
           }
         />
       </View>

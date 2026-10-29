@@ -1,10 +1,10 @@
 import TextField from "@/src/components/ui/TextField";
-import TextAreaField from "@/src/components/ui/TextAreaField";
+import Link from "next/link";
 import { CURRENCIES } from "@/src/constant/currencies";
 import { MAX_PAYMENT_TERMS_DAYS } from "@/src/constant/app";
 import { MAX_PERCENT } from "@/src/constant/limits";
 import type { SettingsFieldsProps } from "@/src/types/types";
-import { FIELD_LIMITS } from "@/src/constant/limits";
+import { ROUTES } from "@/src/constant/routes";
 
 export default function InvoiceDefaultsFields({ values, onChange }: SettingsFieldsProps) {
   return (
@@ -45,26 +45,16 @@ export default function InvoiceDefaultsFields({ values, onChange }: SettingsFiel
         value={values.paymentTermsDays}
         onChange={(event) => onChange("paymentTermsDays", Number(event.target.value))}
       />
-      <TextAreaField
-        id="defaultNotes"
-        maxLength={FIELD_LIMITS.notes}
-        label="Default notes"
-        className="sm:col-span-3"
-        rows={2}
-        placeholder="Bank details, thank-you note…"
-        value={values.defaultNotes}
-        onChange={(event) => onChange("defaultNotes", event.target.value)}
-      />
-      <TextAreaField
-        id="defaultTerms"
-        maxLength={FIELD_LIMITS.notes}
-        label="Default terms"
-        className="sm:col-span-3"
-        rows={2}
-        placeholder="Payment due within 14 days. Late payments incur 1.5% monthly interest."
-        value={values.defaultTerms}
-        onChange={(event) => onChange("defaultTerms", event.target.value)}
-      />
+      <p className="rounded-xl bg-mist px-4 py-3 text-sm text-navy-500 sm:col-span-3">
+        Default notes, terms & conditions and payment details live on the{" "}
+        <Link
+          href={ROUTES.notesSettings}
+          className="font-semibold text-navy underline decoration-gold underline-offset-4"
+        >
+          Notes & terms
+        </Link>{" "}
+        tab.
+      </p>
     </div>
   );
 }

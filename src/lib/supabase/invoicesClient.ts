@@ -1,6 +1,7 @@
 import type { InvoiceData } from "@/src/types/types";
 import { api } from "@/src/lib/apiClient";
 import { roundMoney } from "@/src/lib/invoiceCalculations";
+import { DEFAULT_DOCUMENT_TITLE, DEFAULT_TAX_LABEL } from "@/src/constant/invoice";
 
 /** Strip zustand actions and UI-only fields so only invoice data is sent. */
 export function toInvoicePayload(data: InvoiceData): InvoiceData {
@@ -28,6 +29,9 @@ export function toInvoicePayload(data: InvoiceData): InvoiceData {
     })),
     notes: data.notes ?? "",
     terms: data.terms ?? "",
+    paymentDetails: data.paymentDetails ?? "",
+    documentTitle: data.documentTitle ?? DEFAULT_DOCUMENT_TITLE,
+    taxLabel: data.taxLabel || DEFAULT_TAX_LABEL,
     subtotal: roundMoney(Number(data.subtotal) || 0),
     overallDiscount: Number(data.overallDiscount) || 0,
     taxRate: Number(data.taxRate) || 0,

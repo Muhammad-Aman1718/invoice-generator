@@ -9,6 +9,7 @@ import type {
 import { getLocalIsoDate } from "@/src/lib/dateUtils";
 import { DEFAULT_CURRENCY } from "@/src/constant/currencies";
 import { DEFAULT_PAYMENT_TERMS_DAYS, FULL_PERCENT } from "@/src/constant/app";
+import { DEFAULT_DOCUMENT_TITLE, DEFAULT_TAX_LABEL } from "@/src/constant/invoice";
 
 export function roundMoney(value: number): number {
   return Math.round(value * FULL_PERCENT) / FULL_PERCENT;
@@ -74,6 +75,9 @@ export function createEmptyInvoice(paymentTermsDays = DEFAULT_PAYMENT_TERMS_DAYS
     lineItems: [createLineItem()],
     notes: "",
     terms: "",
+    paymentDetails: "",
+    documentTitle: DEFAULT_DOCUMENT_TITLE,
+    taxLabel: DEFAULT_TAX_LABEL,
     subtotal: 0,
     overallDiscount: 0,
     taxRate: 0,
@@ -85,7 +89,9 @@ export function createEmptyInvoice(paymentTermsDays = DEFAULT_PAYMENT_TERMS_DAYS
 /** True when the user hasn't typed anything worth keeping yet. */
 export function isPristineInvoice(invoice: InvoiceData): boolean {
   const emptyLines = invoice.lineItems.every((item) => !item.description && !Number(item.rate));
-  return !invoice.clientName && !invoice.clientAddress && !invoice.notes && emptyLines;
+  return (
+    !invoice.clientName && !invoice.clientAddress && !invoice.notes && !invoice.paymentDetails && emptyLines
+  );
 }
 
 /** Multi-line "Bill To" text built from a saved client. */

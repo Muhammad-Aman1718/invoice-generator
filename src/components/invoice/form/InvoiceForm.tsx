@@ -10,7 +10,7 @@ import InvoiceTotals from "./InvoiceTotals";
 import ErrorSummary from "@/src/components/invoice/validation/ErrorSummary";
 import type { InvoiceFormProps } from "@/src/types/types";
 
-export default function InvoiceForm({ clients, showTotals = true }: InvoiceFormProps) {
+export default function InvoiceForm({ clients, noteDefaults, showTotals = true }: InvoiceFormProps) {
   return (
     <form
       noValidate
@@ -31,8 +31,8 @@ export default function InvoiceForm({ clients, showTotals = true }: InvoiceFormP
       <FormSection title="Items">
         <LineItemsTable />
       </FormSection>
-      <FormSection title="Notes & terms" description="Payment instructions, thank-you note and your terms.">
-        <NotesSection />
+      <FormSection title="Notes & terms" description="Thank-you note, terms & conditions and how to pay you.">
+        <NotesSection noteDefaults={noteDefaults} />
       </FormSection>
       {showTotals && (
         <FormSection title="Totals">

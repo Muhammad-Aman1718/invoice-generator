@@ -1,6 +1,7 @@
 import { Text, View } from "@react-pdf/renderer";
 import { pdfStyles as s } from "@/src/lib/pdfStyles";
 import { getTotalsBreakdown } from "@/src/lib/invoiceCalculations";
+import { getTaxLineLabel } from "@/src/lib/invoiceText";
 import type { PdfTotalsProps } from "@/src/types/types";
 
 export default function PdfTotals({ invoice, formatMoney }: PdfTotalsProps) {
@@ -19,7 +20,7 @@ export default function PdfTotals({ invoice, formatMoney }: PdfTotalsProps) {
       )}
       {invoice.taxRate > 0 && (
         <View style={s.totalsRow}>
-          <Text style={s.totalsLabel}>Tax ({invoice.taxRate}%)</Text>
+          <Text style={s.totalsLabel}>{getTaxLineLabel(invoice)}</Text>
           <Text style={s.totalsValue}>{formatMoney(taxAmount)}</Text>
         </View>
       )}

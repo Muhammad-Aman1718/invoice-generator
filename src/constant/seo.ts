@@ -9,17 +9,17 @@
 import type { PageSeo, SeoPageKey } from "@/src/types/types";
 
 /** Bump when page content changes; used as `lastmod` in the sitemap. */
-export const SEO_LAST_UPDATED = "2026-10-06";
+export const SEO_LAST_UPDATED = "2026-10-29";
 
 /** Default title used on the home page, in link previews and the OG image. */
-export const SEO_DEFAULT_TITLE = "Free Invoice Generator & PDF Invoice Maker";
+export const SEO_DEFAULT_TITLE = "Free Invoice Generator: Create PDF Invoices";
 
 export const SEO_TAGLINE = "Create professional invoices in seconds. Free, no sign-up needed.";
 
 /** Site-wide keywords, merged with each page's own keywords. */
 export const SEO_KEYWORDS = [
-  "invoice generator",
   "free invoice generator",
+  "invoice generator",
   "PDF invoice maker",
   "online invoice maker",
   "invoice template",
@@ -46,11 +46,28 @@ export const PAGE_SEO: Record<SeoPageKey, PageSeo> = {
     path: "/",
     title: SEO_DEFAULT_TITLE,
     description:
-      "Create professional invoices online in seconds. Free invoice generator with PDF download, " +
-      "40+ currencies, VAT/GST presets, logo upload and client management.",
-    keywords: ["create invoice online", "invoice maker free", "bill generator"],
+      "Free invoice generator: create professional invoices online and download a PDF in seconds. " +
+      "No sign-up, 40+ currencies, VAT/GST and auto-numbering.",
+    keywords: [
+      "free invoice generator online",
+      "free invoice maker",
+      "create invoice online free",
+      "invoice generator no sign up",
+      "tax invoice generator",
+      "bill generator",
+    ],
     priority: 1,
     changeFrequency: "weekly",
+  },
+  countries: {
+    path: "/invoice-generator",
+    title: "Free Invoice Generator by Country",
+    description:
+      "Free invoice generator with your country's rules: required fields, tax names and rates, and " +
+      "a builder pre-set for Pakistan, India, UK, USA and UAE.",
+    keywords: ["invoice requirements by country", "tax invoice format", "VAT invoice requirements"],
+    priority: 0.8,
+    changeFrequency: "monthly",
   },
   about: {
     path: "/about",

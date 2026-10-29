@@ -18,7 +18,10 @@ export default function PricingPage() {
         title="Simple, honest pricing"
         description="Start free. Upgrade when invoicing becomes part of your day. Cancel anytime."
       />
-      <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8" aria-labelledby="plansTitle">
+        <h2 id="plansTitle" className="sr-only">
+          Plans
+        </h2>
         <PlanGrid mode="public" />
         <p className="mt-6 text-center text-xs text-navy-500">
           Prices in USD, excluding applicable taxes. By subscribing you agree to our{" "}

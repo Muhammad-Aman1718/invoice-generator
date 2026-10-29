@@ -18,6 +18,7 @@ export const TAX_TYPES: TaxType[] = [
   { label: "SST", rate: 6 },
   { label: "VAT (GCC)", rate: 5 },
   { label: "VAT (KSA)", rate: 15 },
+  { label: "Sales Tax (Pakistan)", rate: 18 },
   { label: CUSTOM_TAX_LABEL, rate: 0 },
   { label: NO_TAX_LABEL, rate: 0 },
 ];

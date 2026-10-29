@@ -6,6 +6,7 @@ export const HTTP_STATUS = {
   paymentRequired: 402,
   forbidden: 403,
   notFound: 404,
+  conflict: 409,
   notImplemented: 501,
   serviceUnavailable: 503,
   serverError: 500,
@@ -15,6 +16,7 @@ export const API_ERROR_CODES = {
   planLimit: "PLAN_LIMIT",
   paymentsDisabled: "PAYMENTS_DISABLED",
   suspended: "SUSPENDED",
+  duplicateInvoiceNumber: "DUPLICATE_INVOICE_NUMBER",
 } as const;
 
 /** Prefix raised by the enforce_plan_limits() Postgres trigger. */

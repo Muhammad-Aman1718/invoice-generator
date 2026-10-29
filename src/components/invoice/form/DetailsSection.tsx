@@ -3,6 +3,7 @@
 import DateInput from "./DateInput";
 import InvoiceNumberInput from "./InvoiceNumberInput";
 import CurrencySelect from "./CurrencySelect";
+import DocumentTitleSelect from "./DocumentTitleSelect";
 import FormField from "@/src/components/ui/FormField";
 import useFieldValidation from "@/src/hooks/useFieldValidation";
 import { useInvoiceStore } from "@/src/lib/invoiceStore";
@@ -14,6 +15,7 @@ export default function DetailsSection() {
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <DocumentTitleSelect />
       <InvoiceNumberInput />
       <CurrencySelect />
       <FormField id="poNumber" label="PO number (optional)" error={po.error}>

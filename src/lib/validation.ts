@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { INVOICE_STATUSES } from "@/src/constant/invoice";
+import {
+  DEFAULT_DOCUMENT_TITLE,
+  DEFAULT_TAX_LABEL,
+  DOCUMENT_TITLE_VALUES,
+  INVOICE_STATUSES,
+} from "@/src/constant/invoice";
 import { MAX_IMAGE_DATA_URL_LENGTH, MAX_LINE_ITEMS, MAX_PAYMENT_TERMS_DAYS } from "@/src/constant/app";
 import {
   CONTACT_MESSAGE_MIN_LENGTH,
@@ -53,6 +58,9 @@ export const invoiceSchema = z.object({
   lineItems: z.array(lineItemSchema).max(MAX_LINE_ITEMS),
   notes: text(FIELD_LIMITS.notes).default(""),
   terms: text(FIELD_LIMITS.notes).default(""),
+  paymentDetails: text(FIELD_LIMITS.paymentDetails).optional().default(""),
+  documentTitle: z.enum(DOCUMENT_TITLE_VALUES).optional().default(DEFAULT_DOCUMENT_TITLE),
+  taxLabel: text(FIELD_LIMITS.taxLabel).optional().default(DEFAULT_TAX_LABEL),
   subtotal: money,
   overallDiscount: percent.default(0),
   taxRate: percent.default(0),
@@ -80,6 +88,7 @@ export const profileSchema = z.object({
   defaultTaxRate: percent.optional(),
   defaultNotes: text(FIELD_LIMITS.notes).optional(),
   defaultTerms: text(FIELD_LIMITS.notes).optional(),
+  defaultPaymentDetails: text(FIELD_LIMITS.paymentDetails).optional(),
   paymentTermsDays: z.coerce.number().int().min(0).max(MAX_PAYMENT_TERMS_DAYS).optional(),
 });
 

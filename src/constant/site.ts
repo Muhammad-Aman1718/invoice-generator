@@ -36,6 +36,17 @@ export const FOOTER_NAV: FooterColumn[] = [
     ],
   },
   {
+    title: "By country",
+    links: [
+      { href: "/invoice-generator/pakistan", label: "Pakistan" },
+      { href: "/invoice-generator/india", label: "India" },
+      { href: "/invoice-generator/united-kingdom", label: "United Kingdom" },
+      { href: "/invoice-generator/united-states", label: "United States" },
+      { href: "/invoice-generator/uae", label: "UAE" },
+      { href: "/invoice-generator", label: "All countries" },
+    ],
+  },
+  {
     title: "Resources",
     links: [
       { href: "/about", label: "About" },

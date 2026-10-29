@@ -20,9 +20,15 @@ export default {
           from: { opacity: "0", transform: "translateY(8px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        // Movement only: hero text stays visible from the first paint (good for LCP).
+        rise: {
+          from: { transform: "translateY(8px)" },
+          to: { transform: "translateY(0)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.4s ease-out both",
+        rise: "rise 0.4s ease-out both",
       },
       colors: {
         // Brand palette (60 · 30 · 10): mist background, navy, amber accent.
@@ -40,7 +46,7 @@ export default {
           800: "#12124F",
           900: "#0B0B33",
         },
-        gold: { DEFAULT: "#FFC107", hover: "#F2B600", dark: "#B8860B", light: "#FFE08A" },
+        gold: { DEFAULT: "#FFC107", hover: "#F2B600", dark: "#8C6508", light: "#FFE08A" },
         background: "var(--background)",
         foreground: "var(--foreground)",
         card: {

@@ -33,7 +33,10 @@ npm run dev
 ### 1. Database (required)
 
 Open **Supabase → SQL Editor**, paste and run
-[`src/supabase/migrations/002CompleteSchema.sql`](src/supabase/migrations/002CompleteSchema.sql).
+[`src/supabase/migrations/002CompleteSchema.sql`](src/supabase/migrations/002CompleteSchema.sql),
+then [`src/supabase/migrations/003InvoiceExtras.sql`](src/supabase/migrations/003InvoiceExtras.sql)
+(document title, tax name, payment details and default payment details). Until 003 runs, invoices
+still save; those newer fields just aren't stored.
 
 It is idempotent (safe to re-run, safe on an existing database) and creates/updates:
 
@@ -100,7 +103,7 @@ src/
 ├── tests/                Vitest unit tests for the logic in lib/
 ├── types/types.ts        All shared types and component props
 ├── utils/                Small UI utilities (toasts)
-└── supabase/migrations/  SQL schema (001InvoiceSchema.sql, 002CompleteSchema.sql)
+└── supabase/migrations/  SQL schema (001InvoiceSchema.sql, 002CompleteSchema.sql, 003InvoiceExtras.sql)
 src/proxy.ts              Session refresh + route protection (/dashboard, admin)
 ```
 
