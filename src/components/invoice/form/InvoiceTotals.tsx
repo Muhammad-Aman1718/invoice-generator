@@ -7,6 +7,9 @@ import useTaxSelection from "@/src/hooks/useTaxSelection";
 import { useInvoiceStore } from "@/src/lib/invoiceStore";
 import { getTotalsBreakdown } from "@/src/lib/invoiceCalculations";
 import { formatCurrency } from "@/src/lib/format";
+import { getTaxLineLabel } from "@/src/lib/invoiceText";
+import { FIELD_LIMITS } from "@/src/constant/limits";
+import { DEFAULT_TAX_LABEL } from "@/src/constant/invoice";
 
 export default function InvoiceTotals() {
   const store = useInvoiceStore();
@@ -28,14 +31,29 @@ export default function InvoiceTotals() {
       )}
       <TaxSelect taxLabel={taxLabel} onSelect={selectTax} />
       {isCustom && (
-        <PercentInput
-          id="customTaxRate"
-          label="Custom tax rate"
-          value={store.taxRate}
-          onChange={(value) => store.setField("taxRate", value)}
-        />
+        <>
+          <div className="flex items-center justify-between gap-3">
+            <label htmlFor="customTaxName" className="text-sm text-navy-500">
+              Tax name
+            </label>
+            <input
+              id="customTaxName"
+              className="input h-10 w-full max-w-[13rem] py-1.5"
+              maxLength={FIELD_LIMITS.taxLabel}
+              placeholder={DEFAULT_TAX_LABEL}
+              value={store.taxLabel}
+              onChange={(event) => store.setField("taxLabel", event.target.value)}
+            />
+          </div>
+          <PercentInput
+            id="customTaxRate"
+            label="Custom tax rate"
+            value={store.taxRate}
+            onChange={(value) => store.setField("taxRate", value)}
+          />
+        </>
       )}
-      <TotalRow label={`Tax (${store.taxRate}%)`} value={money(taxAmount)} />
+      <TotalRow label={getTaxLineLabel(store)} value={money(taxAmount)} />
       <div className="flex items-center justify-between gap-3 rounded-xl bg-navy px-4 py-3 text-white">
         <span className="text-sm font-semibold">Total due</span>
         <span className="font-display text-lg font-bold tabular-nums text-gold" aria-live="polite">

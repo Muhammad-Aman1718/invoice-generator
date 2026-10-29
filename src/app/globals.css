@@ -65,6 +65,10 @@
   .tabular {
     font-variant-numeric: tabular-nums;
   }
+  /* Long unbroken strings (IBANs, URLs, pasted text) wrap instead of leaving the box. */
+  .wrap-anywhere {
+    overflow-wrap: anywhere;
+  }
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

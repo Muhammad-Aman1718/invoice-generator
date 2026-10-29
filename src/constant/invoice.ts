@@ -1,5 +1,6 @@
 import { AlertTriangle, CheckCircle2, Clock, FileEdit, XCircle, type LucideIcon } from "lucide-react";
 import type {
+  DocumentTitle,
   InvoiceData,
   InvoiceFilter,
   InvoiceListQuery,
@@ -72,11 +73,11 @@ export const REMINDER_STATUSES: InvoiceStatus[] = ["pending", "overdue"];
 export const INVOICE_SHEET_WIDTH = 794;
 
 export const PREVIEW_COLUMNS = [
-  { label: "Description", className: "w-[40%] text-left" },
-  { label: "Qty", className: "w-[8%] text-center" },
-  { label: "Unit Rate", className: "w-[15%] text-right" },
-  { label: "Disc %", className: "w-[9%] text-center" },
-  { label: "Amount", className: "w-[16%] text-right" },
+  { label: "Description", className: "w-[44%] text-left" },
+  { label: "Qty", className: "w-[9%] text-center" },
+  { label: "Unit Rate", className: "w-[17%] text-right" },
+  { label: "Disc %", className: "w-[10%] text-center" },
+  { label: "Amount", className: "w-[20%] text-right" },
 ];
 
 export const INVOICE_SUMMARY_COLUMNS =
@@ -97,3 +98,21 @@ export const NON_BILLABLE_STATUSES: InvoiceStatus[] = ["cancelled", "draft"];
 
 /** Store fields whose change requires recomputing totals. */
 export const FIELDS_AFFECTING_TOTALS: (keyof InvoiceData)[] = ["overallDiscount", "taxRate", "lineItems"];
+
+/** Document headings; several countries require the words "Tax invoice" on VAT/GST invoices. */
+export const DOCUMENT_TITLES: { value: DocumentTitle; label: string; hint: string }[] = [
+  { value: "invoice", label: "Invoice", hint: "Standard invoice" },
+  { value: "tax_invoice", label: "Tax invoice", hint: "VAT / GST registered sellers" },
+  { value: "proforma", label: "Proforma invoice", hint: "Quote before the work or shipment" },
+];
+
+export const DOCUMENT_TITLE_VALUES = DOCUMENT_TITLES.map((title) => title.value) as [
+  DocumentTitle,
+  ...DocumentTitle[],
+];
+export const DEFAULT_DOCUMENT_TITLE: DocumentTitle = "invoice";
+export const DEFAULT_TAX_LABEL = "Tax";
+
+export function getDocumentTitleLabel(value: DocumentTitle | undefined): string {
+  return DOCUMENT_TITLES.find((title) => title.value === value)?.label ?? DOCUMENT_TITLES[0].label;
+}

@@ -38,7 +38,7 @@ export default function BusinessSection() {
         <FormField
           id="businessInfo"
           label="Address & contact details"
-          hint="Address, email, phone, tax number."
+          hint="Address, email, phone and tax number (VAT, GST, NTN…)."
           error={info.error}
           count={{ length: bussinessInfo.length, max: FIELD_LIMITS.address }}
         >

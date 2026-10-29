@@ -90,3 +90,31 @@ export const HELP_CENTER_GROUPS: FaqGroup[] = [
     ],
   },
 ];
+
+/** Home page FAQ, also published as FAQPage structured data. */
+export const HOME_FAQS: FaqItem[] = [
+  {
+    q: "Is this invoice generator really free?",
+    a: "Yes. Create, preview and download as many PDF invoices as you like without an account or card. A free account adds saved invoices and clients.",
+  },
+  {
+    q: "Do I need to sign up to download a PDF?",
+    a: "No. Fill in the builder on this page and click Download. Your draft stays in your browser until you clear it.",
+  },
+  {
+    q: "Do invoice numbers increase automatically?",
+    a: "Yes. After you download invoice #5, the next invoice starts at #6, even if you close the site and come back. You can type your own number at any time.",
+  },
+  {
+    q: "Can I make a tax invoice with VAT or GST?",
+    a: "Yes. Choose “Tax invoice” as the document type, pick a VAT, GST or sales tax preset (or a custom rate) and add your tax number in your business details.",
+  },
+  {
+    q: "Can I add my logo, bank details and terms?",
+    a: "Yes. Upload a logo and signature, add payment details such as IBAN or account number, and write notes and terms with bullet points.",
+  },
+  {
+    q: "Which currencies are supported?",
+    a: "More than 40, including USD, EUR, GBP, PKR, INR, AED, SAR, CAD and AUD, with correct symbols and formatting.",
+  },
+];

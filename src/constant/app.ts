@@ -38,7 +38,12 @@ export const STORAGE_KEYS = {
   invoiceDraft: "invoice-generator-data",
   draftBackup: "invoice-generator-draft-backup",
   cookieNotice: "invoicegen-cookie-notice",
+  /** Highest invoice number downloaded in this browser (guests' auto-numbering). */
+  lastInvoiceNumber: "invoice-generator-last-number",
 } as const;
+
+/** Fired on window when a PDF download records a new "last issued" invoice number. */
+export const INVOICE_NUMBER_EVENT = "invoicegen:invoice-number";
 
 /** Placeholder keys for the four KPI cards in loading skeletons. */
 export const SKELETON_STAT_KEYS = [0, 1, 2, 3];

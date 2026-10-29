@@ -13,9 +13,9 @@ export default function PreviewMeta({ invoice, formatMoney }: PreviewMetaProps) 
   return (
     <div className="avoid-break mx-10 grid grid-cols-4 gap-3">
       {details.map((detail) => (
-        <div key={detail.label} className="rounded-xl border border-navy/[0.08] px-4 py-3">
+        <div key={detail.label} className="min-w-0 rounded-xl border border-navy/[0.08] px-4 py-3">
           <PreviewLabel>{detail.label}</PreviewLabel>
-          <p className="text-[13px] font-semibold">{detail.value}</p>
+          <p className="wrap-anywhere text-[13px] font-semibold">{detail.value}</p>
         </div>
       ))}
       <div className={cn("rounded-xl bg-navy px-4 py-3 text-white", details.length === 2 && "col-span-2")}>

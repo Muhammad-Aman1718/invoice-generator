@@ -15,6 +15,7 @@ export const ROUTES = {
   reports: "/dashboard/reports",
   billing: "/dashboard/billing",
   settings: "/dashboard/settings",
+  notesSettings: "/dashboard/settings/notes-terms",
   admin: "/dashboard/admin",
   adminUsers: "/dashboard/admin/users",
 } as const;

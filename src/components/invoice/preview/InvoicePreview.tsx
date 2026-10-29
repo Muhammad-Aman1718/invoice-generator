@@ -5,6 +5,8 @@ import PreviewMeta from "./PreviewMeta";
 import PreviewParties from "./PreviewParties";
 import PreviewLineItems from "./PreviewLineItems";
 import PreviewNotes from "./PreviewNotes";
+import PreviewPayment from "./PreviewPayment";
+import PreviewSignature from "./PreviewSignature";
 import PreviewTotals from "./PreviewTotals";
 import PreviewFooter from "./PreviewFooter";
 import FitToWidth from "@/src/components/ui/FitToWidth";
@@ -41,10 +43,12 @@ export default function InvoicePreview({
         <PreviewMeta invoice={invoice} formatMoney={formatMoney} />
         <PreviewParties invoice={invoice} />
         <PreviewLineItems invoice={invoice} formatMoney={formatMoney} />
-        <div className="avoid-break grid grid-cols-[1fr_280px] items-start gap-8 px-10 pt-6">
-          <PreviewNotes invoice={invoice} />
+        <div className="avoid-break grid grid-cols-[minmax(0,1fr)_280px] items-start gap-8 px-10 pt-6">
+          <PreviewPayment invoice={invoice} />
           <PreviewTotals invoice={invoice} formatMoney={formatMoney} />
         </div>
+        <PreviewNotes invoice={invoice} />
+        <PreviewSignature invoice={invoice} />
         <PreviewFooter invoice={invoice} />
       </article>
     </FitToWidth>

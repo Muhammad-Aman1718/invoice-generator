@@ -13,6 +13,7 @@ import useUnsavedChanges from "@/src/hooks/useUnsavedChanges";
 import useInvoiceSave from "@/src/hooks/useInvoiceSave";
 import useValidatedDownload from "@/src/hooks/useValidatedDownload";
 import { useInvoiceStore } from "@/src/lib/invoiceStore";
+import { getNoteDefaults } from "@/src/lib/editorDefaults";
 import type { InvoiceEditorProps } from "@/src/types/types";
 
 /** Form on the left, summary rail on the right; the full preview opens in a dialog. */
@@ -64,8 +65,8 @@ export default function InvoiceEditorWorkspace({
         onDownload={download}
         onSave={save}
       />
-      <div className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:px-8 lg:py-8">
-        <InvoiceForm clients={clients} showTotals={false} />
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:px-8 lg:py-8">
+        <InvoiceForm clients={clients} noteDefaults={getNoteDefaults(profile)} showTotals={false} />
         <EditorSummary />
       </div>
       <InvoicePreviewModal

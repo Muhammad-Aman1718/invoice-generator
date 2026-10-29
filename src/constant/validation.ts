@@ -23,6 +23,7 @@ export const INVOICE_TEXT_RULES: InvoiceTextRule[] = [
   { id: "poNumber", key: "poNumber", label: "PO number", max: FIELD_LIMITS.poNumber },
   { id: "notes", key: "notes", label: "Notes", max: FIELD_LIMITS.notes },
   { id: "terms", key: "terms", label: "Terms", max: FIELD_LIMITS.notes },
+  { id: "paymentDetails", key: "paymentDetails", label: "Payment details", max: FIELD_LIMITS.paymentDetails },
 ];
 
 export const VALIDATION_MESSAGES = {

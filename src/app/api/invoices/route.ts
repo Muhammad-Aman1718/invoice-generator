@@ -3,6 +3,8 @@ import { invoiceToRow, rowToInvoiceSummary } from "@/src/lib/mappers";
 import { INVOICE_STATUSES, INVOICE_SUMMARY_COLUMNS } from "@/src/constant/invoice";
 import { unwrapResult, withErrorHandling } from "@/src/lib/server/apiError";
 import { requireUser } from "@/src/lib/server/auth";
+import { assertInvoiceNumberAvailable } from "@/src/lib/server/invoiceNumber";
+import { writeWithOptionalColumns } from "@/src/lib/server/optionalColumns";
 import { parseRequestBody } from "@/src/lib/server/parseRequest";
 import { invoiceSchema } from "@/src/lib/validation";
 import { DEFAULT_API_PAGE_SIZE, MAX_API_PAGE_SIZE } from "@/src/constant/app";
@@ -45,14 +47,14 @@ export const GET = withErrorHandling(async (request: Request) => {
 
 // POST /api/invoices
 export const POST = withErrorHandling(async (request: Request) => {
-  const { supabase, user } = await requireUser();
+  const session = await requireUser();
+  const { supabase, user } = session;
   const input = await parseRequestBody(request, invoiceSchema);
+  await assertInvoiceNumberAvailable(session, input.invoiceNumber);
   const invoice = unwrapResult(
-    await supabase
-      .from("invoices")
-      .insert({ ...invoiceToRow(input), user_id: user.id })
-      .select("id")
-      .single(),
+    await writeWithOptionalColumns({ ...invoiceToRow(input), user_id: user.id }, (row) =>
+      supabase.from("invoices").insert(row).select("id").single(),
+    ),
   );
   return NextResponse.json({ invoice }, { status: HTTP_STATUS.created });
 });

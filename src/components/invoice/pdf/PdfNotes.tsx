@@ -1,29 +1,23 @@
-import { Image, Text, View } from "@react-pdf/renderer";
+import { Text, View } from "@react-pdf/renderer";
+import PdfTextBlocks from "./PdfTextBlocks";
 import { pdfStyles as s } from "@/src/lib/pdfStyles";
+import { getNoteSections } from "@/src/lib/invoiceText";
 import type { PdfNotesProps } from "@/src/types/types";
 
+/** Full-width notes and terms; long text flows onto the next page instead of being cut. */
 export default function PdfNotes({ invoice }: PdfNotesProps) {
-  const blocks = [
-    { label: "Notes", text: invoice.notes },
-    { label: "Terms & conditions", text: invoice.terms },
-  ].filter((block) => block.text);
-
+  const sections = getNoteSections(invoice);
+  if (!sections.length) return null;
   return (
-    <View style={s.notesCol}>
-      {blocks.map((block) => (
-        <View key={block.label} style={s.notesBlock}>
-          <Text style={s.label}>{block.label}</Text>
-          <Text style={s.notesText}>{block.text}</Text>
+    <View style={s.notesSection}>
+      {sections.map((section) => (
+        <View key={section.label} style={s.notesBlock}>
+          <Text style={s.label} minPresenceAhead={24}>
+            {section.label}
+          </Text>
+          <PdfTextBlocks text={section.text} />
         </View>
       ))}
-      {invoice.stampUrl ? (
-        <View>
-          {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf Image has no alt prop */}
-          <Image src={invoice.stampUrl} style={s.stamp} />
-          <View style={s.stampLine} />
-          <Text style={s.label}>Authorized signature</Text>
-        </View>
-      ) : null}
     </View>
   );
 }

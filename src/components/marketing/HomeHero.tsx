@@ -6,15 +6,16 @@ import { ROUTES } from "@/src/constant/routes";
 export default function HomeHero() {
   return (
     <section className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:px-8 lg:pt-16">
-      <div className="min-w-0 motion-safe:animate-fade-up">
+      <div className="min-w-0 motion-safe:animate-rise">
         <span className="mb-5 inline-flex rounded-full bg-gold/15 px-3 py-1 text-xs font-semibold text-navy">
-          Free, no sign-up needed
+          No sign-up · Unlimited PDF downloads
         </span>
         <h1 className="mb-5 text-4xl font-extrabold leading-[1.05] text-navy md:text-5xl lg:text-[3.5rem]">
-          Create professional invoices in seconds
+          Free invoice generator for professional PDF invoices
         </h1>
         <p className="mb-8 max-w-[46ch] text-lg leading-relaxed text-navy-500">
-          Fill in your details, check the live preview and download a tax-ready PDF. No account needed.
+          Fill in your details, check the preview and download a tax-ready PDF in seconds. Invoice numbers
+          continue automatically, and no account is needed.
         </p>
         <div className="flex flex-col gap-3 xs:flex-row">
           <a href="#builder" className="btn-primary px-5 py-3 text-base">

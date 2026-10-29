@@ -11,7 +11,13 @@ export default function InvoiceNumberInput() {
   const { error, inputProps } = useFieldValidation("invoiceNumber");
 
   return (
-    <FormField id="invoiceNumber" label="Invoice number" required error={error}>
+    <FormField
+      id="invoiceNumber"
+      label="Invoice number"
+      required
+      error={error}
+      hint="Numbered automatically. Type your own to change it."
+    >
       <div className="relative">
         <span
           className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-navy-400"

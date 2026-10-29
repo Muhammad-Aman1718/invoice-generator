@@ -12,7 +12,7 @@ export const PDF_COLORS = {
   white: "#ffffff",
   mist: "#F3F5F7", // mist at ~70% on white
   muted: "#6B6B9A", // navy at ~65%
-  muted2: "#8C8CB5", // navy at ~45%
+  muted2: "#7070A6", // navy at ~62% (4.5:1 on white)
   border: "#E4E4EF", // navy at ~8%
   green: "#047857",
   greenBg: "#ECFDF5",

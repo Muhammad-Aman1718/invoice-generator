@@ -11,7 +11,7 @@ export default function TaxSelect({ taxLabel, onSelect }: TaxSelectProps) {
       </label>
       <select
         id="taxType"
-        className="input h-10 w-44 cursor-pointer py-1.5"
+        className="input h-10 w-full max-w-[13rem] cursor-pointer py-1.5"
         value={taxLabel}
         onChange={(event) => {
           const tax = TAX_TYPES.find((item) => item.label === event.target.value);

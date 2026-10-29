@@ -1,6 +1,14 @@
 import { getLocalIsoDate } from "@/src/lib/dateUtils";
 import { buildClientAddress } from "@/src/lib/invoiceCalculations";
-import type { Client, InvoiceData, Profile } from "@/src/types/types";
+import type { Client, InvoiceData, NoteDefaults, Profile } from "@/src/types/types";
+
+export function getNoteDefaults(profile: Profile): NoteDefaults {
+  return {
+    notes: profile.defaultNotes ?? "",
+    terms: profile.defaultTerms ?? "",
+    paymentDetails: profile.defaultPaymentDetails ?? "",
+  };
+}
 
 /** Business details and invoice defaults from the user's profile. */
 export function getProfileDefaults(profile: Profile, current: InvoiceData): Partial<InvoiceData> {
@@ -12,6 +20,7 @@ export function getProfileDefaults(profile: Profile, current: InvoiceData): Part
     taxRate: profile.defaultTaxRate,
     notes: profile.defaultNotes ?? "",
     terms: profile.defaultTerms ?? "",
+    paymentDetails: profile.defaultPaymentDetails ?? "",
     issueDate: getLocalIsoDate(),
     dueDate: getLocalIsoDate(profile.paymentTermsDays),
     status: "pending",

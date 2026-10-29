@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="w-full border-t border-navy/[0.07] bg-white" aria-label="Site footer">
       <div className="mx-auto max-w-7xl px-4 pb-8 pt-14 sm:px-6 lg:px-8">
-        <div className="mb-12 grid grid-cols-2 gap-8 md:grid-cols-5">
+        <div className="mb-12 grid grid-cols-2 gap-8 md:grid-cols-6">
           <div className="col-span-2 space-y-5">
             <BrandLogo tone="onLight" />
             <p className="max-w-xs text-sm leading-relaxed text-navy-500">

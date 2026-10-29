@@ -43,6 +43,12 @@ export interface LineItem {
   amount: number;
 }
 
+export type DocumentTitle = "invoice" | "tax_invoice" | "proforma";
+
+/** One paragraph or list parsed from the free-text notes / terms fields. */
+export type TextBlock =
+  { type: "paragraph"; lines: string[] } | { type: "list"; ordered: boolean; items: string[] };
+
 export interface InvoiceData {
   id?: string;
   userId?: string;
@@ -63,6 +69,12 @@ export interface InvoiceData {
   lineItems: LineItem[];
   notes: string;
   terms: string;
+  /** Bank / wallet details printed in their own block (IBAN, SWIFT, account number…). */
+  paymentDetails: string;
+  /** Heading printed on the document, e.g. "Tax invoice" where the law asks for it. */
+  documentTitle: DocumentTitle;
+  /** Name of the tax shown in the totals ("VAT", "GST", "Sales tax"). */
+  taxLabel: string;
   subtotal: number;
   /** Percentage applied to the subtotal. */
   overallDiscount: number;
@@ -123,6 +135,10 @@ export interface DBInvoiceRow {
   line_items: LineItem[] | null;
   notes: string | null;
   terms: string | null;
+  /** Added by migration 003; missing on databases that haven't run it yet. */
+  payment_details?: string | null;
+  document_title?: string | null;
+  tax_label?: string | null;
   subtotal: number | string;
   overall_discount: number | string;
   tax_rate: number | string;
@@ -168,6 +184,7 @@ export interface Profile {
   defaultTaxRate: number;
   defaultNotes: string | null;
   defaultTerms: string | null;
+  defaultPaymentDetails: string | null;
   paymentTermsDays: number;
   isSuspended: boolean;
   createdAt: string;
@@ -181,8 +198,47 @@ export interface ProfileFormValues {
   defaultCurrency: string;
   defaultTaxRate: number;
   paymentTermsDays: number;
-  defaultNotes: string;
-  defaultTerms: string;
+}
+
+/** Saved notes, terms and payment details offered on every new invoice. */
+export type NoteDefaults = Record<"notes" | "terms" | "paymentDetails", string>;
+
+export interface NoteDefaultField {
+  key: keyof NoteDefaults;
+  id: string;
+  label: string;
+  description: string;
+  max: number;
+  rows: number;
+  placeholder: string;
+  example: string;
+}
+
+export interface NotesSectionProps {
+  /** Present in the dashboard editor only; enables the "saved vs custom" choice. */
+  noteDefaults?: NoteDefaults;
+}
+
+export interface NotesTermsSettingsFormProps {
+  defaults: NoteDefaults;
+}
+
+export interface DefaultTextEditorProps {
+  field: NoteDefaultField;
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export interface SavedTextChoiceProps {
+  id: string;
+  label: string;
+  hint: string;
+  max: number;
+  rows: number;
+  value: string;
+  /** The user's saved default; undefined on the public builder (no account). */
+  savedValue?: string;
+  onChange: (value: string) => void;
 }
 
 export interface Subscription {
@@ -384,6 +440,44 @@ export interface StatItem {
   tone?: "navy" | "green" | "amber" | "red";
 }
 
+export interface CountryGuide {
+  slug: string;
+  /** Used in sentences: "Free invoice generator for the United Kingdom". */
+  name: string;
+  /** Short label for links and titles ("UK"); defaults to the name. */
+  shortName?: string;
+  currency: CurrencyCode;
+  taxName: string;
+  rates: string;
+  intro: string;
+  mustInclude: string[];
+  goodToKnow: string[];
+  /** Applied to the free builder by "Create a … invoice" (/?country=slug#builder). */
+  setup: { documentTitle: DocumentTitle; taxLabel: string; taxRate: number; presetText: string };
+  authority: { name: string; url: string };
+  faqs: FaqItem[];
+}
+
+export interface LoadWhenVisibleProps {
+  /** When the URL hash equals this id, load right away (e.g. "/#builder"). */
+  id?: string;
+  children: ReactNode;
+  fallback: ReactNode;
+  rootMargin?: string;
+}
+
+export interface CountryCardProps {
+  guide: CountryGuide;
+}
+
+export interface CountryChecklistProps {
+  items: string[];
+}
+
+export interface CountryPageProps {
+  params: Promise<{ country: string }>;
+}
+
 export interface FaqItem {
   q: string;
   a: string;
@@ -441,7 +535,8 @@ export type SeoPageKey =
   | "termsOfService"
   | "refundPolicy"
   | "cookiePolicy"
-  | "gdprCompliance";
+  | "gdprCompliance"
+  | "countries";
 
 export interface PageSeo {
   path: string;
@@ -1064,6 +1159,8 @@ export interface PlanLimitModalProps {
 export interface InvoiceFormProps {
   /** Saved clients (signed-in users): enables the "saved client" picker. */
   clients?: Client[];
+  /** Saved notes / terms / payment details (dashboard only). */
+  noteDefaults?: NoteDefaults;
   /** Show the totals card inside the form (off when a summary rail shows them). */
   showTotals?: boolean;
 }
@@ -1129,6 +1226,10 @@ export interface PreviewSectionProps {
 export type PreviewHeaderProps = Pick<PreviewSectionProps, "invoice">;
 export type PreviewPartiesProps = Pick<PreviewSectionProps, "invoice">;
 export type PreviewNotesProps = Pick<PreviewSectionProps, "invoice">;
+
+export interface PreviewTextBlocksProps {
+  text: string;
+}
 export type PreviewFooterProps = Pick<PreviewSectionProps, "invoice">;
 export type PreviewLineItemsProps = PreviewSectionProps;
 export type PreviewMetaProps = PreviewSectionProps;
@@ -1196,6 +1297,13 @@ export interface UploadedImageProps {
 
 export interface UploadDropzoneProps {
   onBrowse: () => void;
+}
+
+export interface NextInvoiceBannerProps {
+  currentNumber: number;
+  nextNumber: number;
+  onStartNext: () => void;
+  onDismiss: () => void;
 }
 
 export interface LandingToolbarProps {

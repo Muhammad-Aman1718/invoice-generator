@@ -4,6 +4,7 @@
 import type {
   Client,
   DBInvoiceRow,
+  DocumentTitle,
   DbRow,
   InvoiceData,
   InvoiceStatus,
@@ -11,7 +12,12 @@ import type {
   Profile,
   Subscription,
 } from "@/src/types/types";
-import { INVOICE_STATUSES } from "@/src/constant/invoice";
+import {
+  DEFAULT_DOCUMENT_TITLE,
+  DEFAULT_TAX_LABEL,
+  DOCUMENT_TITLES,
+  INVOICE_STATUSES,
+} from "@/src/constant/invoice";
 import { DEFAULT_CURRENCY } from "@/src/constant/currencies";
 import { DEFAULT_PAYMENT_TERMS_DAYS } from "@/src/constant/app";
 import { USABLE_SUBSCRIPTION_STATUSES } from "@/src/constant/billing";
@@ -21,6 +27,12 @@ function toStatus(value: unknown): InvoiceStatus {
   // Rows created by the v1 schema used "sent".
   if (value === "sent") return "pending";
   return INVOICE_STATUSES.includes(value as InvoiceStatus) ? (value as InvoiceStatus) : "pending";
+}
+
+function toDocumentTitle(value: unknown): DocumentTitle {
+  return DOCUMENT_TITLES.some((title) => title.value === value)
+    ? (value as DocumentTitle)
+    : DEFAULT_DOCUMENT_TITLE;
 }
 
 export function rowToInvoice(row: DBInvoiceRow): InvoiceData & { id: string } {
@@ -43,6 +55,9 @@ export function rowToInvoice(row: DBInvoiceRow): InvoiceData & { id: string } {
     lineItems: Array.isArray(row.line_items) ? row.line_items : [],
     notes: row.notes ?? "",
     terms: row.terms ?? "",
+    paymentDetails: row.payment_details ?? "",
+    documentTitle: toDocumentTitle(row.document_title),
+    taxLabel: row.tax_label || DEFAULT_TAX_LABEL,
     subtotal: Number(row.subtotal) || 0,
     overallDiscount: Number(row.overall_discount) || 0,
     taxRate: Number(row.tax_rate) || 0,
@@ -103,6 +118,9 @@ export function invoiceToRow(data: Partial<InvoiceData>): DbRow {
     line_items: data.lineItems,
     notes: data.notes,
     terms: data.terms,
+    payment_details: data.paymentDetails,
+    document_title: data.documentTitle,
+    tax_label: data.taxLabel,
     subtotal: data.subtotal,
     overall_discount: data.overallDiscount,
     tax_rate: data.taxRate,
@@ -150,6 +168,7 @@ export function rowToProfile(row: DbRow): Profile {
     defaultTaxRate: Number(row.default_tax_rate) || 0,
     defaultNotes: row.default_notes ?? null,
     defaultTerms: row.default_terms ?? null,
+    defaultPaymentDetails: row.default_payment_details ?? null,
     paymentTermsDays: Number(row.payment_terms_days ?? DEFAULT_PAYMENT_TERMS_DAYS),
     isSuspended: Boolean(row.is_suspended),
     createdAt: row.created_at,
@@ -166,6 +185,7 @@ export function profileToRow(data: Partial<Profile>): DbRow {
     default_tax_rate: data.defaultTaxRate,
     default_notes: data.defaultNotes,
     default_terms: data.defaultTerms,
+    default_payment_details: data.defaultPaymentDetails,
     payment_terms_days: data.paymentTermsDays,
   });
 }

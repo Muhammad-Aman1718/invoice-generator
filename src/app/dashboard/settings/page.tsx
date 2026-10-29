@@ -1,6 +1,7 @@
 import { Settings } from "lucide-react";
 import PageHeader from "@/src/components/ui/PageHeader";
 import ProfileSettingsForm from "@/src/components/settings/ProfileSettingsForm";
+import SettingsTabs from "@/src/components/settings/SettingsTabs";
 import PasswordForm from "@/src/components/settings/PasswordForm";
 import AccountDataSection from "@/src/components/settings/AccountDataSection";
 import { getViewer } from "@/src/lib/server/data";
@@ -16,6 +17,7 @@ export default async function SettingsPage() {
         title="Settings"
         description="Profile, business details, invoice defaults and security."
       />
+      <SettingsTabs />
       <ProfileSettingsForm profile={viewer.profile} email={viewer.user.email ?? ""} />
       <PasswordForm />
       <AccountDataSection />

@@ -2,7 +2,7 @@ import type { PageHeroProps } from "@/src/types/types";
 
 export default function PageHero({ eyebrow, title, description, children }: PageHeroProps) {
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-10 pt-14 motion-safe:animate-fade-up sm:px-6 sm:pt-20 lg:px-8">
+    <section className="mx-auto max-w-6xl px-4 pb-10 pt-14 motion-safe:animate-rise sm:px-6 sm:pt-20 lg:px-8">
       <div className="max-w-3xl">
         {eyebrow && (
           <span className="mb-5 inline-flex rounded-full bg-gold/15 px-3 py-1 text-xs font-semibold text-navy">
